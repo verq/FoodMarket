@@ -1,3 +1,9 @@
+
+BookBuyerAgent.java
+BookSellerAgent.java
+BookSellerGui.java
+APDescription.txt
+MTPs-Main-Container.txt
 #################
 ## Eclipse
 #################
@@ -7,12 +13,13 @@
 .metadata
 bin/
 tmp/
+examples/
 *.tmp
 *.bak
 *.swp
 *~.nib
 local.properties
-
+.classpath
 .settings/
 .loadpath
 
