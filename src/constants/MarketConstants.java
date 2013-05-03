@@ -4,58 +4,79 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MarketConstants {
-	// products id
-	public static final int VEGETABLE = 0;
-	public static final int FRUIT = 1;
-	public static final int MILK_PRODUCT = 2;
-	public static final int MEAT = 3;
-	public static final int BREAD = 4;
-	public static final int ANIMAL = 5;
-	public static final int GRAIN = 6;
-	public static final int MANURE = 7;
-	public static final int MILK = 8;
-	public static final int NUMBER_OF_PRODUCTS = 9;
-
-	// participants id
-	public static final int CLIENT = 0;
-	public static final int BAKER = 1;
-	public static final int MILKMAN = 2;
-	public static final int GROWER = 3;
-	public static final int KEEPER = 4;
-	public static final int FARMER = 5;
-
+	public static final int WEEK = 60000;
 	// client
 	public static final int CLIENT_MIN_INCOME = 1300;
 	public static final int CLIENT_MAX_INCOME = 4000;
 
-	public static Map<Integer, Integer> CLIENT_NEEDS_MIN = new HashMap<Integer, Integer>();
+	public static Map<Products, Integer> CLIENT_NEEDS_MIN = new HashMap<Products, Integer>();
 	static {
-		CLIENT_NEEDS_MIN.put(VEGETABLE, 1);
-		CLIENT_NEEDS_MIN.put(FRUIT, 1);
-		CLIENT_NEEDS_MIN.put(MILK_PRODUCT, 1);
-		CLIENT_NEEDS_MIN.put(MEAT, 1);
-		CLIENT_NEEDS_MIN.put(BREAD, 1);
+		CLIENT_NEEDS_MIN.put(Products.VEGETABLE, 1);
+		CLIENT_NEEDS_MIN.put(Products.FRUIT, 1);
+		CLIENT_NEEDS_MIN.put(Products.MILK_PRODUCT, 1);
+		CLIENT_NEEDS_MIN.put(Products.MEAT, 1);
+		CLIENT_NEEDS_MIN.put(Products.BREAD, 1);
 	}
 
-	public static Map<Integer, Integer> CLIENT_NEEDS_MAX = new HashMap<Integer, Integer>();
+	public static Map<Products, Integer> CLIENT_NEEDS_MAX = new HashMap<Products, Integer>();
 	static {
-		CLIENT_NEEDS_MAX.put(VEGETABLE, 5);
-		CLIENT_NEEDS_MAX.put(FRUIT, 5);
-		CLIENT_NEEDS_MAX.put(MILK_PRODUCT, 5);
-		CLIENT_NEEDS_MAX.put(MEAT, 4);
-		CLIENT_NEEDS_MAX.put(BREAD, 5);
+		CLIENT_NEEDS_MAX.put(Products.VEGETABLE, 5);
+		CLIENT_NEEDS_MAX.put(Products.FRUIT, 5);
+		CLIENT_NEEDS_MAX.put(Products.MILK_PRODUCT, 5);
+		CLIENT_NEEDS_MAX.put(Products.MEAT, 4);
+		CLIENT_NEEDS_MAX.put(Products.BREAD, 5);
 	}
 
 	// baker
 	public static final int BAKER_MIN_EMPLOYEE = 1;
 	public static final int BAKER_MAX_EMPLOYEE = 10;
+
 	public static final int BAKER_PRODUCTIVITY_CONSTANT = 5;
 	public static final int BAKER_EMPLOYEE_PRODUCTIVITY = 20;
 
+	public static final int BAKER_BREAD_COST = 3;
+
 	// milkman
+	public static final int MILKMAN_MIN_EMPLOYEE = 1;
+	public static final int MILKMAN_MAX_EMPLOYEE = 10;
+
+	public static final int MILKMAN_PRODUCTIVITY_CONSTANT = 5;
+	public static final int MILKMAN_EMPLOYEE_PRODUCTIVITY = 20 * 7; // per week
+
+	public static final int MILKMAN_MIN_MILK_COST = 3;
 
 	// keeper
+	public static final int KEEPER_MIN_ANIMAL = 5;
+	public static final int KEEPER_MAX_ANIMAL = 20;
+	public static final int KEEPER_ANIMAL_COST = 12;
+
+	public static final int KEEPER_MANURE_FROM_ANIMAL = 3; // per week
+	public static final int KEEPER_MILK_FROM_ANIMAL = 7;
+	public static final double KEEPER_TRESHOLD_KILLED_ANIMALS = 0.5;
+
+	public static final int KEEPER_GRAIN_NEEDED_FOR_ANIMAL = 7;
+
+	public static final int KEEPER_MEAT_COST = 6;
+	public static final int KEEPER_MILK_COST = 3;
+
 	// grower
+	public static final int GROWER_MIN_FIELD = 100;
+	public static final int GROWER_MAX_FIELD = 500;
+	public static final int GROWER_FIELD_COST = 12;
+
+	public static final int GROWER_FRUIT_PER_FIELD = 2;
+	public static final double GROWER_MANURE_NEEDED_FOR_FIELD = 1.5;
+
+	public static final int GROWER_FRUIT_COST = 3;
 	// farmer
+	public static final int FARMER_MIN_FIELD = 200;
+	public static final int FARMER_MAX_FIELD = 1000;
+	public static final int FARMER_FIELD_COST = 12;
+	public static final double FARMER_TRESHOLD_SOLD_GRAIN = 0.5;
+
+	public static final int FARMER_GRAIN_FROM_FIELD = 2;
+	public static final int FARMER_MANURE_NEEDED_FOR_FIELD = 1;
+
+	public static final int FARMER_GRAIN_COST = 2;
 
 }
