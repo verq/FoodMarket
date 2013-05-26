@@ -17,7 +17,7 @@ public class Farmer extends MarketFieldAgent {
 	protected void fillInitialHave() {
 		numberOfFields = random(MarketConstants.FARMER_MIN_FIELD, MarketConstants.FARMER_MAX_FIELD);
 		grainAmount = randomDouble(0.5, 1) * numberOfFields * MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD;
-		System.out.println("Farmer got " + numberOfFields + " fields and " + grainAmount + " grain");
+		System.out.println("Farmer got " + numberOfFields + " fields and " + grainAmount + " grain");	
 	}
 
 	@Override
