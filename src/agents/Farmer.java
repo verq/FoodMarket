@@ -9,12 +9,12 @@ public class Farmer extends MarketFieldAgent {
 
 	@Override
 	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
+		buy.put(Products.MANURE, numberOfFields* MarketConstants.FARMER_MANURE_NEEDED_FOR_FIELD);
 	}
 
 	@Override
 	protected void fillInitialHave() {
+		myType = Participants.FARMER;
 		numberOfFields = random(MarketConstants.FARMER_MIN_FIELD, MarketConstants.FARMER_MAX_FIELD);
 		grainAmount = randomDouble(0.5, 1) * numberOfFields * MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD;
 		System.out.println("Farmer got " + numberOfFields + " fields and " + grainAmount + " grain");
@@ -22,8 +22,10 @@ public class Farmer extends MarketFieldAgent {
 
 	@Override
 	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
-
+		sell.put(Products.GRAIN, numberOfFields * MarketConstants.FARMER_TRESHOLD_SOLD_GRAIN);
+		pricePerItem.put(Products.GRAIN, MarketConstants.FARMER_GRAIN_COST);
+		sell.put(Products.VEGETABLE, numberOfFields * MarketConstants.FARMER_TRESHOLD_SOLD_VEGETABLES);
+		pricePerItem.put(Products.VEGETABLE, MarketConstants.FARMER_VEGETABLE_COST);
 	}
 
 	@Override

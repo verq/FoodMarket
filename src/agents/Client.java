@@ -14,7 +14,7 @@ public class Client extends MarketAgent {
 	protected void fillInitialBuy() {
 		for (Products p : Products.values()) {
 			if (MarketConstants.CLIENT_NEEDS_MAX.containsKey(p) && MarketConstants.CLIENT_NEEDS_MIN.containsKey(p)) {
-				int productNeed = random(MarketConstants.CLIENT_NEEDS_MIN.get(p),
+				double productNeed = randomDouble(MarketConstants.CLIENT_NEEDS_MIN.get(p),
 						MarketConstants.CLIENT_NEEDS_MAX.get(p));
 				if (productNeed != 0) {
 					buy.put(p, productNeed);
@@ -25,6 +25,7 @@ public class Client extends MarketAgent {
 
 	@Override
 	protected void fillInitialHave() {
+		myType = Participants.CLIENT;
 		income = randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 		money = income;
 	}
@@ -45,5 +46,6 @@ public class Client extends MarketAgent {
 
 	@Override
 	protected void fillSellTo() {
+		// nothing
 	}
 }

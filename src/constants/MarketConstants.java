@@ -68,16 +68,20 @@ public class MarketConstants {
 	public static final double GROWER_MANURE_NEEDED_FOR_FIELD = 1.5;
 
 	public static final double GROWER_FRUIT_COST = 3;
+
 	// farmer
 	public static final int FARMER_MIN_FIELD = 200;
 	public static final int FARMER_MAX_FIELD = 1000;
 	public static final double FARMER_FIELD_COST = 12;
 	public static final double FARMER_TRESHOLD_SOLD_GRAIN = 0.5;
+	public static final double FARMER_TRESHOLD_SOLD_VEGETABLES = 0.5;
 
 	public static final double FARMER_GRAIN_FROM_FIELD = 2;
 	public static final double FARMER_MANURE_NEEDED_FOR_FIELD = 1;
 	public static final double FARMER_MAX_GRAIN_NEEDED_PER_FIELD = 2;
 
 	public static final double FARMER_GRAIN_COST = 2;
+	public static final double FARMER_VEGETABLE_COST = 2;
+
 
 }
