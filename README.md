@@ -3,7 +3,7 @@ Food Market: projekt na Systemy inteligentnych agentów 2013
 Deadline
 ------------
 13.06.2013
-HARD DEADLINE: 14.06.2013
+### HARD DEADLINE: 14.06.2013
 
 Organizacja świata
 -------
