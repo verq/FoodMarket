@@ -25,7 +25,7 @@ public class Baker extends MarketEmployeeAgent {
 	}
 
 	@Override
-	protected void fillBuyFrom() {
+	protected void fillBuyFrom() { 
 		buyFrom.put(Participants.FARMER, Products.GRAIN);
 	}
 
