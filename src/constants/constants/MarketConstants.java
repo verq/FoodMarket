@@ -60,8 +60,10 @@ public class MarketConstants {
 	public static final double KEEPER_MILK_COST = 3;
 
 	// grower
-	public static final double GROWER_MIN_FIELD = 100;
-	public static final double GROWER_MAX_FIELD = 500;
+	public static final int GROWER_MIN_FIELD = 100;
+	public static final int GROWER_MAX_FIELD = 500;
+	public static final int GROWER_MIN_FRUIT = 5;
+	public static final int GROWER_MAX_FRUIT = 20;
 	public static final double GROWER_FIELD_COST = 12;
 
 	public static final double GROWER_FRUIT_PER_FIELD = 2;
@@ -82,6 +84,5 @@ public class MarketConstants {
 
 	public static final double FARMER_GRAIN_COST = 2;
 	public static final double FARMER_VEGETABLE_COST = 2;
-
 
 }
