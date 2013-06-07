@@ -1,27 +1,31 @@
 package agents;
 
+import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
 
 public class Milkman extends MarketEmployeeAgent {
-	private int milkCost;
 
 	@Override
 	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
+		buy.put(Products.MILK, numberOfEmployees * MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
 	}
 
 	@Override
 	protected void fillInitialHave() {
-		// TODO Auto-generated method stub
+		myType = Participants.MILKMAN;
+		numberOfEmployees = random(MarketConstants.MILKMAN_MIN_EMPLOYEE, MarketConstants.MILKMAN_MAX_EMPLOYEE);
+		have.put(Products.MILK, randomDouble(0.5, 1) * numberOfEmployees
+				* MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
+		have.put(Products.MILK_PRODUCT,
+				(double) random(MarketConstants.MILKMAN_MIN_MILK_PRODUCT, MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
 
 	}
 
 	@Override
 	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
-
+		sell.put(Products.MILK_PRODUCT, have.get(Products.MILK_PRODUCT));
+		pricePerItem.put(Products.MILK_PRODUCT, MarketConstants.MILKMAN_MILK_COST);
 	}
 
 	@Override

@@ -39,11 +39,13 @@ public class MarketConstants {
 	// milkman
 	public static final int MILKMAN_MIN_EMPLOYEE = 1;
 	public static final int MILKMAN_MAX_EMPLOYEE = 10;
+	public static final int MILKMAN_MIN_MILK_PRODUCT = 2;
+	public static final int MILKMAN_MAX_MILK_PRODUCT = 4;
 
 	public static final double MILKMAN_PRODUCTIVITY_CONSTANT = 5;
 	public static final double MILKMAN_EMPLOYEE_PRODUCTIVITY = 20 * 7; // per week
 
-	public static final double MILKMAN_MIN_MILK_COST = 3;
+	public static final double MILKMAN_MILK_COST = 3;
 
 	// keeper
 	public static final int KEEPER_MIN_ANIMAL = 5;

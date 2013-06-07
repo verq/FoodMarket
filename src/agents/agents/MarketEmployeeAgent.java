@@ -3,6 +3,7 @@ package agents;
 public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected int numberOfEmployees;
 	protected int productivity;
+	protected double productCost;
 
 	@Override
 	protected void fillInitialBuy() {
