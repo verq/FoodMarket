@@ -48,16 +48,24 @@ public class MarketConstants {
 	// keeper
 	public static final int KEEPER_MIN_ANIMAL = 5;
 	public static final int KEEPER_MAX_ANIMAL = 20;
+	public static final int KEEPER_MIN_MANURE = 5;
+	public static final int KEEPER_MAX_MANURE = 20;
+	public static final int KEEPER_MIN_MEAT = 2;
+	public static final int KEEPER_MAX_MEAT = 4;
+	public static final int KEEPER_MIN_MILK = 2;
+	public static final int KEEPER_MAX_MILK = 4;
 	public static final double KEEPER_ANIMAL_COST = 12;
 
 	public static final double KEEPER_MANURE_FROM_ANIMAL = 3; // per week
 	public static final double KEEPER_MILK_FROM_ANIMAL = 7;
+	public static final int KEEPER_MEET_PER_ANIMAL = 4;
 	public static final double KEEPER_TRESHOLD_KILLED_ANIMALS = 0.5;
 
 	public static final double KEEPER_GRAIN_NEEDED_FOR_ANIMAL = 7;
 
 	public static final double KEEPER_MEAT_COST = 6;
 	public static final double KEEPER_MILK_COST = 3;
+	public static final double KEEPER_MANURE_COST = 2;
 
 	// grower
 	public static final int GROWER_MIN_FIELD = 100;
