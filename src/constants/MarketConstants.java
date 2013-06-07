@@ -34,6 +34,11 @@ public class MarketConstants {
 	public static final int BAKER_PRODUCTIVITY_CONSTANT = 5;
 	public static final int BAKER_EMPLOYEE_PRODUCTIVITY = 20;
 
+	public static final int BAKER_MAX_BREAD = 20;
+	public static final int BAKER_MIN_BREAD = 5;
+	public static final int BAKER_MAX_GRAIN = 4;
+	public static final int BAKER_MIN_GRAIN = 2;
+
 	public static final int BAKER_BREAD_COST = 3;
 
 	// milkman
@@ -78,5 +83,9 @@ public class MarketConstants {
 	public static final int FARMER_MANURE_NEEDED_FOR_FIELD = 1;
 
 	public static final int FARMER_GRAIN_COST = 2;
+	public static final int FARMER_MIN_GRAIN = 2;
+	public static final int FARMER_MAX_GRAIN = 4;
+	public static final int FARMER_MAX_MANURE = 2;
+	public static final int FARMER_MIN_MANURE = 4;
 
 }

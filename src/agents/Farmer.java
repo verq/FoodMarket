@@ -1,5 +1,6 @@
 package agents;
 
+import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
 
@@ -8,20 +9,19 @@ public class Farmer extends MarketFieldAgent {
 
 	@Override
 	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void fillInitialHave() {
-		// TODO Auto-generated method stub
-
+		have.put(Products.GRAIN, random(MarketConstants.FARMER_MIN_GRAIN, MarketConstants.FARMER_MAX_GRAIN));
+		have.put(Products.MANURE, random(MarketConstants.FARMER_MIN_MANURE, MarketConstants.FARMER_MAX_MANURE));
+		numberOfAvailableFields = random(MarketConstants.FARMER_MIN_FIELD, MarketConstants.FARMER_MAX_FIELD);
+		numberOfUsedFields = numberOfAvailableFields;
 	}
 
 	@Override
 	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
-
+		grainCost = MarketConstants.FARMER_GRAIN_COST;
 	}
 
 	@Override

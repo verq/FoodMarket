@@ -1,7 +1,8 @@
 package agents;
 
 public abstract class MarketFieldAgent extends MarketAgent {
-	protected int numberOfFields;
+	protected int numberOfAvailableFields;
+	protected int numberOfUsedFields;
 	protected int tresholdSale;
 
 	@Override
