@@ -35,8 +35,8 @@ public class Farmer extends MarketFieldAgent {
 
 	@Override
 	protected void fillSellTo() {
-		sellTo.put(Participants.KEEPER, Products.GRAIN);
-		sellTo.put(Participants.BAKER, Products.GRAIN);
+		//sellTo.put(Participants.KEEPER, Products.GRAIN);
+		//sellTo.put(Participants.BAKER, Products.GRAIN);
 		sellTo.put(Participants.CLIENT, Products.VEGETABLE);
 	}
 }

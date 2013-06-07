@@ -8,8 +8,8 @@ import agents.Keeper;
 import agents.Milkman;
 
 public enum Participants {
-	CLIENT(Client.class), BAKER(Baker.class), MILKMAN(Milkman.class), GROWER(Grower.class), KEEPER(Keeper.class), FARMER(
-			Farmer.class);
+	CLIENT(Client.class), BAKER(Baker.class), MILKMAN(Milkman.class), GROWER(
+			Grower.class), KEEPER(Keeper.class), FARMER(Farmer.class);
 
 	private final Class participantClass;
 
