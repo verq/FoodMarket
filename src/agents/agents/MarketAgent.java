@@ -43,6 +43,7 @@ public abstract class MarketAgent extends Agent {
 	{
 		return (max - min) * rand.nextDouble() + min;
 	}
+	
 	protected void initializeProducts() {
 		buy = new EnumMap<Products, Double>(Products.class);
 		have = new EnumMap<Products, Double>(Products.class);
@@ -122,7 +123,6 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	private void buyAction() {
-	
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
 			protected void onTick() {
 				DFAgentDescription agentDescription = new DFAgentDescription();
@@ -134,7 +134,7 @@ public abstract class MarketAgent extends Agent {
 					serviceDescription.setType("sell");
 					serviceDescription.setName(name);
 					agentDescription.addServices(serviceDescription);
-					//System.out.println(this.myAgent.getName() + ": I buy: " + serviceDescription.getName());
+					System.out.println(this.myAgent.getName() + ": I'm looking for someone to buy from: " + serviceDescription.getName());
 				}
 				try {
 					DFAgentDescription[] sellingAgents = DFService.search(myAgent, agentDescription);
@@ -162,18 +162,18 @@ public abstract class MarketAgent extends Agent {
 				while (sellProductsIterator.hasNext()) {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = sellProductsIterator.next().name();
-					serviceDescription.setType("buy");
+					serviceDescription.setType("sell");
 					serviceDescription.setName(name);
 					agentDescription.addServices(serviceDescription);
-					//System.out.println(this.myAgent.getName() + ": I sell: " + serviceDescription.getName());
+					System.out.println(this.myAgent.getName() + ": I'm looking for someone to sell to: " + serviceDescription.getName());
 				}
 				try {
 					DFAgentDescription[] buyingAgents = DFService.search(myAgent, agentDescription);
 					System.out.println(this.myAgent.getName() + " found the following " + buyingAgents.length + " buyer agents:");
 					//if(buyingAgents.length > 0) 
-					buyerAgents = new AID[Math.max(0,buyingAgents.length-1)];
-					for (int i = 0; i < buyingAgents.length-1;) {
-						if(buyingAgents[i].getName().getName().compareTo(this.myAgent.getName()) == 0) continue;
+					buyerAgents = new AID[buyingAgents.length];//Math.max(0,buyingAgents.length-1)];
+					for (int i = 0; i < buyingAgents.length;) {
+						//if(buyingAgents[i].getName().getName().compareTo(this.myAgent.getName()) == 0) continue;
 						buyerAgents[i] = buyingAgents[i].getName();
 						System.out.println("* " + buyerAgents[i].getName() + " all: " + buyerAgents[i]);
 						i ++;
