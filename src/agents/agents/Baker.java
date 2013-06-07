@@ -1,31 +1,35 @@
 package agents;
 
+import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
 
 public class Baker extends MarketEmployeeAgent {
-	private int breadCost;
 
 	@Override
 	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
+		buy.put(Products.GRAIN, numberOfEmployees * MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
 	}
 
 	@Override
 	protected void fillInitialHave() {
-		// TODO Auto-generated method stub
+		myType = Participants.BAKER;
+		numberOfEmployees = random(MarketConstants.BAKER_MIN_EMPLOYEE, MarketConstants.BAKER_MAX_EMPLOYEE);
+		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfEmployees * MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
+		have.put(Products.BREAD,
+				(double) random(MarketConstants.BAKER_MIN_BREAD_PRODUCT, MarketConstants.BAKER_MAX_BREAD_PRODUCT));
 
 	}
 
 	@Override
 	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
+		sell.put(Products.BREAD, have.get(Products.BREAD));
+		pricePerItem.put(Products.BREAD, MarketConstants.BAKER_BREAD_COST);
 
 	}
 
 	@Override
-	protected void fillBuyFrom() { 
+	protected void fillBuyFrom() {
 		buyFrom.put(Participants.FARMER, Products.GRAIN);
 	}
 

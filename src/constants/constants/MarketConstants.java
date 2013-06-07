@@ -30,6 +30,8 @@ public class MarketConstants {
 	// baker
 	public static final int BAKER_MIN_EMPLOYEE = 1;
 	public static final int BAKER_MAX_EMPLOYEE = 10;
+	public static final int BAKER_MIN_BREAD_PRODUCT = 2;
+	public static final int BAKER_MAX_BREAD_PRODUCT = 10;
 
 	public static final double BAKER_PRODUCTIVITY_CONSTANT = 5;
 	public static final double BAKER_EMPLOYEE_PRODUCTIVITY = 20;
