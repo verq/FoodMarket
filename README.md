@@ -29,8 +29,7 @@ Cotygodniowa komunikacja między agentami przebiega w 8 etapach:
 TODO
 ------------
 
-* dopracować komunikację
-* ustalić globalny czas (albo załatwić to statyczną zmienną)
-* opracować kilka strategii agentów (które agenci będą mogli wybrać/wylosować i które raczej nie powinny się zmieniać)
+* zaimplementować update resourców co tydzień
+* opracować i zaimplementować kilka strategii agentów (które agenci będą mogli wybrać/wylosować i które raczej nie powinny się zmieniać)
 * uruchomić na kilku konfiguracjach i wyciągnąć wnioski
 * przygotować raport
