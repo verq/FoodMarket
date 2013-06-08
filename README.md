@@ -8,7 +8,7 @@ Deadline
 Organizacja świata
 -------
 Agenci żyją w świecie, w którym co tydzień odbywa się targ, na którym mogą handlować towarami.
-Czas jest (a przynajmniej powinien być: TODO) globalny i każdy agent w każdym tygodniu uaktualnia stan swoich zasobów w zależności od przychodów i zapotrzebowań.
+Czas jest globalny i każdy agent w każdym tygodniu uaktualnia stan swoich zasobów w zależności od przychodów i zapotrzebowań.
 
 Komunikacja
 -------
