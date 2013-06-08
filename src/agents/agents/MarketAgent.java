@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import constants.MarketConstants;
+import constants.OfferFormatUtilities;
 import constants.Participants;
 import constants.Products;
 
@@ -42,12 +43,6 @@ public abstract class MarketAgent extends Agent {
 	private ArrayList<AID> buyerAgentsList;
 	private ArrayList<AID> sellerAgentsList;
 
-	final static String OFFER_ITEM_DELIMITER = ":";
-	final static String OFFER_FIELD_DELIMITER = ";";
-	final static String OFFER_ITEM_PARTS_DELIMITER = " ";
-	final static String SELL_OFFER_TAG = "sell";
-	final static String BUY_OFFER_TAG = "buy";
-	
 	private void initializeMaps() {
 		buy = new EnumMap<Products, Double>(Products.class);
 		have = new EnumMap<Products, Double>(Products.class);
@@ -118,7 +113,7 @@ public abstract class MarketAgent extends Agent {
 			String name = sellProductsIterator.next().toString();
 			ServiceDescription serviceDescription = new ServiceDescription();
 			serviceDescription.setType(name);
-			serviceDescription.setName(SELL_OFFER_TAG);
+			serviceDescription.setName(OfferFormatUtilities.SELL_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
 			System.out.println(myType + ":    I register for selling: " + name);
 		}
@@ -129,7 +124,7 @@ public abstract class MarketAgent extends Agent {
 			String name = buyProductsIterator.next().toString();
 			ServiceDescription serviceDescription = new ServiceDescription();
 			serviceDescription.setType(name);
-			serviceDescription.setName(BUY_OFFER_TAG);
+			serviceDescription.setName(OfferFormatUtilities.BUY_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
 			System.out.println(myType + ": I register for buying: " + name);
 		}
@@ -164,7 +159,7 @@ public abstract class MarketAgent extends Agent {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = buyProductsIterator.next().name();
 					serviceDescription.setType(name);
-					serviceDescription.setName(SELL_OFFER_TAG);
+					serviceDescription.setName(OfferFormatUtilities.SELL_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
 					System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to buy " + name
@@ -208,7 +203,7 @@ public abstract class MarketAgent extends Agent {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = sellProductsIterator.next().name();
 					serviceDescription.setType(name);
-					serviceDescription.setName(BUY_OFFER_TAG);
+					serviceDescription.setName(OfferFormatUtilities.BUY_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
 					System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to sell " + name
@@ -238,36 +233,11 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	private String composeSellContent() {
-		if (sell == null || sell.size() == 0)
-			return "";
-		String content = myType + OFFER_FIELD_DELIMITER + SELL_OFFER_TAG + OFFER_FIELD_DELIMITER;
-		Iterator<Products> sellProductsIterator = sell.keySet().iterator();
-		boolean nonzero = false;
-		while (sellProductsIterator.hasNext()) {
-			Products p = sellProductsIterator.next();
-			if (sell.get(p) > 0.0) {
-				content += p + OFFER_ITEM_PARTS_DELIMITER + sell.get(p) + OFFER_ITEM_PARTS_DELIMITER + pricePerItem.get(p)
-						+ OFFER_ITEM_DELIMITER;
-				nonzero = true;
-			}
-		}
-		if (!nonzero)
-			return "";
-		return content;
+		return OfferFormatUtilities.composeOfferContent(sell, pricePerItem, myType, OfferFormatUtilities.SELL_OFFER_TAG);
 	}
 
 	private String composeBuyContent() {
-		if (buy.size() == 0 || buy.size() == 0)
-			return "";
-		String content = myType + OFFER_FIELD_DELIMITER + BUY_OFFER_TAG + OFFER_FIELD_DELIMITER;
-		Iterator<Products> buyProductsIterator = buy.keySet().iterator();
-		while (buyProductsIterator.hasNext()) {
-			Products p = buyProductsIterator.next();
-			if (buy.get(p) > 0.0)
-				content += p + OFFER_ITEM_PARTS_DELIMITER + buy.get(p) + OFFER_ITEM_PARTS_DELIMITER + pricePerItem.get(p)
-						+ OFFER_ITEM_DELIMITER;
-		}
-		return content;
+		return OfferFormatUtilities.composeOfferContent(buy, pricePerItem, myType, OfferFormatUtilities.BUY_OFFER_TAG);
 	}
 
 	// returns price agent is ready to pay or -1 if he doesn't agree for the
@@ -282,12 +252,6 @@ public abstract class MarketAgent extends Agent {
 		// parse offers
 		//decideAboutBuyOffer();
 		return "coś";
-	}
-	
-	protected AgentOffer parseOffer(String agentName, String offer)
-	{
-
-		return null;
 	}
 	
 	private class SellRequestPerformer extends CyclicBehaviour {

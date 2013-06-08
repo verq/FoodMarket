@@ -1,19 +1,11 @@
 package agents;
 
+import constants.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class AgentOffer {
-	final static int ITEM_NAME_INDEX = 0;
-	final static int ITEM_AMOUNT_INDEX = 1;
-	final static int ITEM_PRICE_INDEX = 2;
-	final static int ITEM_ENTRY_LENGTH = 3;
-	final static int AGENT_TYPE_INDEX = 0;
-	final static int OFFER_TYPE_INDEX = 1;
-	final static int ITEM_LIST_INDEX = 2;
-	final static String OFFER_ITEM_DELIMITER = ":";
-	final static String OFFER_FIELD_DELIMITER = ";";
-	final static String OFFER_ITEM_PARTS_DELIMITER = " ";
 	
 	public String getAgentType() {
 		return agentType;
@@ -65,21 +57,21 @@ public class AgentOffer {
 
 	private void parseListElements(String[] items) {
 		for (String single_entry : items) {
-			String[] values = single_entry.split(OFFER_ITEM_PARTS_DELIMITER);
-			if (values.length < ITEM_ENTRY_LENGTH) continue;
-			itemPrice.put(values[ITEM_NAME_INDEX], Double.parseDouble(values[ITEM_PRICE_INDEX]));
-			itemAmount.put(values[ITEM_NAME_INDEX], Double.parseDouble(values[ITEM_AMOUNT_INDEX]));
+			String[] values = single_entry.split(OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER);
+			if (values.length < OfferFormatUtilities.ITEM_ENTRY_LENGTH) continue;
+			itemPrice.put(values[OfferFormatUtilities.ITEM_NAME_INDEX], Double.parseDouble(values[OfferFormatUtilities.ITEM_PRICE_INDEX]));
+			itemAmount.put(values[OfferFormatUtilities.ITEM_NAME_INDEX], Double.parseDouble(values[OfferFormatUtilities.ITEM_AMOUNT_INDEX]));
 		}
 	}
 	public void parseIncommingOffer(String agentName, String offer) {
 		this.agentName = agentName;
 		if(offer.isEmpty()) return;
-		String[] str = offer.split(OFFER_FIELD_DELIMITER);
-		this.agentType = str[AGENT_TYPE_INDEX];
-		this.offerType = str[OFFER_TYPE_INDEX];
+		String[] str = offer.split(OfferFormatUtilities.OFFER_FIELD_DELIMITER);
+		this.agentType = str[OfferFormatUtilities.AGENT_TYPE_INDEX];
+		this.offerType = str[OfferFormatUtilities.OFFER_TYPE_INDEX];
 		String[] items;
 		try {
-			items = str[ITEM_LIST_INDEX].split(OFFER_ITEM_DELIMITER);
+			items = str[OfferFormatUtilities.ITEM_LIST_INDEX].split(OfferFormatUtilities.OFFER_ITEM_DELIMITER);
 			parseListElements(items);
 		} catch (Exception e) {
 			// raised in case the offer is empty
