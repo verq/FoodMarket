@@ -1,5 +1,6 @@
 package agents;
 
+import utilities.*;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.*;
@@ -24,6 +25,8 @@ import constants.Participants;
 import constants.Products;
 
 public abstract class MarketAgent extends Agent {
+	protected static AgentsUtilities utilities = new AgentsUtilities();
+
 	protected double money;
 	protected Participants myType;
 	protected EnumMap<Products, Double> buy; // how much of everything he needs
@@ -42,15 +45,9 @@ public abstract class MarketAgent extends Agent {
 	final static String OFFER_ITEM_DELIMITER = ":";
 	final static String OFFER_FIELD_DELIMITER = ";";
 	final static String OFFER_ITEM_PARTS_DELIMITER = " ";
+	final static String SELL_OFFER_TAG = "sell";
+	final static String BUY_OFFER_TAG = "buy";
 	
-	protected int randomInt(int min, int max) {
-		return rand.nextInt(max - min + 1) + min;
-	}
-
-	protected double randomDouble(double min, double max) {
-		return (max - min) * rand.nextDouble() + min;
-	}
-
 	private void initializeMaps() {
 		buy = new EnumMap<Products, Double>(Products.class);
 		have = new EnumMap<Products, Double>(Products.class);
@@ -121,7 +118,7 @@ public abstract class MarketAgent extends Agent {
 			String name = sellProductsIterator.next().toString();
 			ServiceDescription serviceDescription = new ServiceDescription();
 			serviceDescription.setType(name);
-			serviceDescription.setName("sell");
+			serviceDescription.setName(SELL_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
 			System.out.println(myType + ":    I register for selling: " + name);
 		}
@@ -132,7 +129,7 @@ public abstract class MarketAgent extends Agent {
 			String name = buyProductsIterator.next().toString();
 			ServiceDescription serviceDescription = new ServiceDescription();
 			serviceDescription.setType(name);
-			serviceDescription.setName("buy");
+			serviceDescription.setName(BUY_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
 			System.out.println(myType + ": I register for buying: " + name);
 		}
@@ -167,7 +164,7 @@ public abstract class MarketAgent extends Agent {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = buyProductsIterator.next().name();
 					serviceDescription.setType(name);
-					serviceDescription.setName("sell");
+					serviceDescription.setName(SELL_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
 					System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to buy " + name
@@ -211,7 +208,7 @@ public abstract class MarketAgent extends Agent {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = sellProductsIterator.next().name();
 					serviceDescription.setType(name);
-					serviceDescription.setName("buy");
+					serviceDescription.setName(BUY_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
 					System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to sell " + name
@@ -243,7 +240,7 @@ public abstract class MarketAgent extends Agent {
 	private String composeSellContent() {
 		if (sell == null || sell.size() == 0)
 			return "";
-		String content = myType + OFFER_FIELD_DELIMITER + "sell" + OFFER_FIELD_DELIMITER;
+		String content = myType + OFFER_FIELD_DELIMITER + SELL_OFFER_TAG + OFFER_FIELD_DELIMITER;
 		Iterator<Products> sellProductsIterator = sell.keySet().iterator();
 		boolean nonzero = false;
 		while (sellProductsIterator.hasNext()) {
@@ -262,7 +259,7 @@ public abstract class MarketAgent extends Agent {
 	private String composeBuyContent() {
 		if (buy.size() == 0 || buy.size() == 0)
 			return "";
-		String content = myType + OFFER_FIELD_DELIMITER + "buy" + OFFER_FIELD_DELIMITER;
+		String content = myType + OFFER_FIELD_DELIMITER + BUY_OFFER_TAG + OFFER_FIELD_DELIMITER;
 		Iterator<Products> buyProductsIterator = buy.keySet().iterator();
 		while (buyProductsIterator.hasNext()) {
 			Products p = buyProductsIterator.next();

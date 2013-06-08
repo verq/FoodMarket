@@ -16,11 +16,11 @@ public class Milkman extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.MILKMAN;
-		numberOfEmployees = randomInt(MarketConstants.MILKMAN_MIN_EMPLOYEE, MarketConstants.MILKMAN_MAX_EMPLOYEE);
-		have.put(Products.MILK, randomDouble(0.5, 1) * numberOfEmployees
+		numberOfEmployees = utilities.randomInt(MarketConstants.MILKMAN_MIN_EMPLOYEE, MarketConstants.MILKMAN_MAX_EMPLOYEE);
+		have.put(Products.MILK, utilities.randomDouble(0.5, 1) * numberOfEmployees
 				* MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
 		have.put(Products.MILK_PRODUCT,
-				(double) randomInt(MarketConstants.MILKMAN_MIN_MILK_PRODUCT, MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
+				(double) utilities.randomInt(MarketConstants.MILKMAN_MIN_MILK_PRODUCT, MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
 
 	}
 

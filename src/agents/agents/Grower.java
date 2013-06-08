@@ -16,10 +16,10 @@ public class Grower extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.GROWER;
-		numberOfFields = randomInt(MarketConstants.GROWER_MIN_FIELD, MarketConstants.GROWER_MAX_FIELD);
-		have.put(Products.MANURE, randomDouble(0.5, 1) * numberOfFields
+		numberOfFields = utilities.randomInt(MarketConstants.GROWER_MIN_FIELD, MarketConstants.GROWER_MAX_FIELD);
+		have.put(Products.MANURE, utilities.randomDouble(0.5, 1) * numberOfFields
 				* MarketConstants.GROWER_MANURE_NEEDED_FOR_FIELD);
-		have.put(Products.FRUIT, (double) randomInt(MarketConstants.GROWER_MIN_FRUIT, MarketConstants.GROWER_MAX_FRUIT));
+		have.put(Products.FRUIT, (double) utilities.randomInt(MarketConstants.GROWER_MIN_FRUIT, MarketConstants.GROWER_MAX_FRUIT));
 	}
 
 	@Override

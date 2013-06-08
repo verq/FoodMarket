@@ -15,11 +15,11 @@ public class Keeper extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.KEEPER;
-		numberOfFields = randomInt(MarketConstants.KEEPER_MIN_ANIMAL, MarketConstants.KEEPER_MAX_ANIMAL);
-		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfFields * MarketConstants.KEEPER_GRAIN_NEEDED_FOR_ANIMAL);
-		have.put(Products.MANURE, (double) randomInt(MarketConstants.KEEPER_MIN_MANURE, MarketConstants.KEEPER_MAX_MANURE));
-		have.put(Products.MEAT, (double) randomInt(MarketConstants.KEEPER_MIN_MEAT, MarketConstants.KEEPER_MAX_MEAT));
-		have.put(Products.MILK, (double) randomInt(MarketConstants.KEEPER_MIN_MILK, MarketConstants.KEEPER_MAX_MILK));
+		numberOfFields = utilities.randomInt(MarketConstants.KEEPER_MIN_ANIMAL, MarketConstants.KEEPER_MAX_ANIMAL);
+		have.put(Products.GRAIN, utilities.randomDouble(0.5, 1) * numberOfFields * MarketConstants.KEEPER_GRAIN_NEEDED_FOR_ANIMAL);
+		have.put(Products.MANURE, (double) utilities.randomInt(MarketConstants.KEEPER_MIN_MANURE, MarketConstants.KEEPER_MAX_MANURE));
+		have.put(Products.MEAT, (double) utilities.randomInt(MarketConstants.KEEPER_MIN_MEAT, MarketConstants.KEEPER_MAX_MEAT));
+		have.put(Products.MILK, (double) utilities.randomInt(MarketConstants.KEEPER_MIN_MILK, MarketConstants.KEEPER_MAX_MILK));
 
 	}
 

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
+import utilities.*;
 
-public class Baker extends MarketEmployeeAgent {
-
+public class Baker extends MarketEmployeeAgent {	
 	@Override
 	protected void fillInitialBuy() {
 		buy.put(Products.GRAIN, numberOfEmployees
@@ -17,13 +17,13 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.BAKER;
-		numberOfEmployees = randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
+		numberOfEmployees = utilities.randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
 				MarketConstants.BAKER_MAX_EMPLOYEE);
-		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfEmployees
+		have.put(Products.GRAIN, utilities.randomDouble(0.5, 1) * numberOfEmployees
 				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
 		have.put(
 				Products.BREAD,
-				(double) randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
+				(double) utilities.randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
 						MarketConstants.BAKER_MAX_BREAD_PRODUCT));
 
 	}
