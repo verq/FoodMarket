@@ -39,7 +39,7 @@ public abstract class MarketAgent extends Agent {
 	private ArrayList<AID> buyerAgentsList;
 	private ArrayList<AID> sellerAgentsList;
 
-	protected int random(int min, int max) {
+	protected int randomInt(int min, int max) {
 		return rand.nextInt(max - min + 1) + min;
 	}
 
@@ -47,7 +47,7 @@ public abstract class MarketAgent extends Agent {
 		return (max - min) * rand.nextDouble() + min;
 	}
 
-	protected void initializeProducts() {
+	private void initializeMaps() {
 		buy = new EnumMap<Products, Double>(Products.class);
 		have = new EnumMap<Products, Double>(Products.class);
 		sell = new EnumMap<Products, Double>(Products.class);
@@ -56,6 +56,8 @@ public abstract class MarketAgent extends Agent {
 		sellTo = new EnumMap<Participants, Products>(Participants.class);
 		buyerAgentsList = new ArrayList<AID>();
 		sellerAgentsList = new ArrayList<AID>();
+	}
+	protected void initializeProducts() {
 		initializeAddProducts(buy);
 		initializeAddProducts(have);
 		initializeAddProducts(sell);
@@ -83,18 +85,24 @@ public abstract class MarketAgent extends Agent {
 
 	protected abstract void fillSellTo();
 
+	protected abstract void updateResources();
+	
 	protected void takeDown() {
+		try { DFService.deregister(this); }
+        catch (Exception e) {}
 		System.out.println("Agent " + this.getClass().getName() + " "
 				+ getAID().getName() + " is terminating.");
 	}
 
 	protected void setup() {
+		initializeMaps();
 		initializeProducts();
 		System.out.println("Agent " + this.getClass().getName() + " "
 				+ getAID().getName() + " is starting");
 		register();
 		buyAction();
 		sellAction();
+		weeklyResourceUpdateAction();
 	}
 
 	private void register() {
@@ -131,20 +139,22 @@ public abstract class MarketAgent extends Agent {
 		}
 	}
 
-	/*
-	 * private void printMyOwnServices(AID myAgent) { jade.util.leap.Iterator
-	 * mdd = agentDescription.getAllServices();
-	 * System.out.println(myAgent.getName() + "My services:");
-	 * while(mdd.hasNext()) { ServiceDescription sd = (ServiceDescription)
-	 * mdd.next(); System.out.println(this.myAgent.getName() +" my services: " +
-	 * sd.getName() + " " + sd.getType()); } }
-	 */
+	private void weeklyResourceUpdateAction() {
+		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {	
+			@Override
+			protected void onTick() {
+				updateResources();				
+			}
+		});
+	}
+	
 	private void buyAction() {
 		if (buyFrom.isEmpty()) {
 			System.out.println(myType + ": not buying from anyone!");
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
+			@Override
 			protected void onTick() {
 				Iterator<Products> buyProductsIterator = buyFrom.values()
 						.iterator();
@@ -166,8 +176,6 @@ public abstract class MarketAgent extends Agent {
 								+ " found the following "
 								+ sellingAgents.length + " seller agents:");
 						for (int i = 0; i < sellingAgents.length; ++i) {
-							// if(sellerAgents[i].getName().compareTo(this.myAgent.getName())
-							// != 0) continue;
 							sellerAgentsList.add(sellingAgents[i].getName());
 							System.out.println("** "
 									+ sellerAgentsList.get(i).getName());
@@ -189,6 +197,7 @@ public abstract class MarketAgent extends Agent {
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
+			@Override
 			protected void onTick() {
 				Iterator<Products> sellProductsIterator = sellTo.values()
 						.iterator();
@@ -203,7 +212,6 @@ public abstract class MarketAgent extends Agent {
 					System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to sell " + name
 							+ " to");
-
 					try {
 						buyingAgents = DFService.search(myAgent,
 								agentDescription);
@@ -263,16 +271,25 @@ public abstract class MarketAgent extends Agent {
 
 	// returns price agent is ready to pay or -1 if he doesn't agree for the
 	// offer at all
-	protected int decideAboutSellOffer(Products product, int price) {
-		return 15;
-	}
+	protected abstract void decideAboutSellOffer(ArrayList<AgentOffer> offers);
 
 	// returns amount of money agent wants to get or -1 if he doesn't agree for
 	// the offer at all
-	protected int decideAboutBuyOffer(Products product, int price) {
-		return 15;
-	}
+	protected abstract void decideAboutBuyOffer(ArrayList<AgentOffer> offers);
 
+	private String createAnswerToBuyOffer(Map<String, String> offers) {
+		// parse offers
+		//decideAboutBuyOffer();
+		return "coś";
+	}
+	
+	protected void parseOffer(String offer)
+	{
+		String[] str = offer.split("|");
+		String who = str[0], what = str[1];
+		String[] items = str[2].split(":");
+	}
+	
 	private class SellRequestPerformer extends CyclicBehaviour {
 		private int repliesCnt = 0; // The counter of replies from seller agents
 		private MessageTemplate mt; // The template to receive replies
@@ -333,6 +350,8 @@ public abstract class MarketAgent extends Agent {
 				}
 				break;
 			case 2:
+				// decide:
+				String offerContent = createAnswerToBuyOffer(buyOffers);
 				// Respond buyers with your decision
 				System.out
 						.println(myAgent.getName()

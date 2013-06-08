@@ -1,11 +1,12 @@
 package agents;
 
+import java.util.ArrayList;
+
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
 
 public class Keeper extends MarketFieldAgent {
-
 	@Override
 	protected void fillInitialBuy() {
 		buy.put(Products.GRAIN, numberOfFields * MarketConstants.KEEPER_GRAIN_NEEDED_FOR_ANIMAL);
@@ -14,11 +15,11 @@ public class Keeper extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.KEEPER;
-		numberOfFields = random(MarketConstants.KEEPER_MIN_ANIMAL, MarketConstants.KEEPER_MAX_ANIMAL);
+		numberOfFields = randomInt(MarketConstants.KEEPER_MIN_ANIMAL, MarketConstants.KEEPER_MAX_ANIMAL);
 		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfFields * MarketConstants.KEEPER_GRAIN_NEEDED_FOR_ANIMAL);
-		have.put(Products.MANURE, (double) random(MarketConstants.KEEPER_MIN_MANURE, MarketConstants.KEEPER_MAX_MANURE));
-		have.put(Products.MEAT, (double) random(MarketConstants.KEEPER_MIN_MEAT, MarketConstants.KEEPER_MAX_MEAT));
-		have.put(Products.MILK, (double) random(MarketConstants.KEEPER_MIN_MILK, MarketConstants.KEEPER_MAX_MILK));
+		have.put(Products.MANURE, (double) randomInt(MarketConstants.KEEPER_MIN_MANURE, MarketConstants.KEEPER_MAX_MANURE));
+		have.put(Products.MEAT, (double) randomInt(MarketConstants.KEEPER_MIN_MEAT, MarketConstants.KEEPER_MAX_MEAT));
+		have.put(Products.MILK, (double) randomInt(MarketConstants.KEEPER_MIN_MILK, MarketConstants.KEEPER_MAX_MILK));
 
 	}
 
@@ -45,6 +46,24 @@ public class Keeper extends MarketFieldAgent {
 		sellTo.put(Participants.MILKMAN, Products.MILK);
 		sellTo.put(Participants.GROWER, Products.MANURE);
 		sellTo.put(Participants.FARMER, Products.MANURE);
+	}
+
+	@Override
+	protected void updateResources() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

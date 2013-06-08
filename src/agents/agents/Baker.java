@@ -1,5 +1,7 @@
 package agents;
 
+import java.util.ArrayList;
+
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
@@ -8,16 +10,21 @@ public class Baker extends MarketEmployeeAgent {
 
 	@Override
 	protected void fillInitialBuy() {
-		buy.put(Products.GRAIN, numberOfEmployees * MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
+		buy.put(Products.GRAIN, numberOfEmployees
+				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
 	}
 
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.BAKER;
-		numberOfEmployees = random(MarketConstants.BAKER_MIN_EMPLOYEE, MarketConstants.BAKER_MAX_EMPLOYEE);
-		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfEmployees * MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
-		have.put(Products.BREAD,
-				(double) random(MarketConstants.BAKER_MIN_BREAD_PRODUCT, MarketConstants.BAKER_MAX_BREAD_PRODUCT));
+		numberOfEmployees = randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
+				MarketConstants.BAKER_MAX_EMPLOYEE);
+		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfEmployees
+				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
+		have.put(
+				Products.BREAD,
+				(double) randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
+						MarketConstants.BAKER_MAX_BREAD_PRODUCT));
 
 	}
 
@@ -36,6 +43,24 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void fillSellTo() {
 		sellTo.put(Participants.CLIENT, Products.BREAD);
+	}
+
+	@Override
+	protected void updateResources() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

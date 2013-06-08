@@ -1,5 +1,6 @@
 package agents;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 import constants.MarketConstants;
@@ -47,5 +48,23 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillSellTo() {
 		// nothing
+	}
+
+	@Override
+	protected void updateResources() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
 	}
 }

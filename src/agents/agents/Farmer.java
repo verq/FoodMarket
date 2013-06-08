@@ -1,5 +1,7 @@
 package agents;
 
+import java.util.ArrayList;
+
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
@@ -15,7 +17,7 @@ public class Farmer extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.FARMER;
-		numberOfFields = random(MarketConstants.FARMER_MIN_FIELD, MarketConstants.FARMER_MAX_FIELD);
+		numberOfFields = randomInt(MarketConstants.FARMER_MIN_FIELD, MarketConstants.FARMER_MAX_FIELD);
 		have.put(Products.GRAIN, randomDouble(0.5, 1) * numberOfFields
 				* MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD);
 	}
@@ -38,5 +40,23 @@ public class Farmer extends MarketFieldAgent {
 		sellTo.put(Participants.KEEPER, Products.GRAIN);
 		sellTo.put(Participants.BAKER, Products.GRAIN);
 		sellTo.put(Participants.CLIENT, Products.VEGETABLE);
+	}
+
+	@Override
+	protected void updateResources() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		// TODO Auto-generated method stub
+		
 	}
 }
