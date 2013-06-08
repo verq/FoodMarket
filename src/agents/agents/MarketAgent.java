@@ -111,7 +111,7 @@ public abstract class MarketAgent extends Agent {
 			serviceDescription.setType(name);
 			serviceDescription.setName("sell");
 			agentDescription.addServices(serviceDescription);
-			System.out.println(myType + ": I register for selling: " + name);
+			System.out.println(myType + ":    I register for selling: " + name);
 		}
 
 		t = new HashSet<Products>(buyFrom.values());
