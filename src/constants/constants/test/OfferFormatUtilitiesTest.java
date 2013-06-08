@@ -1,4 +1,4 @@
-package constants;
+package constants.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,10 @@ import java.util.EnumMap;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import constants.OfferFormatUtilities;
+import constants.Participants;
+import constants.Products;
 
 public class OfferFormatUtilitiesTest {
 	EnumMap<Products, Double> itemAmount;

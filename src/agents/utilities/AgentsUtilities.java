@@ -41,7 +41,6 @@ public class AgentsUtilities {
 				agentsOffers.add(agOf);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return agentsOffers;

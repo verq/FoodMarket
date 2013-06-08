@@ -1,6 +1,7 @@
 package agents;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import constants.MarketConstants;
 import constants.Participants;
@@ -55,6 +56,25 @@ public class Grower extends MarketFieldAgent {
 	@Override
 	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
 		return offers;
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Boolean> composeFinalBuyingDecision(
+			Map<String, String> sellOffers) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean confirmSellTransactionWith(String traderName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
 		
 	}

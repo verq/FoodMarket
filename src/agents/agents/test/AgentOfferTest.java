@@ -1,4 +1,4 @@
-package agents;
+package agents.test;
 
 import static org.junit.Assert.*;
 

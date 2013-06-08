@@ -83,4 +83,16 @@ public class Client extends MarketAgent {
 		return ans;
 
 	}
+
+	@Override
+	public boolean confirmSellTransactionWith(String traderName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void updateBuyerStore(String traderName) {
+		// TODO Auto-generated method stub
+		
+	}
 }
