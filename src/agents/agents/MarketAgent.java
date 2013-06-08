@@ -14,7 +14,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,19 +26,45 @@ import constants.Products;
 import utilities.*;
 
 public abstract class MarketAgent extends Agent {
+	/**
+	 * how much money do I have
+	 */
 	protected double money;
+	/**
+	 * what is my type
+	 */
 	protected Participants myType;
-	protected EnumMap<Products, Double> buy; // how much of everything he needs
-												// to buy next time
-	protected EnumMap<Products, Double> have; // how much of everything he has
-	protected EnumMap<Products, Double> sell; // how much of everything he has
-												// to sell
-	protected EnumMap<Products, Double> pricePerItem; // how much of everything
-														// he has to sell
+	/**
+	 * how much of everything I need to buy next time
+	 */
+	protected EnumMap<Products, Double> buy; 											
+	/**
+	 * how much of everything I have
+	 */
+	protected EnumMap<Products, Double> have;
+	/**
+	 * how much of everything I can to sell
+	 */
+	protected EnumMap<Products, Double> sell;
+	/**
+	 * what is this week's the price per item
+	 */
+	protected EnumMap<Products, Double> pricePerItem; 
+	/**
+	 * whom from can I buy {@link Products}
+	 */
 	protected EnumMap<Participants, Products> buyFrom;
+	/**
+	 * to whom I sell {@link Products}
+	 */
 	protected EnumMap<Participants, Products> sellTo;
-	protected Random rand = new Random();
+	/**
+	 * list of currently available agents I can sell items to
+	 */
 	private ArrayList<AID> buyerAgentsList;
+	/**
+	 * list of currently available agents I can buy items from
+	 */
 	private ArrayList<AID> sellerAgentsList;
 
 	private void initializeMaps() {
@@ -138,11 +163,13 @@ public abstract class MarketAgent extends Agent {
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {	
 			@Override
 			protected void onTick() {
+				//System.out.println(myAgent.getName() + ": updating resources...");
 				updateResources();				
 			}
 		});
 	}
 	
+	boolean addedBuyBehaviour = false;
 	private void buyAction() {
 		if (buyFrom.isEmpty()) {
 			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": not buying from anyone!");
@@ -153,6 +180,7 @@ public abstract class MarketAgent extends Agent {
 			protected void onTick() {
 				Iterator<Products> buyProductsIterator = buyFrom.values()
 						.iterator();
+				sellerAgentsList.clear();
 				while (buyProductsIterator.hasNext()) {
 					DFAgentDescription agentDescription = new DFAgentDescription();
 					ServiceDescription serviceDescription = new ServiceDescription();
@@ -160,32 +188,39 @@ public abstract class MarketAgent extends Agent {
 					serviceDescription.setType(name);
 					serviceDescription.setName(OfferFormatUtilities.SELL_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
-					System.out.println(this.myAgent.getName()
+					if(AgentsUtilities.DEBUG_ST_1) System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to buy " + name
 							+ " from");
 
 					try {
 						DFAgentDescription[] sellingAgents = DFService.search(
 								myAgent, agentDescription);
-						System.out.println(this.myAgent.getName()
-								+ " found the following "
-								+ sellingAgents.length + " seller agents:");
+
 						for (int i = 0; i < sellingAgents.length; ++i) {
 							sellerAgentsList.add(sellingAgents[i].getName());
-							System.out.println("** "
-									+ sellerAgentsList.get(i).getName());
 						}
 					} catch (FIPAException fe) {
 						fe.printStackTrace();
 					}
 				}
+				
 				if (!sellerAgentsList.isEmpty()) {
-					myAgent.addBehaviour(new BuyRequestPerformer());
+					System.out.println(this.myAgent.getName()
+							+ " found the following "
+							+ sellerAgentsList.size() + " seller agents:");
+					for (int i = 0; i < sellerAgentsList.size(); ++i) {
+						System.out.println("** "
+								+ sellerAgentsList.get(i).getName());
+					}
+					if(!addedBuyBehaviour) {
+						//addedBuyBehaviour = true;
+						myAgent.addBehaviour(new BuyRequestPerformer());
+					}
 				}
 			}
 		});
 	}
-
+	boolean addedSellBehaviour = false;
 	private void sellAction() {
 		if (sellTo.isEmpty()) {
 			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": not selling to anyone!");
@@ -197,6 +232,7 @@ public abstract class MarketAgent extends Agent {
 				Iterator<Products> sellProductsIterator = sellTo.values()
 						.iterator();
 				DFAgentDescription[] buyingAgents;
+				buyerAgentsList.clear();
 				while (sellProductsIterator.hasNext()) {
 					DFAgentDescription agentDescription = new DFAgentDescription();
 					ServiceDescription serviceDescription = new ServiceDescription();
@@ -204,27 +240,32 @@ public abstract class MarketAgent extends Agent {
 					serviceDescription.setType(name);
 					serviceDescription.setName(OfferFormatUtilities.BUY_OFFER_TAG);
 					agentDescription.addServices(serviceDescription);
-					System.out.println(this.myAgent.getName()
+					if(AgentsUtilities.DEBUG_ST_1) System.out.println(this.myAgent.getName()
 							+ ": I'm looking for someone to sell " + name
 							+ " to");
 					try {
 						buyingAgents = DFService.search(myAgent,
 								agentDescription);
-						System.out.println(this.myAgent.getName()
-								+ " found the following " + buyingAgents.length
-								+ " buyer agents:");
-						for (int i = 0; i < buyingAgents.length;) {
+						for (int i = 0; i < buyingAgents.length;i ++) {
 							buyerAgentsList.add(buyingAgents[i].getName());
-							System.out.println("* "
-									+ buyerAgentsList.get(i).getName());
-							i++;
 						}
 					} catch (FIPAException fe) {
 						fe.printStackTrace();
 					}
 				}
-				if (buyerAgentsList.size() > 0) {
-					myAgent.addBehaviour(new SellRequestPerformer());
+				
+				if (!buyerAgentsList.isEmpty()) {
+					System.out.println(this.myAgent.getName()
+							+ " found the following " + buyerAgentsList.size()
+							+ " buyer agents:");
+					for (int i = 0; i < buyerAgentsList.size();i ++) {
+						System.out.println("* "
+								+ buyerAgentsList.get(i).getName());
+					}
+					if(!addedSellBehaviour){
+						//addedSellBehaviour = true;
+						myAgent.addBehaviour(new SellRequestPerformer());
+					}
 				}
 			}
 
@@ -234,31 +275,74 @@ public abstract class MarketAgent extends Agent {
 	private String composeSellContent() {
 		return OfferFormatUtilities.composeOfferContent(sell, pricePerItem, myType, OfferFormatUtilities.SELL_OFFER_TAG);
 	}
-
+	
+	@SuppressWarnings("unused")
 	private String composeBuyContent() {
 		return OfferFormatUtilities.composeOfferContent(buy, pricePerItem, myType, OfferFormatUtilities.BUY_OFFER_TAG);
 	}
 
-	// takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	/**
+	 * TODO: implement this method
+	 * @param sellOffers
+	 * @return map: to whose offer you respond and what is your answer (accept/reject: true/false)
+	 */
+	public abstract Map<String, Boolean> composeFinalBuyingDecision(
+			Map<String, String> sellOffers);
+	
+	/**
+	 * TODO: implement this method
+	 * takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	 * @param offers from sellers
+	 * @return list of {@link AgentOffer} items containing sell offer details
+	 */
 	protected abstract ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers);
 
-	// takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	/**
+	 * TODO: implement this method
+	 * takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	 * @param offers from buyers
+	 * @return list of {@link AgentOffer} items containing buy offer details
+	 */
 	protected abstract ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers);
 
-
+	/**
+	 * invoked by seller after receiving all buyers' offers
+	 * @param buy offers containing offerer's name and offer as String
+	 * @return answers to buy offers containing recepient name and answer as String
+	 */
 	private Map<String, String> createAnswerToBuyOffer(Map<String, String> offers) {
 		return AgentsUtilities.createMapOfOffers(decideAboutBuyOffer(AgentsUtilities.createListOfOffers(offers)));
 	}
 	
+	/**
+	 * invoked by buyer after receiving all sellers' offers
+	 * @param buy offers containing offerer's name and offer as String
+	 * @return answers to buy offers containing recepient name and answer as String
+	 */
 	private Map<String, String> createAnswerToSellOffer(Map<String, String> offers) {
 		return AgentsUtilities.createMapOfOffers(decideAboutSellOffer(AgentsUtilities.createListOfOffers(offers)));
 	}
-	private class SellRequestPerformer extends CyclicBehaviour {
+
+	/**
+	 * invoked at the very end of transaction to confirm it;
+	 * don't forget to update your store here!
+	 * @param traderName
+	 * @return return true if you can complete transaction with this buyer, otherwise return false
+	 */
+	public abstract boolean confirmSellTransactionWith(String traderName);
+	
+	/**
+	 * buyer: update your supplies after positive transaction with seller traderName
+	 * @param traderName
+	 */
+	public abstract void updateBuyerStore(String traderName);
+	
+	private class SellRequestPerformer extends Behaviour {
 		private int repliesCnt = 0; // The counter of replies from seller agents
 		private MessageTemplate mt; // The template to receive replies
 		private int step = 0;
 		private Map<String, String> buyOffers; // seller name : content
-		private Map<String, AID> buyTraders;
+		private Map<String, AID> buyTraders; // seller name : where to send reply
 
 		public void onStart() {
 			buyOffers = new HashMap<String, String>();
@@ -267,104 +351,120 @@ public abstract class MarketAgent extends Agent {
 
 		public void action() {
 			String conversationID = myType + "=inform";
-			switch (step) {
-			case 0:
-				// Send your price to everyone
-				// if(buyerAgents.length == 0) block();
-				ACLMessage offer_inform = new ACLMessage(ACLMessage.INFORM);
-				for (int i = 0; i < buyerAgentsList.size(); ++i) {
-					System.out.println(myAgent.getName()
-							+ " 1) sell: sending sell offer to: "
-							+ buyerAgentsList.get(i).getName());
-					offer_inform.addReceiver(buyerAgentsList.get(i));
-				}
-				offer_inform.setContent(composeSellContent());
-				offer_inform.setConversationId(conversationID);
-				offer_inform.setReplyWith(conversationID
-						+ System.currentTimeMillis());
-				myAgent.send(offer_inform);
-				// Prepare the template to get proposals
-				mt = MessageTemplate.and(MessageTemplate
-						.MatchConversationId(conversationID), MessageTemplate
-						.MatchInReplyTo(offer_inform.getReplyWith()));
-				step = 1;
-				break;
-			case 1:
-				// Receive all proposals/refusals from buyers agents
-				mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-				ACLMessage reply = myAgent.receive(mt);
-				if (reply != null) {
-					// This is a proposal
-					System.out.println(myAgent.getName()
-							+ " 4) sell: got offer from "
-							+ reply.getSender().getName() + "  :  "
-							+ reply.getContent());
-					buyOffers.put(reply.getSender().getName(),
-							reply.getContent());
-					buyTraders.put(reply.getSender().getName(),
-							reply.getSender());
-					repliesCnt++;
-					if (repliesCnt >= buyerAgentsList.size()) {
-						// We received all CFPs
-						step = 2;
+			try {
+				switch (step) {
+				case 0:
+					buyOffers.clear();
+					buyTraders.clear();
+					// Send your price to everyone who's interested
+					ACLMessage offer_inform = new ACLMessage(ACLMessage.INFORM);
+					for (int i = 0; i < buyerAgentsList.size(); ++i) {
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 1) sell: sending sell offer to: "
+								+ buyerAgentsList.get(i).getName());
+						offer_inform.addReceiver(buyerAgentsList.get(i));
 					}
-				} else {
+					offer_inform.setContent(composeSellContent());
+					offer_inform.setConversationId(conversationID);
+					offer_inform.setReplyWith(conversationID
+							+ System.currentTimeMillis());
+					myAgent.send(offer_inform);
+					step = 1;
+					break;
+				case 1:
+					// Receive all proposals/refusals from buyers agents
+					mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+					ACLMessage reply = myAgent.receive(mt);
+					if (reply != null) {
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 4) sell: got offer from "
+								+ reply.getSender().getName() + ": "
+								+ reply.getContent());
+						// remember buyers
+						buyOffers.put(reply.getSender().getName(),
+								reply.getContent());
+						buyTraders.put(reply.getSender().getName(),
+								reply.getSender());
+						repliesCnt++;
+						if (repliesCnt >= buyerAgentsList.size()) {
+							// We received all CFPs
+							step = 2;
+						}
+					} else {
+						block();
+					}
+					break;
+				case 2:
+					// we got all cfp from buyers: make the decision and respond
+					// decide:
+					Map<String, String> responsesToSend = createAnswerToBuyOffer(buyOffers);
+					// Respond to buyers with your decision
+					if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out
+							.println(myAgent.getName()
+									+ " 5) sell: got all offers - responding with decision");
+					Iterator<String> buyerIterator = responsesToSend.keySet()
+							.iterator();
+					while (buyerIterator.hasNext()) {
+						ACLMessage cfp = new ACLMessage(ACLMessage.PROPOSE);
+						String name = buyerIterator.next();
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 5a) sell: sending decision to: "
+								+ buyTraders.get(name).getName());
+						
+						cfp.addReceiver(buyTraders.get(name));
+						cfp.setContent(composeSellContent());
+						cfp.setConversationId("propose" + myType);
+						cfp.setReplyWith("propose" + System.currentTimeMillis());
+						myAgent.send(cfp);
+					}
+					step = 3;
+					repliesCnt = 0;
+					break;
+				case 3:
+					// get confirmation from buyers, update supplies store and
+					// confirm back
+					mt = MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL), MessageTemplate.MatchPerformative(ACLMessage.REJECT_PROPOSAL));
+					ACLMessage msg = myAgent.receive(mt);
+					if (msg != null) {
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName() + " 7) sell: got accepted confirmation from "
+								+ msg.getSender().getName());
+						ACLMessage confirm = msg.createReply();
+						boolean confirmed = confirmSellTransactionWith(msg.getSender().getName());
+						if(confirmed)
+							confirm.setPerformative(ACLMessage.CONFIRM);
+						else confirm.setPerformative(ACLMessage.REFUSE);
+						confirm.setReplyWith("cfp" + System.currentTimeMillis());
+						myAgent.send(confirm);
+						repliesCnt ++;
+						if(repliesCnt >= buyerAgentsList.size())
+						{
+							step = 4;
+						}
+					} else {
+						block();
+					}
+					break;
+				case 4:
+					if(AgentsUtilities.DEBUG_ST_1) System.out.println("sell: step = end");
+					step = 0;
+					repliesCnt = 0;
+					buyOffers.clear();
+					buyTraders.clear();
 					block();
+					break;
 				}
-				break;
-			case 2:
-				// decide:
-				Map<String, String> responsesToSend = createAnswerToBuyOffer(buyOffers);
-				// Respond buyers with your decision
-				System.out
-						.println(myAgent.getName()
-								+ " 5) sell: got all offers - responding with decision");
-				ACLMessage cfp = new ACLMessage(ACLMessage.PROPOSE);
-				for (int i = 0; i < buyerAgentsList.size(); ++i) {
-					System.out.println(myAgent.getName()
-							+ " 5a) sell: sending decision to: "
-							+ buyerAgentsList.get(i).getName());
-					cfp.addReceiver(buyerAgentsList.get(i)); // buyOffers
-				}
-				cfp.setContent(composeSellContent());
-				cfp.setConversationId("propose" + myType);
-				cfp.setReplyWith("propose" + System.currentTimeMillis()); // Unique
-																			// value
-				myAgent.send(cfp);
-				step = 3;
-				break;
-			case 3:
-				// Get confirmation from buyers, update supplies store and
-				// confirm back
-				mt = MessageTemplate
-						.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-				ACLMessage msg = myAgent.receive(mt);
-				if (msg != null) {
-					String title = msg.getContent();
-					System.out.println(myAgent.getName() + " 7) sell: " + title
-							+ "got accepted confirmation from "
-							+ msg.getSender().getName());
-					ACLMessage confirm = msg.createReply();
-					confirm.setPerformative(ACLMessage.CONFIRM);
-					confirm.setReplyWith("cfp" + System.currentTimeMillis()); // Unique
-																				// value
-					myAgent.send(confirm);
-					step = 4;
-				} else {
-					block();
-				}
-				break;
-			case 4:
-				System.out.println("sell: step = end");
-				step = 0;
-				block();
-				break;
-
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+		}
+
+		@Override
+		public boolean done() {
+			return step == 4;
 		}
 	}
 
-	private class BuyRequestPerformer extends CyclicBehaviour {
+	private class BuyRequestPerformer extends Behaviour {
 		private int step = 0;
 		private MessageTemplate mt;
 		private ACLMessage msg;
@@ -378,84 +478,143 @@ public abstract class MarketAgent extends Agent {
 		}
 
 		public void action() {
-			switch (step) {
-			case 0:
-				// Get current prices from sellers
-				mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-				ACLMessage sell_offer = myAgent.receive(mt);
-				if (sell_offer != null) {
-					// Reply received
-					System.out.println(myAgent.getName()
-							+ " 2) buy: got offer from "
-							+ sell_offer.getSender().getName() + ": "
-							+ sell_offer.getContent());
-					sellOffers.put(sell_offer.getSender().getName(),
-							sell_offer.getContent());
-					sellTraders.put(sell_offer.getSender().getName(),
-							sell_offer.getSender());
-					offersCnt++;
-					if (offersCnt >= sellerAgentsList.size()) {
-						// We received all information
-						step = 1;
+			try {
+				switch (step) {
+				case 0:
+					// get current prices from sellers
+					mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+					ACLMessage sell_offer = myAgent.receive(mt);
+					if (sell_offer != null) {
+						// reply received
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 2) buy: got offer from "
+								+ sell_offer.getSender().getName() + ": "
+								+ sell_offer.getContent());
+						
+						// remember this offer
+						sellOffers.put(sell_offer.getSender().getName(),
+								sell_offer.getContent());
+						sellTraders.put(sell_offer.getSender().getName(),
+								sell_offer.getSender());
+						offersCnt++;
+						if (offersCnt >= sellerAgentsList.size()) {
+							// we received all offers
+							offersCnt = 0;
+							step = 1;
+						}
 					}
-				}
-				break;
-			case 1:
-				// Got offers from everyone, send CFP to sellers
-				// make some decision
-				Map<String, String> responsesToSend = createAnswerToBuyOffer(sellOffers);
+					break;
+				case 1:
+					// got offers from everyone, send CFP to all sellers
+					
+					// make some decision first
+					Map<String, String> responsesToSend = createAnswerToSellOffer(sellOffers);
 
-				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-				System.out.println(myAgent.getName()
-						+ " 3) buy: received all info, sending cfp");
-				Iterator<String> tradersIterator = sellTraders.keySet()
-						.iterator();
-				while (tradersIterator.hasNext()) {
-					String name = tradersIterator.next();
-					System.out.println(myAgent.getName()
-							+ "3a) buy: sending to " + name);
-					cfp.addReceiver(sellTraders.get(name));
-				}
-				cfp.setContent(composeBuyContent());
-				myAgent.send(cfp);
-				step = 2;
-				break;
-			case 2:
-				// Receive sellers' decision and accept or reject it
-				mt = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
-				msg = myAgent.receive(mt);
-				if (msg != null) {
-					// Receive decisions from sellers
-					String title = msg.getContent();
-					ACLMessage reply = msg.createReply();
-					reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-					System.out.println(myAgent.getName() + " 6) buy: " + title
-							+ "accepted offer from "
-							+ msg.getSender().getName());
-					myAgent.send(reply);
-					step = 3;
-				} else {
+					if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+							+ " 3) buy: received all offers, sending cfp with decision");
+					Iterator<String> sellersIterator = responsesToSend.keySet().iterator();
+					// send offer specific response to every agent
+					while (sellersIterator.hasNext()) {
+						ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+						String name = sellersIterator.next();
+						
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ "3a) buy: sending to " + name);
+						
+						cfp.addReceiver(sellTraders.get(name));
+						cfp.setContent(responsesToSend.get(name));
+						myAgent.send(cfp);
+					}
+					sellTraders.clear();
+					sellOffers.clear();
+					step = 2;
+					break;
+				case 2:
+					// receive sellers' decision
+					mt = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
+					ACLMessage sellerDecision = myAgent.receive(mt);
+					if (sellerDecision != null) {
+						// receive decisions from sellers
+						if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 6) buy: got decision from "
+								+ sellerDecision.getSender().getName() + ": "
+								+ sellerDecision.getContent());
+						
+						// remember decisions and content 
+						sellOffers.put(sellerDecision.getSender().getName(),
+								sellerDecision.getContent());
+						sellTraders.put(sellerDecision.getSender().getName(),
+								sellerDecision.getSender());
+						offersCnt++;
+						if (offersCnt >= sellerAgentsList.size()) {
+							// we received all decisions
+							offersCnt = 0;
+							step = 3;
+						}
+					} else {
+						block();
+					}
+					break;
+				case 3:
+					// received all decisions: sending confirmation (accept/reject the offer)
+					Map<String, Boolean> myDecisions = composeFinalBuyingDecision(sellOffers);
+					Iterator<String> decisionIterator = myDecisions.keySet().iterator();
+					
+					// send your deficion to evey seller
+					while(decisionIterator.hasNext())
+					{
+						String recipientName = decisionIterator.next();
+						ACLMessage dec;
+						if(myDecisions.get(recipientName) == true) {
+							dec = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+							if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName() + " 6a) buy: accepted offer from "
+									+ recipientName);
+						}
+						else {
+							dec = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
+							if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName() + " 6a) buy: rejected offer from "
+									+ recipientName);
+						}
+						dec.addReceiver(sellTraders.get(recipientName));
+						myAgent.send(dec);
+					}
+					offersCnt = 0;
+					step = 4;
+				case 4:
+					// receive confirmation of transaction and update supplies
+					mt = MessageTemplate.or(MessageTemplate.MatchPerformative(ACLMessage.CONFIRM), MessageTemplate.MatchPerformative(ACLMessage.REFUSE));
+					msg = myAgent.receive(mt);
+					if (msg != null) {
+						if(msg.getPerformative() == ACLMessage.CONFIRM)
+						{
+							if(AgentsUtilities.PRINT_COMMUNICATION_STAGE) System.out.println(myAgent.getName()
+								+ " 8) buy: received confirmation from "
+								+ msg.getSender().getName());
+							updateBuyerStore(msg.getSender().getName());
+						}
+						offersCnt ++;
+						if(offersCnt >= sellerAgentsList.size()) {
+							step = 5;
+						}
+					}
+					break;
+				case 5:
+					if(AgentsUtilities.DEBUG_ST_1) System.out.println("buy: step = end");
+					step = 0;
+					offersCnt = 0;
+					sellOffers.clear();
+					sellTraders.clear();
 					block();
+					break;
 				}
-				break;
-			case 3:
-				// Receive confirmation of transaction and update supplies
-				mt = MessageTemplate.MatchPerformative(ACLMessage.CONFIRM);
-				msg = myAgent.receive(mt);
-				if (msg != null) {
-					System.out.println(myAgent.getName()
-							+ " 8) buy: received confirmation from "
-							+ msg.getSender().getName());
-					step = 3;
-				}
-				break;
-			case 4:
-				System.out.println("buy: step = end");
-				step = 0;
-				block();
-				break;
-
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+		}
+
+		@Override
+		public boolean done() {
+			return step == 5;
 		}
 	}
 

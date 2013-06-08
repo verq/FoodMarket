@@ -2,6 +2,8 @@ package agents;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import constants.MarketConstants;
 import constants.Participants;
@@ -69,5 +71,16 @@ public class Client extends MarketAgent {
 		return offers;
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Map<String, Boolean> composeFinalBuyingDecision(
+			Map<String, String> sellOffers) {
+		Map<String, Boolean> ans = new HashMap<String, Boolean>();
+		for (String agent_name : sellOffers.keySet()) {
+			ans.put(agent_name, true);
+		}
+		return ans;
+
 	}
 }
