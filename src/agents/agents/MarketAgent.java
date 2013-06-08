@@ -39,6 +39,10 @@ public abstract class MarketAgent extends Agent {
 	private ArrayList<AID> buyerAgentsList;
 	private ArrayList<AID> sellerAgentsList;
 
+	final static String OFFER_ITEM_DELIMITER = ":";
+	final static String OFFER_FIELD_DELIMITER = ";";
+	final static String OFFER_ITEM_PARTS_DELIMITER = " ";
+	
 	protected int randomInt(int min, int max) {
 		return rand.nextInt(max - min + 1) + min;
 	}
@@ -239,14 +243,14 @@ public abstract class MarketAgent extends Agent {
 	private String composeSellContent() {
 		if (sell == null || sell.size() == 0)
 			return "";
-		String content = myType + "|sell|";
+		String content = myType + OFFER_FIELD_DELIMITER + "sell" + OFFER_FIELD_DELIMITER;
 		Iterator<Products> sellProductsIterator = sell.keySet().iterator();
 		boolean nonzero = false;
 		while (sellProductsIterator.hasNext()) {
 			Products p = sellProductsIterator.next();
 			if (sell.get(p) > 0.0) {
-				content += p + " " + sell.get(p) + " " + pricePerItem.get(p)
-						+ ":";
+				content += p + OFFER_ITEM_PARTS_DELIMITER + sell.get(p) + OFFER_ITEM_PARTS_DELIMITER + pricePerItem.get(p)
+						+ OFFER_ITEM_DELIMITER;
 				nonzero = true;
 			}
 		}
@@ -258,13 +262,13 @@ public abstract class MarketAgent extends Agent {
 	private String composeBuyContent() {
 		if (buy.size() == 0 || buy.size() == 0)
 			return "";
-		String content = myType + "|buy|";
+		String content = myType + OFFER_FIELD_DELIMITER + "buy" + OFFER_FIELD_DELIMITER;
 		Iterator<Products> buyProductsIterator = buy.keySet().iterator();
 		while (buyProductsIterator.hasNext()) {
 			Products p = buyProductsIterator.next();
 			if (buy.get(p) > 0.0)
-				content += p + " " + buy.get(p) + " " + pricePerItem.get(p)
-						+ ":";
+				content += p + OFFER_ITEM_PARTS_DELIMITER + buy.get(p) + OFFER_ITEM_PARTS_DELIMITER + pricePerItem.get(p)
+						+ OFFER_ITEM_DELIMITER;
 		}
 		return content;
 	}
@@ -283,11 +287,10 @@ public abstract class MarketAgent extends Agent {
 		return "coś";
 	}
 	
-	protected void parseOffer(String offer)
+	protected AgentOffer parseOffer(String agentName, String offer)
 	{
-		String[] str = offer.split("|");
-		String who = str[0], what = str[1];
-		String[] items = str[2].split(":");
+
+		return null;
 	}
 	
 	private class SellRequestPerformer extends CyclicBehaviour {
