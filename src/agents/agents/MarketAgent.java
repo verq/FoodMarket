@@ -38,7 +38,7 @@ public abstract class MarketAgent extends Agent {
 	protected Random rand = new Random();
 	private ArrayList<AID> buyerAgentsList;
 	private ArrayList<AID> sellerAgentsList;
-	
+
 	protected int random(int min, int max) {
 		return rand.nextInt(max - min + 1) + min;
 	}
@@ -140,7 +140,7 @@ public abstract class MarketAgent extends Agent {
 	 * sd.getName() + " " + sd.getType()); } }
 	 */
 	private void buyAction() {
-		if(buyFrom.isEmpty()) {
+		if (buyFrom.isEmpty()) {
 			System.out.println(myType + ": not buying from anyone!");
 			return;
 		}
@@ -184,7 +184,7 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	private void sellAction() {
-		if(sellTo.isEmpty()) {
+		if (sellTo.isEmpty()) {
 			System.out.println(myType + ": not selling to anyone!");
 			return;
 		}
@@ -205,21 +205,22 @@ public abstract class MarketAgent extends Agent {
 							+ " to");
 
 					try {
-						buyingAgents = DFService.search(
-								myAgent, agentDescription);
+						buyingAgents = DFService.search(myAgent,
+								agentDescription);
 						System.out.println(this.myAgent.getName()
 								+ " found the following " + buyingAgents.length
 								+ " buyer agents:");
 						for (int i = 0; i < buyingAgents.length;) {
 							buyerAgentsList.add(buyingAgents[i].getName());
-							System.out.println("* " + buyerAgentsList.get(i).getName());
+							System.out.println("* "
+									+ buyerAgentsList.get(i).getName());
 							i++;
 						}
 					} catch (FIPAException fe) {
 						fe.printStackTrace();
 					}
 				}
-				if(buyerAgentsList.size() > 0) {
+				if (buyerAgentsList.size() > 0) {
 					myAgent.addBehaviour(new SellRequestPerformer());
 				}
 			}
