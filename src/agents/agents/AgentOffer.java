@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class AgentOffer {
 	
-	public String getAgentType() {
+	public Participants getAgentType() {
 		return agentType;
 	}
-	public void setAgentType(String agentType) {
+	public void setAgentType(Participants agentType) {
 		this.agentType = agentType;
 	}
 	public String getAgentName() {
@@ -25,49 +25,51 @@ public class AgentOffer {
 	public void setOfferType(String offerType) {
 		this.offerType = offerType;
 	}
-	public Map<String, Double> getItemPrice() {
+	public Map<Products, Double> getItemPrice() {
 		return itemPrice;
 	}
-	public void setItemPrice(Map<String, Double> itemPrice) {
+	public void setItemPrice(Map<Products, Double> itemPrice) {
 		this.itemPrice = itemPrice;
 	}
-	public Map<String, Double> getItemAmount() {
+	public Map<Products, Double> getItemAmount() {
 		return itemAmount;
 	}
-	public void setItemAmount(Map<String, Double> itemAmount) {
+	public void setItemAmount(Map<Products, Double> itemAmount) {
 		this.itemAmount = itemAmount;
 	}
 	private void initialize() {
-		itemPrice = new HashMap<String, Double>();
-		itemAmount = new HashMap<String, Double>();
-		agentName = agentType = offerType = "";		
+		itemPrice = new HashMap<Products, Double>();
+		itemAmount = new HashMap<Products, Double>();
 	}
 	
 	public AgentOffer() {
 		initialize();
 	}
-	
+	public AgentOffer(String agentName, String offer) {
+		initialize();
+		parseIncommingOffer(agentName, offer);
+	}
 	public void addItemPrice(String item, double price) {
-		itemPrice.put(item, price);
+		itemPrice.put(Products.valueOf(item), price);
 	}
 
 	public void addItemAmount(String item, double price) {
-		itemAmount.put(item, price);
+		itemAmount.put(Products.valueOf(item), price);
 	}
 
 	private void parseListElements(String[] items) {
 		for (String single_entry : items) {
 			String[] values = single_entry.split(OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER);
 			if (values.length < OfferFormatUtilities.ITEM_ENTRY_LENGTH) continue;
-			itemPrice.put(values[OfferFormatUtilities.ITEM_NAME_INDEX], Double.parseDouble(values[OfferFormatUtilities.ITEM_PRICE_INDEX]));
-			itemAmount.put(values[OfferFormatUtilities.ITEM_NAME_INDEX], Double.parseDouble(values[OfferFormatUtilities.ITEM_AMOUNT_INDEX]));
+			itemPrice.put(Products.valueOf(values[OfferFormatUtilities.ITEM_NAME_INDEX]), Double.parseDouble(values[OfferFormatUtilities.ITEM_PRICE_INDEX]));
+			itemAmount.put(Products.valueOf(values[OfferFormatUtilities.ITEM_NAME_INDEX]), Double.parseDouble(values[OfferFormatUtilities.ITEM_AMOUNT_INDEX]));
 		}
 	}
 	public void parseIncommingOffer(String agentName, String offer) {
 		this.agentName = agentName;
 		if(offer.isEmpty()) return;
 		String[] str = offer.split(OfferFormatUtilities.OFFER_FIELD_DELIMITER);
-		this.agentType = str[OfferFormatUtilities.AGENT_TYPE_INDEX];
+		this.agentType = Participants.valueOf(str[OfferFormatUtilities.AGENT_TYPE_INDEX]);
 		this.offerType = str[OfferFormatUtilities.OFFER_TYPE_INDEX];
 		String[] items;
 		try {
@@ -78,9 +80,9 @@ public class AgentOffer {
 		}
 
 	}
-	private String agentType;
+	private Participants agentType;
 	private String agentName;
 	private String offerType;
-	private Map<String, Double> itemPrice;
-	private Map<String, Double> itemAmount;	
+	private Map<Products, Double> itemPrice;
+	private Map<Products, Double> itemAmount;	
 }

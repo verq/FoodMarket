@@ -24,10 +24,9 @@ import constants.MarketConstants;
 import constants.OfferFormatUtilities;
 import constants.Participants;
 import constants.Products;
+import utilities.*;
 
 public abstract class MarketAgent extends Agent {
-	protected static AgentsUtilities utilities = new AgentsUtilities();
-
 	protected double money;
 	protected Participants myType;
 	protected EnumMap<Products, Double> buy; // how much of everything he needs
@@ -115,7 +114,7 @@ public abstract class MarketAgent extends Agent {
 			serviceDescription.setType(name);
 			serviceDescription.setName(OfferFormatUtilities.SELL_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
-			System.out.println(myType + ":    I register for selling: " + name);
+			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": I register for selling: " + name);
 		}
 
 		t = new HashSet<Products>(buyFrom.values());
@@ -126,7 +125,7 @@ public abstract class MarketAgent extends Agent {
 			serviceDescription.setType(name);
 			serviceDescription.setName(OfferFormatUtilities.BUY_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
-			System.out.println(myType + ": I register for buying: " + name);
+			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": I register for buying: " + name);
 		}
 		try {
 			DFService.register(this, agentDescription);
@@ -146,7 +145,7 @@ public abstract class MarketAgent extends Agent {
 	
 	private void buyAction() {
 		if (buyFrom.isEmpty()) {
-			System.out.println(myType + ": not buying from anyone!");
+			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": not buying from anyone!");
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
@@ -189,7 +188,7 @@ public abstract class MarketAgent extends Agent {
 
 	private void sellAction() {
 		if (sellTo.isEmpty()) {
-			System.out.println(myType + ": not selling to anyone!");
+			if(AgentsUtilities.DEBUG_ST_1) System.out.println(myType + ": not selling to anyone!");
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
@@ -240,20 +239,20 @@ public abstract class MarketAgent extends Agent {
 		return OfferFormatUtilities.composeOfferContent(buy, pricePerItem, myType, OfferFormatUtilities.BUY_OFFER_TAG);
 	}
 
-	// returns price agent is ready to pay or -1 if he doesn't agree for the
-	// offer at all
-	protected abstract void decideAboutSellOffer(ArrayList<AgentOffer> offers);
+	// takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	protected abstract ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers);
 
-	// returns amount of money agent wants to get or -1 if he doesn't agree for
-	// the offer at all
-	protected abstract void decideAboutBuyOffer(ArrayList<AgentOffer> offers);
+	// takes list of agents' offers, computes what he wants to do and returns list of offers he wants to make
+	protected abstract ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers);
 
-	private String createAnswerToBuyOffer(Map<String, String> offers) {
-		// parse offers
-		//decideAboutBuyOffer();
-		return "coś";
+
+	private Map<String, String> createAnswerToBuyOffer(Map<String, String> offers) {
+		return AgentsUtilities.createMapOfOffers(decideAboutBuyOffer(AgentsUtilities.createListOfOffers(offers)));
 	}
 	
+	private Map<String, String> createAnswerToSellOffer(Map<String, String> offers) {
+		return AgentsUtilities.createMapOfOffers(decideAboutSellOffer(AgentsUtilities.createListOfOffers(offers)));
+	}
 	private class SellRequestPerformer extends CyclicBehaviour {
 		private int repliesCnt = 0; // The counter of replies from seller agents
 		private MessageTemplate mt; // The template to receive replies
@@ -315,7 +314,7 @@ public abstract class MarketAgent extends Agent {
 				break;
 			case 2:
 				// decide:
-				String offerContent = createAnswerToBuyOffer(buyOffers);
+				Map<String, String> responsesToSend = createAnswerToBuyOffer(buyOffers);
 				// Respond buyers with your decision
 				System.out
 						.println(myAgent.getName()
@@ -388,7 +387,7 @@ public abstract class MarketAgent extends Agent {
 					// Reply received
 					System.out.println(myAgent.getName()
 							+ " 2) buy: got offer from "
-							+ sell_offer.getSender().getName() + "  :  "
+							+ sell_offer.getSender().getName() + ": "
 							+ sell_offer.getContent());
 					sellOffers.put(sell_offer.getSender().getName(),
 							sell_offer.getContent());
@@ -402,7 +401,10 @@ public abstract class MarketAgent extends Agent {
 				}
 				break;
 			case 1:
-				// Send CFP to sellers
+				// Got offers from everyone, send CFP to sellers
+				// make some decision
+				Map<String, String> responsesToSend = createAnswerToBuyOffer(sellOffers);
+
 				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 				System.out.println(myAgent.getName()
 						+ " 3) buy: received all info, sending cfp");
@@ -412,7 +414,6 @@ public abstract class MarketAgent extends Agent {
 					String name = tradersIterator.next();
 					System.out.println(myAgent.getName()
 							+ "3a) buy: sending to " + name);
-					// make some decision...
 					cfp.addReceiver(sellTraders.get(name));
 				}
 				cfp.setContent(composeBuyContent());

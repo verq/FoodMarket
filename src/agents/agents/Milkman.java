@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
+import utilities.*;
 
 public class Milkman extends MarketEmployeeAgent {
 
@@ -16,11 +17,11 @@ public class Milkman extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.MILKMAN;
-		numberOfEmployees = utilities.randomInt(MarketConstants.MILKMAN_MIN_EMPLOYEE, MarketConstants.MILKMAN_MAX_EMPLOYEE);
-		have.put(Products.MILK, utilities.randomDouble(0.5, 1) * numberOfEmployees
+		numberOfEmployees = AgentsUtilities.randomInt(MarketConstants.MILKMAN_MIN_EMPLOYEE, MarketConstants.MILKMAN_MAX_EMPLOYEE);
+		have.put(Products.MILK, AgentsUtilities.randomDouble(0.5, 1) * numberOfEmployees
 				* MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
 		have.put(Products.MILK_PRODUCT,
-				(double) utilities.randomInt(MarketConstants.MILKMAN_MIN_MILK_PRODUCT, MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
+				(double) AgentsUtilities.randomInt(MarketConstants.MILKMAN_MIN_MILK_PRODUCT, MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
 
 	}
 
@@ -47,13 +48,15 @@ public class Milkman extends MarketEmployeeAgent {
 	}
 
 	@Override
-	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}

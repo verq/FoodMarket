@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import constants.Participants;
 import constants.Products;
 
 import agents.AgentOffer;
@@ -17,34 +18,34 @@ public class AgentOfferTest {
 	AgentOffer ao;
 	String name = "dupa";
 	String offerType = "buy";
-	String agentType = "CLIENT";
-	Map<String, Double> itemPrice;
-	Map<String, Double> itemAmount;
+	Participants agentType = Participants.CLIENT;
+	Map<Products, Double> itemPrice;
+	Map<Products, Double> itemAmount;
 	
 	@Before
 	public void setUp() throws Exception {
 		ao = new AgentOffer();
-		itemPrice = new HashMap<String, Double>();
-		itemAmount = new HashMap<String, Double>();
+		itemPrice = new HashMap<Products, Double>();
+		itemAmount = new HashMap<Products, Double>();
 
-		itemPrice.put("VEGETABLE", 12.0);
-		itemPrice.put("JAJKO", 42.21);
-		itemPrice.put("KURA", 0.4);
+		itemPrice.put(Products.VEGETABLE, 12.0);
+		itemPrice.put(Products.ANIMAL, 42.21);
+		itemPrice.put(Products.FRUIT, 0.4);
 
-		itemAmount.put("VEGETABLE", 3.4);
-		itemAmount.put("JAJKO", 5.0);
-		itemAmount.put("KURA", 2.0);
+		itemAmount.put(Products.VEGETABLE, 3.4);
+		itemAmount.put(Products.ANIMAL, 5.0);
+		itemAmount.put(Products.FRUIT, 2.0);
 	}
 
 	private String composeOfferContent() {
 		if (itemPrice == null || itemPrice.size() == 0 | itemAmount == null || itemAmount.size() == 0)
 			return "";
 		String content = agentType + ";" + offerType + ";";
-		Iterator<String> priceIterator = itemPrice.keySet().iterator();
+		Iterator<Products> priceIterator = itemPrice.keySet().iterator();
 
 		boolean nonzero = false;
 		while (priceIterator.hasNext()) {
-			String p = priceIterator.next();
+			Products p = priceIterator.next();
 			if (itemAmount.get(p) > 0.0) {
 				content += p + " " + itemAmount.get(p) + " " + itemPrice.get(p)
 						+ ":";

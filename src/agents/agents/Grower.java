@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
+import utilities.*;
 
 public class Grower extends MarketFieldAgent {
 
@@ -16,10 +17,10 @@ public class Grower extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.GROWER;
-		numberOfFields = utilities.randomInt(MarketConstants.GROWER_MIN_FIELD, MarketConstants.GROWER_MAX_FIELD);
-		have.put(Products.MANURE, utilities.randomDouble(0.5, 1) * numberOfFields
+		numberOfFields = AgentsUtilities.randomInt(MarketConstants.GROWER_MIN_FIELD, MarketConstants.GROWER_MAX_FIELD);
+		have.put(Products.MANURE, AgentsUtilities.randomDouble(0.5, 1) * numberOfFields
 				* MarketConstants.GROWER_MANURE_NEEDED_FOR_FIELD);
-		have.put(Products.FRUIT, (double) utilities.randomInt(MarketConstants.GROWER_MIN_FRUIT, MarketConstants.GROWER_MAX_FRUIT));
+		have.put(Products.FRUIT, (double) AgentsUtilities.randomInt(MarketConstants.GROWER_MIN_FRUIT, MarketConstants.GROWER_MAX_FRUIT));
 	}
 
 	@Override
@@ -45,13 +46,15 @@ public class Grower extends MarketFieldAgent {
 	}
 
 	@Override
-	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		return offers;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		return offers;
 		// TODO Auto-generated method stub
 		
 	}

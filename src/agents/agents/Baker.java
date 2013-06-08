@@ -17,13 +17,13 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.BAKER;
-		numberOfEmployees = utilities.randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
+		numberOfEmployees = AgentsUtilities.randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
 				MarketConstants.BAKER_MAX_EMPLOYEE);
-		have.put(Products.GRAIN, utilities.randomDouble(0.5, 1) * numberOfEmployees
+		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1) * numberOfEmployees
 				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
 		have.put(
 				Products.BREAD,
-				(double) utilities.randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
+				(double) AgentsUtilities.randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
 						MarketConstants.BAKER_MAX_BREAD_PRODUCT));
 
 	}
@@ -52,13 +52,15 @@ public class Baker extends MarketEmployeeAgent {
 	}
 
 	@Override
-	protected void decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+		return offers;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+		return offers;
 		// TODO Auto-generated method stub
 		
 	}
