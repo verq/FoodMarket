@@ -10,6 +10,7 @@ import constants.Participants;
 import constants.Products;
 import utilities.*;
 
+@SuppressWarnings("serial")
 public class Client extends MarketAgent {
 	private double income;
 	private EnumMap<Products, Integer> weekProductNeeds;

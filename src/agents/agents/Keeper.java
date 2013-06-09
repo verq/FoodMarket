@@ -8,6 +8,7 @@ import constants.Participants;
 import constants.Products;
 import utilities.*;
 
+@SuppressWarnings("serial")
 public class Keeper extends MarketFieldAgent {
 	@Override
 	protected void fillInitialBuy() {

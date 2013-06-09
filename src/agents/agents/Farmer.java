@@ -8,6 +8,7 @@ import constants.Participants;
 import constants.Products;
 import utilities.*;
 
+@SuppressWarnings("serial")
 public class Farmer extends MarketFieldAgent {
 	private double grainCost;
 

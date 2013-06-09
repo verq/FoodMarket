@@ -8,6 +8,7 @@ import constants.Participants;
 import constants.Products;
 import utilities.*;
 
+@SuppressWarnings("serial")
 public class Grower extends MarketFieldAgent {
 
 	@Override

@@ -1,0 +1,1029 @@
+\documentclass[a4paper]{article}
+% Kodowanie latin 2 (ISO8859-2)
+%\usepackage[latin2]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% język
+\usepackage[polish]{babel}
+% \usepackage[english]{babel}
+
+% znaczki matematyczne
+\usepackage{amsmath, amsfonts}
+%\usepackage{pdfescape}
+% wcięcie na początku pierwszego akapitu
+\usepackage{indentfirst}
+% dołączanie obrazków
+%\usepackage{graphics}
+\usepackage{graphicx} 
+% pozycjonowanie obrazków
+\usepackage{float}
+\usepackage{subfig}
+
+% stopnie (\degree) itd.
+\usepackage{gensymb} 
+% listingi kodu
+\usepackage{listings} 
+%\usepackage{asm}
+% kolory
+\usepackage[usenames,dvipsnames]{color}
+%Apricot 	Aquamarine 	Bittersweet 	Black
+%Blue		BlueGreen 	BlueViolet 	BrickRed
+%Brown 		BurntOrange 	CadetBlue 	CarnationPink
+%Cerulean 	CornflowerBlue 	Cyan	 	Dandelion
+%DarkOrchid 	Emerald 	ForestGreen 	Fuchsia
+%Goldenrod 	Gray	 	Green	 	GreenYellow
+%JungleGreen 	Lavender 	LimeGreen 	Magenta
+%Mahogany 	Maroon	 	Melon	 	MidnightBlue
+%Mulberry 	NavyBlue 	OliveGreen 	Orange
+%OrangeRed 	Orchid	 	Peach	 	Periwinkle
+%PineGreen 	Plum	 	ProcessBlue 	Purple
+%RawSienna 	Red	 	RedOrange 	RedViolet
+%Rhodamine 	RoyalBlue 	RoyalPurple 	RubineRed
+%Salmon 	SeaGreen 	Sepia	 	SkyBlue
+%SpringGreen 	Tan	 	TealBlue 	Thistle
+%Turquoise 	Violet	 	VioletRed 	White
+%WildStrawberry Yellow	 	YellowGreen 	YellowOrange
+
+% - szersza strona
+\usepackage[nofoot,hdivide={2cm,*,2cm},vdivide={2cm,*,2cm}]{geometry}
+\frenchspacing
+% brak numerów stron
+%\pagestyle{empty}
+
+% linki do pozycji w spisie treści
+% - komenda \url w wersji nie tworzącej dodatkowej ramki
+\usepackage[pdfborder={0 0 0 0}]{hyperref}
+%\usepackage{hyperref} % musi być ostatni!!
+\usepackage{fancyvrb}
+
+\lstset{language={[x86masm]Assembler},
+	numbers=left,
+	%makemacrouse=true,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+        keywordstyle=\color{CornflowerBlue},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color{Lavender},
+        morecomment=[l][\color{LimeGreen}]{//},
+        morecomment=[l][\color{LimeGreen}]{\#},
+	deletekeywords={ebp, esp, al, ah, ax, ebx, ecx, eax, edx, esi, edi,bl, bh, bx, dec, xor, jne, je, jle, jg, jge, or, add, cmp, inc,
+sub, mul, jl, jmp, mov, jng, push, jnle, shr, and},
+	morekeywords={[3]ebp, esp, al, ah, ax, ebx, ecx, edx, eax, esi, edi, bl, bh, bx},
+	keywordsprefix=[3]{\%},
+	keywordstyle=[3]\color{Periwinkle},
+        morekeywords={[2]% 						% keywords
+ 	ACALL,ADD,ADDC,AJMP,ANL,CALL,CJNE,CLR,CPL,DA,DEC,DIV AB,
+ 	DJNZ,INC,JB,JBC,JC,JMP,JNB,JNC,JNZ,JZ,LCALL,MOV,MOVC,MOVX,
+ 	MUL AB,NOP,ORL,POP,PUSH,RET,RETI,RL,RLC,RR,RRC,SETB,SJMP,mull,adc,cmpl, jnle, divl,
+ 	SUBB,SWAP,XCH,XCHD,XRL,DS,EQU,movl, dec, xor, jne, je, jle, jg, jge, or, add, cmp, inc, addl, sarl, idivl, movw, sub, mul, jl, jmp, mov, jng, 
+pushl, push,popl,subl, shr, and},
+morekeywords=[4]{fld, fldl, fst, finit, fstpl, fstl, flds, fninit, faddp},
+keywordstyle=[4]\color{Plum},
+	keywordstyle=[2]\color{WildStrawberry},
+	emph={A,DSEG,ENDM,CSEG,R0,R1,R2,R3,R4,R5,R6,R7,MACRO,ADC_CONVERSION,SYSCALL,EXIT,STDIN,READ,WRITE, stdout, klucz, alphabet_length
+	,\$SYSCALL,\$EXIT,\$STDIN,\$READ,\$WRITE, \$stdout, @function},
+literate=*{:}{{\textcolor{blue}:}}{1}%
+{=}{{\textcolor{blue}=}}{1}%
+{-}{{\textcolor{blue}-}}{1}%
+{+}{{\textcolor{blue}+}}{1}%
+{*}{{\textcolor{blue}*}}{1}%
+{!}{{\textcolor{blue}!}}{1}%
+{(}{{\textcolor{blue}(}}{1}%
+{)}{{\textcolor{blue})}}{1}%
+{[}{{\textcolor{blue}[}}{1}%
+{]}{{\textcolor{blue}]}}{1}%
+{<}{{\textcolor{blue}<}}{1}%
+{>}{{\textcolor{blue}>}}{1}%
+{\$}{{\textcolor{Turquoise}\$}}{1}
+{\%}{{\textcolor{Turquoise}\%}}{1}
+{0}{{\textcolor{Apricot}0}}{1}
+{5}{{\textcolor{Apricot}5}}{1}
+{6}{{\textcolor{Apricot}6}}{1}
+{7}{{\textcolor{Apricot}7}}{1}
+{8}{{\textcolor{Apricot}8}}{1}
+{9}{{\textcolor{Apricot}9}}{1}
+{4}{{\textcolor{Apricot}4}}{1}
+{3}{{\textcolor{Apricot}3}}{1}
+{2}{{\textcolor{Apricot}2}}{1}
+{1}{{\textcolor{Apricot}1}}{1},%
+	emphstyle=\color{Emerald}
+	,sensitive=false
+	,keywordsprefix={\$},
+	keywordsprefix={.}
+	%keywordstyle=[3]\color{Emerald}
+%	keywordsprefixstyle=\color{Magenta}
+	}
+%\lstdefinelanguage{asmcode}{%
+%	alsoletter={...},%
+%	alsoother={...},%
+%	morekeywords=[1]{% 						% keywords
+%	ACALL,ADD,ADDC,AJMP,ANL,CALL,CJNE,CLR,CPL,DA,DEC,DIV AB,%
+%	DJNZ,INC,JB,JBC,JC,JMP,JNB,JNC,JNZ,JZ,LCALL,MOV,MOVC,MOVX%
+%	MUL AB,NOP,ORL,POP,PUSH,RET,RETI,RL,RLC,RR,RRC,SETB,SJMP,%
+%	SUBB,SWAP,XCH,XCHD,XRL,DS,...},%
+%	morekeywords=[2]{% 						% keywords
+%	EQU,...},%
+%	emph={A,DSEG,ENDM,CSEG,R0,R1,R2,R3,R4,R5,R6,R7,MACRO,ADC_CONVERSION:,...},%
+%	sensitive=false,
+%	comment=[l];,% 							% comments
+%	morecomment=[l]{//,#},% 						% comments
+%	morestring=[m]{}%						% strings 
+%}%[keywords,comments,strings]%
+
+\usepackage{verbatim}
+\graphicspath{{/media/Data/Dowiązanie do prog/asm/}{/media/Data/Dowiązanie do prog/asm/pierwsze/}{/media/Data/Dowiązanie do prog/asm/wstawki/}}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=MidnightBlue,    % color of internal links
+    citecolor=Plum,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% dane autora
+\author{Beata Wójciak}
+\title{1 sprawozdanie z laboratorium z Architektury Komputerów}
+\date{\today}
+
+% początek dokumentu
+\begin{document}
+\begin{titlepage}
+\vspace*{\fill}
+ \begin{center}
+
+  \textsc{\LARGE Architektura Komputerów 2}\\[2.0cm]
+  \textsc{\Large Projekt: mnożenie liczb w ciele $mod$ $n$}\\[1.5cm] 
+
+\vspace*{\fill}
+% autorzy:
+  \begin{minipage}{0.4\textwidth}
+    \begin{flushleft} \large
+    \emph{Autor:}\\
+    Damian Jarmużek, 181171 \\ Beata Wójciak, 181048
+    \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+    \begin{flushright} \large
+    \emph{Prowadzący:} \\
+    Dr hab. inż. ~Janusz Biernat
+    \end{flushright}
+  \end{minipage}
+
+%\vfill
+\vspace*{\fill}
+% Bottom of the page
+{\large \today}
+ \end{center}
+
+\end{titlepage}
+
+\newpage
+%spis treści
+\tableofcontents
+\newpage
+
+% streszczenie
+\section{Cel i charakterystyka projektu}
+Zadanie projektowe polegało na skonstruowaniu układu pozwalającego na efektywne mnożenie dwóch liczb w ciele $mod$ $n$. Na wejściu podane były 3
+liczby całkowite: $a$ i $b$ oraz $n$, gdzie $a,b \in [0,n)$. \\ Przy implementacji algorytmu skorzystaliśmy z faktu, że $a{\cdot}b = (x+y){\cdot}(x-y)$. 
+Po prostych przekształceniach otrzymujemy zależności: 
+
+\begin{equation} \label{cntX}
+ x = {{a+b} \over 2}
+\end{equation}
+ \begin{equation} \label{cntY}
+y = {{a-b} \over 2}
+\end{equation}
+\indent Jednak ze względu na przesunięcie bitowe dla liczb o różnych parzystościach wynik nie był poprawny (wynika to z błędów zaokrągleń).
+ Dlatego też korzystaliśmy w implementacji z innej postaci równania, a mianowicie:
+\begin{equation}
+ a{\cdot}b = {{(a+b)^2 - (a-b)^2} \over 4}
+\end{equation}
+\indent Zatem nasze $x$ i $y$ wynosiły:
+\begin{equation} \label{Xok}
+ x = {a+b}
+\end{equation}
+ \begin{equation} \label{Yok}
+y = {a-b}
+\end{equation}
+\indent Ostatecznie operacje wykonywaliśmy na liczbach $x$ i $y$. 
+\\ \indent Nasz algorytm znajdował rozwiązanie przeprowadzając na $a$ i $b$ następujące operacje:
+\begin{enumerate}
+ \item Uzyskanie liczb $x$ i $y$ korzystając z zależności \ref{Xok} i \ref{Yok}
+ \item Podniesienie każdej z liczb do kwadratu (algorytm opisany w rozdziale \ref{sqr})
+ \item Odjęcie od siebie wyniku kwadratowania (opisane w rozdziale \ref{sub})
+ \item Przeprowadzeniu operacji modulo na uzyskanym rezultacie (rozdz. \ref{mod})
+\end{enumerate}
+\indent Schemat algorytmu zobrazowany został na poniższym schemacie (Rys. \ref{schem}).
+\begin{figure} [H]
+ \centering
+ \includegraphics[width=0.5\textwidth]{schematogolny.jpg}
+ \caption{Ogólny schemat algorytmu}
+ \label{schem}
+\end{figure}
+
+
+\indent Kluczowym dla efektywności momentem było podnoszenie liczb do kwadratu. Początkowo chcieliśmy skorzystać z algorytmu opisanego w artykule \ref{kochanski},
+jednak okazało się, że kwadrator można zaimplementować szybciej i wydajniej korzystając z własności podnoszenia liczb do kwadratu. \\ \indent
+ Opis poszczególnych elementów zaczyna się jednak od krótkiego wspomnienia o sumatorze, który
+wykorzystywaliśmy w kilku miejscach. Dla uproszczenia przyjęliśmy, że pierwsza z liczb jest większa, co pozwoliło na uniknięcie liczb ujemnych w wyrażeniu \ref{Yok}.
+
+\section{Sumator w kodzie U2}
+Sumator wykorzystujemy zarówno do dodawania jak i do odejmowania liczb, dlatego też jest on napisany tak, by działał w kodzie U2. W ten sposób uniezależniamy się
+od znaku wyrażenia \ref{Yok} i błędów związanych z ewentualnym wystąpieniem liczby ujemnej. \\ \indent Projektując sumator korzystaliśmy z algorytmu Ladnera~-~Fischera,
+opisanego w książce \cite{ArytmUklReszt}. Tam również znajduje się przykładowy kod sumatora, który zaadaptowaliśmy do naszych potrzeb.
+\begin{figure}[H]
+ \includegraphics{lfa.jpg}
+ \caption{Schemat działania sumatora Ladnera-Fischera}
+\end{figure}
+
+\lstset{language={Verilog},caption={Kod w Verilogu obrazujący implementację przykładowego sumatora dla liczb 10-bitowych}}
+\begin{lstlisting}
+//modul szybkiego sumatora 10-bitowego
+module sum_10b(X, Y, W);
+input [9:0] X, Y;
+output [9:0] W;
+wire [9:0] g, p, h, g1, p1, g2, p2, gg, pp;
+
+//wstepne przygotowanie wartosci iloczynow,
+//sum i sum wykluczajacych parametrow wejsciowych
+	assign g[9:0] = X[9:0] & Y[9:0];
+	assign p[9:0] = X[9:0] | Y[9:0];
+	assign h[9:0] = X[9:0] ^ Y[9:0];
+
+	assign gg[0] = g[0];
+	assign pp[0] = p[0];
+
+//struktura Ladnera-Fischera
+//poziom 1
+	GP inst10 (g[1], p[1], g[0], p[0], gg[1], pp[1]);
+	GP inst32 (g[3], p[3], g[2], p[2], g1[3], p1[3]);
+	GP inst54 (g[5], p[5], g[4], p[4], g1[5], p1[5]);
+	GP inst76 (g[7], p[7], g[6], p[6], g1[7], p1[7]);
+	GP inst98 (g[9], p[9], g[8], p[8], g1[9], p1[9]);
+
+//poziom 2
+	GP inst21 (g[2], p[2], gg[1], pp[1], gg[2], pp[2]);
+	GP inst31 (g1[3], p1[3], gg[1], pp[1], gg[3], pp[3]);
+	GP inst65 (g[6], p[6], g1[5], p1[5], g2[6], p2[6]);
+	GP inst75 (g1[7], p1[7], g1[5], p1[5], g2[7], p2[7]);
+
+//poziom 3
+	GP inst43 (g[4], p[4], gg[3], pp[3], gg[4], pp[4]);
+	GP inst53 (g1[5], p1[5], gg[3], pp[3], gg[5], pp[5]);
+	GP inst63 (g2[6], p2[6], gg[3], pp[3], gg[6], pp[6]);
+	GP inst73 (g2[7], p2[7], gg[3], pp[3], gg[7], pp[7]);
+
+//poziom 4
+	GP inst87 (g[8], p[8], gg[7], pp[7], gg[8], pp[8]);
+	GP inst97 (g1[9], p1[9], gg[7], pp[7], gg[9], pp[9]);
+
+	assign W[9:0] = {h[9:1] ^ gg[8:0], h[0]};
+endmodule
+\end{lstlisting}
+
+\section{Podnoszenie liczb do kwadratu} \label{sqr}
+Była to kluczowa operacja w naszym projekcie, dlatego też istotne było wykonanie jej szybko. Podczas analizy tego, co dzieje się podczas podnoszenia liczby do kwadratu
+zaobserwowaliśmy, że spora część bitów się ``kasuje'', dlatego też --- odpowiednio opisując wejścia i wyjścia poszczególnych bitów liczby podnoszonej do kwadratu
+i wyniku --- można uzyskać kwadrator o przeważnie dwukrotnie mniejszej wysokości, niż wynikałoby to ze standardowego sposobu mnożenia.
+\\ \indent Łatwo zauważyć, że wysokość kwadratora bardzo łatwo jest ograniczyć
+dzięki temu, że przy mnożeniu liczby przez nią samą zmniejsza się ilość czynników, które wpływają na wynik.
+Dla przykładu, dla liczby 3-bitowej otrzymujemy następującą równość:
+\begin{eqnarray}
+ (a_2{\cdot}2^2 + a_1{\cdot}2^1 + a_0{\cdot}2^0)^2
+&=& a_2{\cdot}2^4 + a_1{\cdot}2^2 + a_0 + a_2{\cdot}a_1{\cdot}2^4 + a_1{\cdot}a_0{\cdot}2^2 + a_2{\cdot}a_0{\cdot}2^3 \nonumber \\ 
+&= &(a_2 + a_2{\cdot}a_1){\cdot}2^4 + a_2{\cdot}a_0{\cdot}2^3 + (a_1 + a_1{\cdot}a_0){\cdot}2^2 + 0{\cdot}2^1 + a_0{\cdot}2^0 \nonumber
+\end{eqnarray}
+\\ \indent W ogólnym przypadku powyższe równanie można by przedstawić następująco:
+\begin{eqnarray} \label{sumaWielu}
+(a_0 + a_1{\cdot}2^1 + a_2{\cdot}2^2 + \dots + a_{k-1}{\cdot}2^{k-1})^2 &=& 
+ \sum_{i=0}^{k-1}a_i{\cdot}2^{2i} + \sum_{i=0}^{k-2} \sum_{j=1}^{k-1-i}a_i{\cdot}a_{i+j}{\cdot}2^{2i+j}
+\end{eqnarray}
+\\ \indent Równość \ref{sumaWielu} można też przedstawić na schemacie, gdzie jeszcze łatwiej zauważyć różnice w wysokości matrycy.
+ Dla porównania poniżej (Rys.~\ref{mulSqr}) zaprezentowane jest porównanie fragmentów matrycy dla kwadratora i układu mnożącego. 
+\begin{figure} [H]
+ \centering
+ \subfloat[Schemat matrycy mnożącej]{\includegraphics[width=0.75\textwidth]{matrMnoz.png}} \\
+ \subfloat[Schemat kwadratora]{\includegraphics[width=0.75\textwidth]{matrKwad.png}}
+ \caption{Schemat obliczeń}
+ \label{mulSqr}
+\end{figure}
+Poniżej, na listingu \ref{kwadr} zamieszczony został kod kwadratora. Wykorzystuje on w dużej mierze sumator \verb sumc_20b , 
+który jest jednorzędowym sumatorem generującym przesunięcie do następnej linii. Jego kod znajduje się na listingu \ref{sumc20b}.
+\lstset{caption={Kod obrazujący działanie kwadratora}}
+\begin{lstlisting}[label=kwadr] 
+//modul wyliczajacy kwadrat liczby 10-bitowej, wynikiem jest liczba 20-bitowa
+module sqr_10b(X, W);
+input [9:0] X;
+output [19:0] W;
+//poziomy posrednie obliczen
+wire [19:0] line1, line2, line3, line4, line5, line6;
+//przeniesienia posrednie obliczen
+wire [19:0] C1, C2, C3, C4, C5, C6;
+//sumy posrednie obliczen
+wire [19:0] S2, S3, S4, S5, S6, S7;
+
+	//poszczegolne poziomy posrednie obliczen:
+	//sumy czesciowe z nowymi przeniesieniami
+	//kwadrator z maksymalna optymalizacja ilosci poziomow
+	assign {line1[19], line1[17], line1[15], line1[13], line1[11], 
+			   line1[9], line1[7], line1[5], line1[3], line1[1]} 
+			   = 10'b0000000000;
+	assign {line1[18], line1[16], line1[14], line1[12], line1[10], 
+			   line1[8], line1[6], line1[4], line1[2], line1[0]}
+			   = X[9:0];
+	assign C1 = 20'b00000000000000000000;
+	
+	assign {line2[19], line2[18], line2[17:16], line2[15:12], line2[11], 
+			   line2[10:2], line2[1:0]} = {1'b0, X[9]&X[8], 
+			   X[9:8]&{X[7], X[7]}, 
+			   X[9:6]&{X[5], X[5], X[5], X[5]}, 5'b00000, X[9:1] & 
+			   {X[0], X[0], 
+			   X[0], X[0], X[0], X[0], X[0], X[0], X[0]}, 2'b00};
+	sumc_20b inst2(line1, line2, C1, C2, S2);
+	
+	assign {line3[19:17], line3[16:14], line3[13:12], line3[11:4], 
+			   line3[3:0]} =  {3'b000, X[9:7]&{X[6], X[6], X[6]}, 
+			   2'b00, X[9:2] & {X[1], X[1], X[1], X[1], X[1], X[1],
+			   X[1], X[1]}, 4'b0000};
+	sumc_20b inst3(S2, line3, C2, C3, S3);
+	
+	assign {line4[19:13], line4[12:6], line4[5:0]} = 
+			   {7'b0000000, X[9:3] & {X[2], X[2], X[2],
+			   X[2], X[2], X[2], X[2]}, 6'b000000};
+	sumc_20b inst4(S3, line4, C3, C4, S4);
+	
+	assign {line5[19:14], line5[13:8], line5[7:0]} = 
+			   {6'b000000, X[9:4] & {X[3], X[3], X[3], 
+			   X[3], X[3], X[3]}, 8'b00000000};
+	sumc_20b inst5(S4, line5, C4, C5, S5);
+	
+	assign {line6[19:15], line6[14:10], line6[9:0]} = 
+			   {5'b00000, X[9:5] & {X[4], X[4], X[4],
+			   X[4], X[4]}, 10'b0000000000};
+	sumc_20b inst6(S5, line6, C5, C6, S6);
+
+	sum_20b instend(S6, C6, S7);
+
+	assign W = S7;
+endmodule
+\end{lstlisting}
+
+\lstset{caption={\texttt{sum\_20b}}}
+\label{sumc20b}
+\begin{lstlisting}[label=sumc20b]
+//modul z sumatorami FA
+module sumc_20b(X, Y, Cold, C, S);
+input [19:0] X, Y, Cold;
+output [19:0] C, S;
+	//obliczanie wartosci przeniesien
+	assign C[19:0] = {X[18:0] & Y[18:0] | 
+((X[18:0] | Y[18:0]) & Cold[18:0]), 1'b0};
+	//obliczanie wartosci sum na danych pozycjach
+	assign S = X ^ Y ^ Cold;
+endmodule
+\end{lstlisting}
+
+ W naszym projekcie wykorzystaliśmy idee zawarte m.in. w \cite{ArytmUklReszt} i \cite{SqrDegign}. 
+
+\section{Odejmowanie wyników częściowych} \label{sub}
+Po uzyskaniu kwadratów liczb $x$ i $y$ należało je od siebie odjąć --- w tym celu wykorzystaliśmy opisany już wcześniej sumator w kodzie U2. Jedyne, co trzeba było dodać,
+by uzyskać poprawny wynik, to zamiana liczby $y$ na liczbę do niej przeciwną (bo --- co oczywiste --- odejmowanie liczby, to dodawanie jej dopełnienia). \\ \indent
+Dla jasności poniższy listing zawiera implementację przykładowego subtraktora (dla liczb 10-bitowych).
+\lstset{caption={Subtraktor liczb 10-bitowych}}
+\begin{lstlisting}
+//modul subtraktora 10-bitowego
+module sub_10b(X, Y, W);
+input [9:0] X, Y;
+output [9:0] W;
+wire [9:0] neg_Y;
+//obliczanie liczby przeciwnej do Y
+	neg_10b instNEG(Y, neg_Y);
+//sumowanie liczby X i przeciwnej do Y
+	sum_10b insts2_10b(X, neg_Y, W);
+endmodule
+\end{lstlisting}
+
+\section{Końcowe przeprowadzenie operacji $mod$ $n$} \label{mod}
+Na końcu należało jeszcze przeprowadzić skalowanie wyniku, by uzyskać rezultat w początkowym zakresie $[0,n)$. Aby to uczynić sprawdzaliśmy dla kolejnych bitów liczby, 
+czy odpowiadające im wielokrotności liczby $n$ mieszczą się w wyniku. W tym celu porównywaliśmy otrzymany wynik z liczbą $n$ i w zależności
+od otrzymanego wyniku wykonywaliśmy korektę, albo nie. Gdy wynik był zbyt duży --- odejmowaliśmy wielokrotności $n$, w przeciwnym
+razie --- dodawaliśmy je. \\ \indent Do odejmowania wykorzystaliśmy wspomniany już kilkukrotnie sumator.
+Jeśli po wykonaniu sprawdzenia (przy pomocy odejmowania $n$) wynik był ujemny, to znaczyło to, że 
+początkowa liczba była mniejsza od przyjętej wielokrotności. W przeciwnym wypadku odejmowaliśmy tę wielokrotność. Następnie przechodziliśmy do kolejnego
+bitu liczby, gdzie powtarzaliśmy te same kroki. Jeśli liczba wejściowa była ujemna, to dodawaliśmy $n$, dopóki nie uzyskaliśmy wyniku mieszczącego się w zadanym przedziale.
+\\ \indent Teoretycznie liczba kroków w tej części programu zależy liniowo od długości wyniku. Jednak ze względu na to,
+że początkowe liczby $a$ i $b$ były z przedziału $[0,n)$, a zatem również $x$ i $y$ były z tego przedziału, wynik końcowy nie mógł być bardzo od tego zakresu oddalony.
+Dlatego w praktyce korekta wykonywała się dosłownie kilka razy (empirycznie sprawdziliśmy, że przeważnie ok. 3 --- 4). \\ \indent
+Listing \ref{moduler} przedstawia model obliczeń przeprowadzanych dla $n=767$ dla liczb o długości 10 bitów. Moduł ten korzysta z funkcji \texttt{multiplexmod\_10b}, 
+zaprezentowanej na listingu \ref{multliplex}.
+
+\lstset{caption={Kod obliczający resztę z dzielenia przez $767$}}
+\begin{lstlisting}[label=moduler]
+//modul obliczajacy reszte z dzielenia przez 767 
+//liczby 20-bitowej z wynikiem 10-bitowym
+module mod767_10b(X, W);
+input [19:0] X;
+output [9:0] W;
+//poziomy posrednie obliczen
+wire [19:0] l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11;
+
+//obliczanie kolejnych X mod 767*2^i, dla i w przedziale [0, 10], ieN
+assign l1[9:0] = X[9:0];
+multiplexmod_10b instm1(X[19:10], l1[19:10]);
+
+assign l2[8:0] = l1[8:0];
+multiplexmod_11b instm2(l1[19:9], l2[19:9]);
+
+assign l3[7:0] = l2[7:0];
+multiplexmod_11b instm3(l2[18:8], l3[18:8]);
+
+assign l4[6:0] = l3[6:0];
+multiplexmod_11b instm4(l3[17:7], l4[17:7]);
+
+assign l5[5:0] = l4[5:0];
+multiplexmod_11b instm5(l4[16:6], l5[16:6]);
+
+assign l6[4:0] = l5[4:0];
+multiplexmod_11b instm6(l5[15:5], l6[15:5]);
+
+assign l7[3:0] = l6[3:0];
+multiplexmod_11b instm7(l6[14:4], l7[14:4]);
+
+assign l8[2:0] = l7[2:0];
+multiplexmod_11b instm8(l7[13:3], l8[13:3]);
+
+assign l9[1:0] = l8[1:0];
+multiplexmod_11b instm9(l8[12:2], l9[12:2]);
+
+assign l10[0] = l9[0];
+multiplexmod_11b instm10(l9[11:1], l10[11:1]);
+
+multiplexmod_11b instm11(l10[10:0], l11[10:0]);
+
+multiplexmod_10b instm12(l11[9:0], W[9:0]);
+
+endmodule
+
+\end{lstlisting}
+
+\lstset{caption={\texttt{multiplexmod\_11b} }}
+\begin{lstlisting}[label=multliplex]
+//obliczanie reszty z dzielenia przez 767 liczby 11-bitowej
+module multiplexmod_11b(X1, W);
+input [10:0] X1;
+output [10:0] W;
+wire c1;
+wire [10:0] sub1;
+	//sprawdzenie czy nalezy odjac 767
+	assign c1 = X1[10] | X1[9]&X1[8] | X1[9]&X1[7]
+		    &X1[6]&X1[5]&X1[4]&X1[3]&X1[2]&X1[1]&X1[0];
+	//wyliczenie roznicy po odjeciu 767
+	sub_11b insts(X1[10:0], 11'b01011111111, sub1);
+	//przypisanie nowej wartosci do portow
+	assign W[10] = c1&sub1[10] | !c1&X1[10];
+	assign W[9] = c1&sub1[9] | !c1&X1[9];
+	assign W[8] = c1&sub1[8] | !c1&X1[8];
+	assign W[7] = c1&sub1[7] | !c1&X1[7];
+	assign W[6] = c1&sub1[6] | !c1&X1[6];
+	assign W[5] = c1&sub1[5] | !c1&X1[5];
+	assign W[4] = c1&sub1[4] | !c1&X1[4];
+	assign W[3] = c1&sub1[3] | !c1&X1[3];
+	assign W[2] = c1&sub1[2] | !c1&X1[2];
+	assign W[1] = c1&sub1[1] | !c1&X1[1];
+	assign W[0] = c1&sub1[0] | !c1&X1[0];
+endmodule
+\end{lstlisting}
+
+\section{Podsumowanie i wnioski}
+Dużą pomocą w projektowaniu układu była możliwość korzystania ze środowiska pozwalającego na tworzenie nawet 
+skomplikowanych układów w stosunkowo prosty sposób. \\ \indent
+Projekt zaczęliśmy od napisania prostego układu mnożącego. Było to spowodowane częściowo nie do końca poprawnym zrozumieniem tematu projektu,
+jednak wyciągnęliśmy z tego pewne wnioski, a i sam dodatkowy program nie powstał na marne. Po zaimplementowaniu kwadratora mogliśmy
+bowiem porównać czasy działania obydwu wersji i zauważyliśmy, że ta druga (z kwadratorem) działa nawet trochę szybciej. Oczywiście 
+dużo zależało tu od implementacji, która --- ze względu na nasze znikome doświadczenie w pisaniu w językach typu HDL --- nie jest 
+pozbawiona niedoskonałości. \\ \indent
+Podczas testów programu zaobserwowaliśmy też, że najdłużej wykonującą się częścią programu jest końcowe skalowanie liczby, by 
+znajdowała się w przedziale $[0, n)$. 
+Zajmowało ono ok. $3/4$ czasu potrzebnego na wykonanie wszystkich obliczeń. Wynikało to głównie z tego, że ta część układu wykorzystywała
+największą ilość sumatorów spośród wszystkich części składowych. Przypuszczalnie można by przyspieszyć ten etap obliczeń, jednak
+z braku zasobów czasowych nie zrobiliśmy tego.\\ \indent
+
+%\begin{figure}[H]
+%  \begin{center}
+%      \subfloat[Oryginalny obraz]{\includegraphics[scale=0.5]{sinus.png}}
+%       \subfloat[K = 10]{\includegraphics[scale=0.5]{sinus_pngbox10.png}}\\
+%       \subfloat[K = 50]{\includegraphics[scale=0.5]{sinus_pngbox50.png}}
+%       \subfloat[K = 90]{\includegraphics[scale=0.5]{sinus_pngbox90.png}}
+%  \end{center}
+%\caption{Efekt działania filtra dla obrazu zawierającego koncentryczne fale} 
+%\end{figure}
+
+
+% itemizer
+%\begin{itemize}
+%\end{itemize}
+
+%tworzenie tabeli:
+%\begin{table}[h!]
+%  \begin{center}
+%    \begin{tabular}[h!]{|r||c|c||l|} \hline
+%adin &	dwa & tri & cztiri \\ \hline
+%    \end{tabular}
+%  \end{center}
+%  \caption{jajco}
+%  \label{tabDane}
+%\end{table}
+
+%\begin{figure}[H]
+%  \begin{center}
+%    \includegraphics[scale=0.5]{sciezka/do/pliku}
+%    \caption{podpis} 
+%  \end{center}
+%\end{figure}
+
+\section{Kod przykładowego programu}
+Ostatni już, \ref{calosc} listing przedstawia cały program, którego fragmenty zostały wykorzystane powyżej. Program ten przyjmuje
+jako argumenty $2$ liczby 10-bitowe. Dla uproszczenia $n$ jest już na stałe wpisane do programu i wynosi $767$. Kod programu
+znajduje się też jako osobny plik na płycie.
+\lstset{caption={Cały program realizujący mnożenie liczb 10-bitowych}}
+\begin{lstlisting}[label=calosc]
+`timescale 1ns / 1ps
+
+module AK2kod(
+	input [9:0] X,
+	input [9:0] Y,
+	output [9:0] W
+);
+
+wire [9:0] a, b;
+wire [19:0] a2b2;
+wire [19:0] a2;
+wire [19:0] b2;
+wire [19:0] a2b2s;
+
+//suma liczb X i Y
+sum_10b instsumXY(X, Y, a);
+//roznica liczb X i Y
+sub_10b instsubXY(X, Y, b);
+
+//kwadrat liczby (X+Y)
+sqr_10b instX(a, a2);
+//kwadrat liczby (X-Y)
+sqr_10b instY(b, b2);
+
+//roznica liczb (X+Y)^2-(X-Y)^2
+sub_20b instXY20(a2, b2, a2b2);
+//dzielenie przez 4 przy uzyciu przesuniecia bitowego o 2 miejsca w prawo
+shr2_20b instshr2XY(a2b2, a2b2s);
+
+//obliczenie ((X+Y)^2-(X-Y)^2)/4 mod 767
+mod767_10b instmod767(a2b2s, W);
+
+endmodule
+
+//modul obliczajacy reszte z dzielenia przez 767 
+//liczby 20-bitowej z wynikiem 10-bitowym
+module mod767_10b(X, W);
+input [19:0] X;
+output [9:0] W;
+//poziomy posrednie obliczen
+wire [19:0] l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11;
+
+//obliczanie kolejnych X mod 767*2^i, dla i w przedziale [0, 10], ieN
+assign l1[9:0] = X[9:0];
+multiplexmod_10b instm1(X[19:10], l1[19:10]);
+
+assign l2[8:0] = l1[8:0];
+multiplexmod_11b instm2(l1[19:9], l2[19:9]);
+
+assign l3[7:0] = l2[7:0];
+multiplexmod_11b instm3(l2[18:8], l3[18:8]);
+
+assign l4[6:0] = l3[6:0];
+multiplexmod_11b instm4(l3[17:7], l4[17:7]);
+
+assign l5[5:0] = l4[5:0];
+multiplexmod_11b instm5(l4[16:6], l5[16:6]);
+
+assign l6[4:0] = l5[4:0];
+multiplexmod_11b instm6(l5[15:5], l6[15:5]);
+
+assign l7[3:0] = l6[3:0];
+multiplexmod_11b instm7(l6[14:4], l7[14:4]);
+
+assign l8[2:0] = l7[2:0];
+multiplexmod_11b instm8(l7[13:3], l8[13:3]);
+
+assign l9[1:0] = l8[1:0];
+multiplexmod_11b instm9(l8[12:2], l9[12:2]);
+
+assign l10[0] = l9[0];
+multiplexmod_11b instm10(l9[11:1], l10[11:1]);
+
+multiplexmod_11b instm11(l10[10:0], l11[10:0]);
+
+multiplexmod_10b instm12(l11[9:0], W[9:0]);
+
+endmodule
+
+//obliczanie reszty z dzielenia przez 767 liczby 10-bitowej
+module multiplexmod_10b(X1, W);
+input [9:0] X1;
+output [9:0] W;
+wire c1;
+wire [9:0] sub1;
+	//sprawdzenie czy nalezy odjac 767
+	assign c1 = X1[9]&X1[8] | X1[9]&X1[7]
+		    &X1[6]&X1[5]&X1[4]&X1[3]&X1[2]&X1[1]&X1[0];
+	//wyliczenie roznicy po odjeciu 767
+	sub_10b insts(X1[9:0], 10'b1011111111, sub1);
+	//przypisanie nowej wartosci do portow
+	assign W[9] = c1&sub1[9] | !c1&X1[9];
+	assign W[8] = c1&sub1[8] | !c1&X1[8];
+	assign W[7] = c1&sub1[7] | !c1&X1[7];
+	assign W[6] = c1&sub1[6] | !c1&X1[6];
+	assign W[5] = c1&sub1[5] | !c1&X1[5];
+	assign W[4] = c1&sub1[4] | !c1&X1[4];
+	assign W[3] = c1&sub1[3] | !c1&X1[3];
+	assign W[2] = c1&sub1[2] | !c1&X1[2];
+	assign W[1] = c1&sub1[1] | !c1&X1[1];
+	assign W[0] = c1&sub1[0] | !c1&X1[0];
+endmodule
+
+//obliczanie reszty z dzielenia przez 767 liczby 11-bitowej
+module multiplexmod_11b(X1, W);
+input [10:0] X1;
+output [10:0] W;
+wire c1;
+wire [10:0] sub1;
+	//sprawdzenie czy nalezy odjac 767
+	assign c1 = X1[10] | X1[9]&X1[8] | X1[9]&
+	    X1[7]&X1[6]&X1[5]&X1[4]&X1[3]&X1[2]&X1[1]&X1[0];
+	//wyliczenie roznicy po odjeciu 767
+	sub_11b insts(X1[10:0], 11'b01011111111, sub1);
+	//przypisanie nowej wartosci do portow
+	assign W[10] = c1&sub1[10] | !c1&X1[10];
+	assign W[9] = c1&sub1[9] | !c1&X1[9];
+	assign W[8] = c1&sub1[8] | !c1&X1[8];
+	assign W[7] = c1&sub1[7] | !c1&X1[7];
+	assign W[6] = c1&sub1[6] | !c1&X1[6];
+	assign W[5] = c1&sub1[5] | !c1&X1[5];
+	assign W[4] = c1&sub1[4] | !c1&X1[4];
+	assign W[3] = c1&sub1[3] | !c1&X1[3];
+	assign W[2] = c1&sub1[2] | !c1&X1[2];
+	assign W[1] = c1&sub1[1] | !c1&X1[1];
+	assign W[0] = c1&sub1[0] | !c1&X1[0];
+endmodule
+
+//modul wyliczajacy kwadrat liczby 10-bitowej, 
+//wynikiem jest liczba 20-bitowa
+module sqr_10b(X, W);
+input [9:0] X;
+output [19:0] W;
+//poziomy posrednie obliczen
+wire [19:0] line1, line2, line3, line4, line5, line6;
+//przeniesienia posrednie obliczen
+wire [19:0] C1, C2, C3, C4, C5, C6;
+//sumy posrednie obliczen
+wire [19:0] S2, S3, S4, S5, S6, S7;
+
+	//poszczegolne poziomy posrednie obliczen:
+	//sumy czesciowe z nowymi przeniesieniami
+	//kwadrator z maksymalna optymalizacja ilosci poziomow
+	assign {line1[19], line1[17], line1[15], 
+		    line1[13], line1[11], line1[9], line1[7], 
+		    line1[5], line1[3], line1[1]} = 10'b0000000000;
+	assign {line1[18], line1[16], line1[14], line1[12], 
+		    line1[10], line1[8], line1[6], line1[4], 
+		    line1[2], line1[0]} = X[9:0];
+	assign C1 = 20'b00000000000000000000;
+	
+	assign {line2[19], line2[18], line2[17:16], line2[15:12],
+		    line2[11], line2[10:2], line2[1:0]} = {1'b0,
+		    X[9]&X[8], X[9:8]&{X[7], X[7]}, X[9:6]&{X[5],
+		    X[5], X[5], X[5]}, 5'b00000, X[9:1] & {X[0],
+		    X[0], X[0], X[0], X[0], X[0], X[0], X[0], X[0]},
+		    2'b00};
+	sumc_20b inst2(line1, line2, C1, C2, S2);
+	
+	assign {line3[19:17], line3[16:14], line3[13:12], line3[11:4],
+		    line3[3:0]} = {3'b000, X[9:7]&{X[6], X[6], X[6]},
+		    2'b00, X[9:2] & {X[1], X[1], X[1], X[1], X[1],
+		    X[1], X[1], X[1]}, 4'b0000};
+	sumc_20b inst3(S2, line3, C2, C3, S3);
+	
+	assign {line4[19:13], line4[12:6], line4[5:0]} =
+		    {7'b0000000, X[9:3] & {X[2], X[2], X[2], 
+		    X[2], X[2], X[2], X[2]}, 6'b000000};
+	sumc_20b inst4(S3, line4, C3, C4, S4);
+	
+	assign {line5[19:14], line5[13:8], line5[7:0]} = 
+		    {6'b000000, X[9:4] & {X[3], X[3], X[3], 
+		    X[3], X[3], X[3]}, 8'b00000000};
+	sumc_20b inst5(S4, line5, C4, C5, S5);
+	
+	assign {line6[19:15], line6[14:10], line6[9:0]} = 
+		    {5'b00000, X[9:5] & {X[4], X[4], X[4], 
+		    X[4], X[4]}, 10'b0000000000};
+	sumc_20b inst6(S5, line6, C5, C6, S6);
+
+	sum_20b instend(S6, C6, S7);
+
+	assign W = S7;
+endmodule
+
+//modul z sumatorami FA
+module sumc_20b(X, Y, Cold, C, S);
+input [19:0] X, Y, Cold;
+output [19:0] C, S;
+	//obliczanie wartosci przeniesien
+	assign C[19:0] = {X[18:0] & Y[18:0] | 
+		    ((X[18:0] | Y[18:0]) & Cold[18:0]), 1'b0};
+	//obliczanie wartosci sum na danych pozycjach
+	assign S = X ^ Y ^ Cold;
+endmodule
+
+//modul przesuniecia bitowego w prawo liczby 10-bitowej
+module shr_10b(X, W);
+input [9:0] X;
+output [9:0] W;
+	assign W[9:0] = {1'b0, X[9:1]};
+endmodule
+
+//modul przesuniecia bitowego w prawo o 2 liczby 20-bitowej
+module shr2_20b(X, W);
+input [19:0] X;
+output [19:0] W;
+	assign W[19:0] = {2'b00, X[19:2]};
+endmodule
+
+//modul szybkiego sumatora 10-bitowego
+module sum_10b(X, Y, W);
+input [9:0] X, Y;
+output [9:0] W;
+wire [9:0] g, p, h, g1, p1, g2, p2, gg, pp;
+
+//wstepne przygotowanie wartosci iloczynow, 
+//sum i sum wykluczajacych parametrow wejsciowych
+	assign g[9:0] = X[9:0] & Y[9:0];
+	assign p[9:0] = X[9:0] | Y[9:0];
+	assign h[9:0] = X[9:0] ^ Y[9:0];
+
+	assign gg[0] = g[0];
+	assign pp[0] = p[0];
+
+//struktura Ladnera-Fischera
+//poziom 1
+	GP inst10 (g[1], p[1], g[0], p[0], gg[1], pp[1]);
+	GP inst32 (g[3], p[3], g[2], p[2], g1[3], p1[3]);
+	GP inst54 (g[5], p[5], g[4], p[4], g1[5], p1[5]);
+	GP inst76 (g[7], p[7], g[6], p[6], g1[7], p1[7]);
+	GP inst98 (g[9], p[9], g[8], p[8], g1[9], p1[9]);
+
+//poziom 2
+	GP inst21 (g[2], p[2], gg[1], pp[1], gg[2], pp[2]);
+	GP inst31 (g1[3], p1[3], gg[1], pp[1], gg[3], pp[3]);
+	GP inst65 (g[6], p[6], g1[5], p1[5], g2[6], p2[6]);
+	GP inst75 (g1[7], p1[7], g1[5], p1[5], g2[7], p2[7]);
+
+//poziom 3
+	GP inst43 (g[4], p[4], gg[3], pp[3], gg[4], pp[4]);
+	GP inst53 (g1[5], p1[5], gg[3], pp[3], gg[5], pp[5]);
+	GP inst63 (g2[6], p2[6], gg[3], pp[3], gg[6], pp[6]);
+	GP inst73 (g2[7], p2[7], gg[3], pp[3], gg[7], pp[7]);
+
+//poziom 4
+	GP inst87 (g[8], p[8], gg[7], pp[7], gg[8], pp[8]);
+	GP inst97 (g1[9], p1[9], gg[7], pp[7], gg[9], pp[9]);
+
+	assign W[9:0] = {h[9:1] ^ gg[8:0], h[0]};
+endmodule
+
+//modul szybkiego sumatora 11-bitowego
+module sum_11b(X, Y, W);
+input [10:0] X, Y;
+output [10:0] W;
+wire [10:0] g, p, h, g1, p1, g2, p2, g3, p3, gg, pp;
+
+//wstepne przygotowanie wartosci iloczynow, 
+//sum i sum wykluczajacych parametrow wejsciowych
+	assign g[10:0] = X[10:0] & Y[10:0];
+	assign p[10:0] = X[10:0] | Y[10:0];
+	assign h[10:0] = X[10:0] ^ Y[10:0];
+
+	assign gg[0] = g[0];
+	assign pp[0] = p[0];
+
+//struktura Ladnera-Fischera
+//poziom 1
+	GP inst10 (g[1], p[1], g[0], p[0], gg[1], pp[1]);
+	GP inst32 (g[3], p[3], g[2], p[2], g1[3], p1[3]);
+	GP inst54 (g[5], p[5], g[4], p[4], g1[5], p1[5]);
+	GP inst76 (g[7], p[7], g[6], p[6], g1[7], p1[7]);
+	GP inst98 (g[9], p[9], g[8], p[8], g1[9], p1[9]);
+
+//poziom 2
+	GP inst21 (g[2], p[2], gg[1], pp[1], gg[2], pp[2]);
+	GP inst31 (g1[3], p1[3], gg[1], pp[1], gg[3], pp[3]);
+	GP inst65 (g[6], p[6], g1[5], p1[5], g2[6], p2[6]);
+	GP inst75 (g1[7], p1[7], g1[5], p1[5], g2[7], p2[7]);
+	GP inst109 (g[10], p[10], g1[9], p1[9], g2[10], p2[10]);
+
+//poziom 3
+	GP inst43 (g[4], p[4], gg[3], pp[3], gg[4], pp[4]);
+	GP inst53 (g1[5], p1[5], gg[3], pp[3], gg[5], pp[5]);
+	GP inst63 (g2[6], p2[6], gg[3], pp[3], gg[6], pp[6]);
+	GP inst73 (g2[7], p2[7], gg[3], pp[3], gg[7], pp[7]);
+
+//poziom 4
+	GP inst87 (g[8], p[8], gg[7], pp[7], gg[8], pp[8]);
+	GP inst97 (g1[9], p1[9], gg[7], pp[7], gg[9], pp[9]);
+	GP inst107 (g2[10], p2[10], gg[7], pp[7], gg[10], pp[10]);
+	
+	assign W[10:0] = {h[10:1] ^ gg[9:0], h[0]};
+endmodule
+
+//modul szybkiego sumatora 20-bitowego
+module sum_20b(X, Y, W);
+input [19:0] X, Y;
+output [19:0] W;
+wire [19:0] g, p, h, g1, p1, g2, p2, g3, p3, gg, pp;
+
+//wstepne przygotowanie wartosci iloczynow, 
+//sum i sum wykluczajacych parametrow wejsciowych
+	assign g[19:0] = X[19:0] & Y[19:0];
+	assign p[19:0] = X[19:0] | Y[19:0];
+	assign h[19:0] = X[19:0] ^ Y[19:0];
+
+	assign gg[0] = g[0];
+	assign pp[0] = p[0];
+
+//struktura Ladnera-Fischera
+//poziom 1
+	GP inst10 (g[1], p[1], g[0], p[0], gg[1], pp[1]);
+	GP inst32 (g[3], p[3], g[2], p[2], g1[3], p1[3]);
+	GP inst54 (g[5], p[5], g[4], p[4], g1[5], p1[5]);
+	GP inst76 (g[7], p[7], g[6], p[6], g1[7], p1[7]);
+	GP inst98 (g[9], p[9], g[8], p[8], g1[9], p1[9]);
+	GP inst1110 (g[11], p[11], g[10], p[10], g1[11], p1[11]);
+	GP inst1312 (g[13], p[13], g[12], p[12], g1[13], p1[13]);
+	GP inst1514 (g[15], p[15], g[14], p[14], g1[15], p1[15]);
+	GP inst1716 (g[17], p[17], g[16], p[16], g1[17], p1[17]);
+	GP inst1918 (g[19], p[19], g[18], p[18], g1[19], p1[19]);
+
+//poziom 2
+	GP inst21 (g[2], p[2], gg[1], pp[1], gg[2], pp[2]);
+	GP inst31 (g1[3], p1[3], gg[1], pp[1], gg[3], pp[3]);
+	GP inst65 (g[6], p[6], g1[5], p1[5], g2[6], p2[6]);
+	GP inst75 (g1[7], p1[7], g1[5], p1[5], g2[7], p2[7]);
+	GP inst109 (g[10], p[10], g1[9], p1[9], g2[10], p2[10]);
+	GP inst119 (g1[11], p1[11], g1[9], p1[9], g2[11], p2[11]);
+	GP inst1413 (g[14], p[14], g1[13], p1[13], g2[14], p2[14]);
+	GP inst1513 (g1[15], p1[15], g1[13], p1[13], g2[15], p2[15]);
+	GP inst1817 (g[18], p[18], g1[17], p1[17], g2[18], p2[18]);
+	GP inst1917 (g1[19], p1[19], g1[17], p1[17], g2[19], p2[19]);
+
+//poziom 3
+	GP inst43 (g[4], p[4], gg[3], pp[3], gg[4], pp[4]);
+	GP inst53 (g1[5], p1[5], gg[3], pp[3], gg[5], pp[5]);
+	GP inst63 (g2[6], p2[6], gg[3], pp[3], gg[6], pp[6]);
+	GP inst73 (g2[7], p2[7], gg[3], pp[3], gg[7], pp[7]);
+	GP inst1211 (g[12], p[12], g2[11], p2[11], g3[12], p3[12]);
+	GP inst1311 (g1[13], p1[13], g2[11], p2[11], g3[13], p3[13]);
+	GP inst1411 (g2[14], p2[14], g2[11], p2[11], g3[14], p3[14]);
+	GP inst1511 (g2[15], p2[15], g2[11], p2[11], g3[15], p3[15]);
+
+//poziom 4
+	GP inst87 (g[8], p[8], gg[7], pp[7], gg[8], pp[8]);
+	GP inst97 (g1[9], p1[9], gg[7], pp[7], gg[9], pp[9]);
+	GP inst107 (g2[10], p2[10], gg[7], pp[7], gg[10], pp[10]);
+	GP inst117 (g2[11], p2[11], gg[7], pp[7], gg[11], pp[11]);
+	GP inst127 (g3[12], p3[12], gg[7], pp[7], gg[12], pp[12]);
+	GP inst137 (g3[13], p3[13], gg[7], pp[7], gg[13], pp[13]);
+	GP inst147 (g3[14], p3[14], gg[7], pp[7], gg[14], pp[14]);
+	GP inst157 (g3[15], p3[15], gg[7], pp[7], gg[15], pp[15]);
+	
+//poziom 5
+	GP inst1615 (g[16], p[16], gg[15], pp[15], gg[16], pp[16]);
+	GP inst1715 (g1[17], p1[17], gg[15], pp[15], gg[17], pp[17]);
+	GP inst1815 (g2[18], p2[18], gg[15], pp[15], gg[18], pp[18]);
+	GP inst1915 (g2[19], p2[19], gg[15], pp[15], gg[19], pp[19]);
+	
+	assign W[19:0] = {h[19:1] ^ gg[18:0], h[0]};
+endmodule
+
+//modul subtraktora 10-bitowego
+module sub_10b(X, Y, W);
+input [9:0] X, Y;
+output [9:0] W;
+wire [9:0] neg_Y;
+//obliczanie liczby przeciwnej do Y
+	neg_10b instNEG(Y, neg_Y);
+//sumowanie liczby X i przeciwnej do Y
+	sum_10b insts2_10b(X, neg_Y, W);
+endmodule
+
+//modul subtraktora 11-bitowego
+module sub_11b(X, Y, W);
+input [10:0] X, Y;
+output [10:0] W;
+wire [10:0] neg_Y;
+//obliczanie liczby przeciwnej do Y
+	neg_11b instNEG(Y, neg_Y);
+//sumowanie liczby X i przeciwnej do Y
+	sum_11b insts2_11b(X, neg_Y, W);
+endmodule
+
+//modul subtraktora 20-bitowego
+module sub_20b(X, Y, W);
+input [19:0] X, Y;
+output [19:0] W;
+wire [19:0] neg_Y;
+//obliczanie liczby przeciwnej do Y
+	neg_20b instNEG(Y, neg_Y);
+//sumowanie liczby X i przeciwnej do Y
+	sum_20b insts2_20b(X, neg_Y, W);
+endmodule
+
+//modul generacji i propagacji przeniesienia
+module GP(gh, ph, gl, pl, g, p);
+input gh, ph, gl, pl;
+output g, p;
+//generacja przeniesienia
+	assign g = gh | ph & gl;
+//propogacja przeniesienia
+	assign p = ph & pl;
+endmodule
+
+//modul obliczania liczby przeciwnej 10-bitowej
+module neg_10b(X, neg_X);
+input [9:0] X;
+output [9:0] neg_X;
+wire [9:0] not_X;
+//negacja wartosci bitow
+	assign not_X[9:0] = ~X[9:0];
+//suma negacji liczby z liczba 1
+	sum_11b instSD(not_X, 10'b0000000001, neg_X);
+endmodule
+
+//modul obliczania liczby przeciwnej 11-bitowej
+module neg_11b(X, neg_X);
+input [10:0] X;
+output [10:0] neg_X;
+wire [10:0] not_X;
+//negacja wartosci bitow
+	assign not_X[10:0] = ~X[10:0];
+//suma negacji liczby z liczba 1
+	sum_10b instSD(not_X, 11'b00000000001, neg_X);
+endmodule
+
+//modul obliczania liczby przeciwnej 20-bitowej
+module neg_20b(X, neg_X);
+input [19:0] X;
+output [19:0] neg_X;
+wire [19:0] not_X;
+//negacja wartosci bitow
+	assign not_X[19:0] = ~X[19:0];
+//suma negacji liczby z liczba 1
+	sum_20b instSD(not_X, 20'b00000000000000000001, neg_X);
+endmodule
+
+\end{lstlisting}
+
+\begin{thebibliography}{9}
+\bibitem{ArchKomp}
+Janusz Biernat, \emph{Architektura komputerów}, Wyd. 4 rozsz., Oficyna Wydawnicza Politechniki Wrocławskiej, 2005
+
+\bibitem{ArytmUklReszt} \label{ArchUklReszt}
+Janusz Biernat, \emph{Architektura układów arytmetyki resztowej}, Warszawa, Akademicka Oficyna Wydawnicza EXIT, 2007
+
+\bibitem{ArytmKomp}
+Janusz Biernat, \emph{Arytmetyka komputerów}, Warszawa, Wydawnictwo Naukowe PWN, 1996
+
+\bibitem{SqrDegign} \label{sqrDes}
+Stanislaw J. Piestrak, \emph{Design of Squarers Modulo A With Low-Level Pipelining}, IEEE TRANSACTIONS ON CIRCUITS AND SYSTEMS—II: ANALOG AND DIGITAL SIGNAL PROCESSING, VOL. 49, NO. 1, JANUARY 2002
+
+\bibitem{MetArytReszt}
+Janusz Biernat, \emph{Metody i układy arytmetyki komputerowej}, Wrocław, Oficyna Wydawnicza Politechniki Wrocławskiej, 2001
+
+\bibitem{kochanski} \label{kochanski}
+Martin Kochanski, \emph{A New Method of Serial Modular Multiplication}
+
+\bibitem{Verilog2}
+Weng Fook Lee, \emph{Verilog Coding for Logic Synthesis}, A JOHN WILEY \& SONS, INC., PUBLICATION
+
+\bibitem{VerilogGuide}
+James M. Lee, \emph{VERILOG QUICKSTART: A Practical Guide to Simulation and Synthesis in Verilog}, Third Edition Intrinsix Corp. KLUWER ACADEMIC PUBLISHERS NEW YORK, BOSTON, DORDRECHT, LONDON, MOSCOW
+
+\end{thebibliography}
+
+\end{document}

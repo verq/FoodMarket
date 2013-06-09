@@ -1,0 +1,752 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\usepackage{alltt}
+\usepackage{varioref}
+\usepackage{enumerate}
+\usepackage{amsfonts}
+\usepackage{amsmath} 
+\usepackage{indentfirst}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{listings} 
+\usepackage{multirow}
+\usepackage{pdfpages}
+\usepackage[usenames,dvipsnames,table]{xcolor}
+%\usepackage[hdivide={2cm,*,2cm},vdivide={2cm,*,2.5cm}]{geometry}
+\frenchspacing
+
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+   \def\@currentlabel{#2}%
+   \label{#1}\endgroup
+}
+\makeatother
+\linespread{1.3}
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm, headsep=1.2cm]{geometry}
+
+% kolory
+\usepackage[usenames,dvipsnames]{xcolor}
+%Apricot 	Aquamarine 	Bittersweet 	Black
+%Blue		BlueGreen 	BlueViolet 	BrickRed
+%Brown 		BurntOrange 	CadetBlue 	CarnationPink
+%Cerulean 	CornflowerBlue 	Cyan	 	Dandelion
+%DarkOrchid 	Emerald 	ForestGreen 	Fuchsia
+%Goldenrod 	Gray	 	Green	 	GreenYellow
+%JungleGreen 	Lavender 	LimeGreen 	Magenta
+%Mahogany 	Maroon	 	Melon	 	MidnightBlue
+%Mulberry 	NavyBlue 	OliveGreen 	Orange
+%OrangeRed 	Orchid	 	Peach	 	Periwinkle
+%PineGreen 	Plum	 	ProcessBlue 	Purple
+%RawSienna 	Red	 	RedOrange 	RedViolet
+%Rhodamine 	RoyalBlue 	RoyalPurple 	RubineRed
+%Salmon 	SeaGreen 	Sepia	 	SkyBlue
+%SpringGreen 	Tan	 	TealBlue 	Thistle
+%Turquoise 	Violet	 	VioletRed 	White
+%WildStrawberry Yellow	 	YellowGreen 	YellowOrange
+
+\usepackage{hyperref} % musi być ostatni!!
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    pdftoolbar=true,        % show Acrobat's toolbar?
+    pdfmenubar=true,        % show Acrobat's menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=Black,%MidnightBlue,    % color of internal links
+    citecolor=Black,%Plum,        % color of links to bibliography
+    filecolor=Black,%magenta,      % color of file links
+    urlcolor=Black%cyan           % color of external links
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\graphicspath{{digits_examples}}%{/media/Data/Dowiązanie do prog/asm/pierwsze/}{/media/Data/Dowiązanie do prog/asm/wstawki/}}
+
+\begin{document}
+\includepdf[pages={1}]{str_tytulowa.pdf} 
+
+% \begin{titlepage}
+% \vspace*{\fill}
+%  \begin{center}
+
+%   \textsc{\LARGE Praca inżynierska}\\[2.0cm]
+%   \textsc{\Large  Seminarium dyplomowe: Zastosowanie wybranych metod komputerowego podejmowania decyzji do rozpoznawania ustrukturyzowanego pisma ręcznego}\\[1.5cm] 
+
+% \vspace*{\fill}
+%   \begin{minipage}{0.4\textwidth}
+%     \begin{flushleft} \large
+%     \emph{Autorzy:}\\
+%     Beata Wójciak, 181048
+%     \end{flushleft}
+%     \end{minipage}
+%     \begin{minipage}{0.4\textwidth}
+%     \begin{flushright} \large
+%     \emph{Promotor:} \\
+%     prof.~zw.~dr~hab.~inż.~Marek~Kurzyński
+%     \end{flushright}
+%   \end{minipage}
+% \vspace*{\fill}
+
+% {\large Wrocław, \today}
+%  \end{center}
+% \end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+\section{Wstęp}
+Rozpoznawanie pisma znajduje ostatnio coraz szersze zastosowanie w~codziennym życiu, np. w~USA można wypłacać pieniądze z~bankomatów przy pomocy czeków~---~kwota na czeku jest rozpoznawana automatycznie \cite{glowna praca}. Nowoczesne urządzenia mobilne również mają już zaimplementowane algorytmy rozpoznające odręczne pismo.
+
+W~praktyce najczęściej wykorzystuje się sieci neuronowe ze względu na ich wysoką skuteczność i~krótki czas rozpoznawania obiektów oraz możliwość douczania sieci w~czasie działania.
+
+
+\section{Cel i zakres projektu}
+Głównym celem mojej pracy było zastosowanie kilku metod rozpoznawania w~celu rozpoznawania odręcznie zapisanych cyfr oraz porównanie otrzymanych rezultatów. Porównałam zarówno poprawność klasyfikacji jak również czas działania każdego z algorytmów.
+
+W~swojej pracy rozważyłam następujące metody klasyfikacji:
+\begin{enumerate}[(1)]
+ \item \emph{k-NN} ($k$ nearest neighbours, metoda $k$ najbliższych sąsiadów)
+ \item \emph{NM} (nearest mean, metoda najbliższej średniej)
+ \item \emph{SVM} (support vector machine, maszyna wektorów nośnych)
+ \item \emph{NN} (neural network, sieć neuronowa)
+\end{enumerate}
+
+Użyłam też analizy głównych składowych do redukcji cech próbek.
+
+\section{Wykorzystane technologie}
+Wszystkie programy napisałam w~języku Octave. Dodatkowo, użyłam biblioteki \verb libsvm  do \emph{SVM} oraz pakietu \verb octave_nnet  do sieci neuronowych.
+Wszystkie testy przeprowadzałam na komputerze o~parametrach:
+\begin{itemize}
+ \item System operacyjny: Debian Squeeze z jądrem w wersji 3.2.0-0
+ \item Pojemność pamięci RAM: 4GB
+ \item Procesor: Intel Core 2 Duo, 2.53GHz
+\end{itemize}
+
+\section{Zestaw danych}
+Do badań użyłam bazy cyfr pobranej z~internetu, którą można znaleźć pod adresem \cite{zrodlo cyferek}. Zestaw składa się z~60000~próbek w~zestawie uczącym oraz 10000~próbek w~zestawie testującym.
+
+Każda próbka jest pojedynczą cyfrą o wymiarach $28 \times 28$ px. Kilka przykładowych cyfr przedstawia Rysunek \ref{fig:przykladowe obrazki}.
+
+\begin{figure}[H]
+  \centering
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/0_01195}}\hspace{20pt}
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/2_00635}}\hspace{20pt}
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/3_03475}}\\
+  \centering
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/4_01549}}\hspace{20pt}
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/7_01754}}\hspace{20pt}
+    \subfloat{ \includegraphics[width=0.2\textwidth]{digits_examples/8_03139}}
+  \caption{Przykładowe próbki z~wykorzystanego zbioru}
+  \label{fig:przykladowe obrazki}
+\end{figure}
+
+W~mojej pracy każda próbka reprezentowana jest jako jednowymiarowy wektor o~długości 784, w~którym kolejne elementy są wartością pikseli w~kolejnych wierszach oryginalnego obrazka.
+
+\section{Opis poszczególnych metod}
+Pokrótce przedstawię ideę każdej z~zastosowanych przeze mnie metod. Opis każdej z~nich można znaleźć również w~pracach \cite{glowna praca}~i~\cite{bib:opis algorytmow}.
+\subsection{Analiza głównych składowych (PCA)}
+Dane, które wykorzystuję mają ponad 700 wymiarów, co istotnie wpływa na czas działania algorytmów. Dlatego zdecydowałam się użyć algorytmu PCA do redukcji liczby wymiarów danych.
+
+Jest to metoda redukcji cech obiektu oparta na analizie zbioru danych traktowanego jako zbiór punktów w~przestrzeni i~takim obrocie układu współrzędnych, by maksymalizować wariancję kolejnych współrzędnych.
+W ten sposób konstruowana jest nowa przestrzeń, w której najwięcej informacji niosą początkowe współrzędne.
+
+Danymi wejściowymi jest macierz $X$, w~której w kolejnych wierszach znajdują się poszczególne próbki, zaś w kolumnach kolejne cechy obiektu. Pierwszym krokiem algorytmu jest normalizacja macierzy poprzez odjęcie od każdej cechy średniej
+wartości tej cechy dla wszystkich próbek, tj.
+\[
+ X_{znorm}[i,j] = X[i,j] - {{1} \over {N}} \sum_{n=1}^N X[i,n]
+\]
+gdzie $N$ oznacza liczę próbek.
+
+Następnie liczona jest macierz kowariancji:
+\[
+ C = {X_{znorm} \cdot X_{znorm}^T} \cdot {{1} \over {N}}
+\]
+oraz wyznaczane są jej wartości i~wektory własne.
+
+W~tym momencie można już zmniejszyć wymiar przestrzeni: z~otrzymanych wartości własnych wybiera się te największe, a~opierając się na odpowiadających im wektorom własnym można dokonać na nie projekcji oryginalnych danych.
+
+Po tej operacji powstaje macierz wyjściowa $Y$, w~której każdy wiersz $y$ powstaje w~wyniku przekształcenia:
+\[
+ y = V^T \cdot x
+\]
+gdzie V to macierz wektorów własnych dla wybranych wartości własnych, zaś $x$ to wiersz w~macierzy wejściowej.
+
+
+\subsection{Metoda \emph{k} najbliższych sąsiadów}\label{chapter: knn}
+Jest to najprostsza z~użytych przeze mnie metod. Sprowadza się ona do obliczenia odległości próbki ze zbioru testującego od~każdego elementu zbioru uczącego i~wybraniu $k$ próbek o~najmniejszej odległości, tworzących zbiór $B$. 
+Testowany obiekt jest następnie klasyfikowany do klasy, której obiekty występowały najczęściej w~zbiorze $B$.
+
+W~swojej pracy testowałam algorytm dla $k \in \{2,3,5,8,10,13, 15, 17, 19, 21, 25, 28\}$. 
+
+Odległości między obiektami obliczałam przy użyciu 3~różnych metryk:
+\begin{enumerate}[(a)]
+ \item\label{metryka: l2} \emph{odległości euklidesowej}, wyrażonej wzorem: $d(x,y) = \sqrt{\sum_{i=1}^{N}(x_i - y_i)^2}$, gdzie $N$ to wymiar przestrzeni
+ \item\label{metryka: hamming} \emph{odległości Hamminga}, której wartość równa jest liczbie pozycji, na których różnią się porównywane wektory
+ \item\label{metryka: tangent} \emph{odległości stycznych}, której szczegółowy opis można znaleźć w~\cite{tangent distance}. Metoda polega na wyliczeniu stycznych do funkcji wyznaczonych przez transformacje na obrazach, a~następnie 
+znalezieniu najmniejszej odległości między tymi stycznymi na pewnym ograniczonym odcinku.
+
+Metryka ta teoretycznie pozwala zwiększyć poprawność klasyfikacji, bowiem jest odporna na drobne różnice między obrazkami wynikające z~ich przesunięcia względem siebie.
+
+W~pracy rozważałam przesunięcia obrazków w~pionie i~w~poziomie o~odległość do~2~pikseli oraz obroty w~prawo i~w~lewo o~kąt nie większy niż 2~stopnie. Testowałam tylko kilka
+dyskretnych wartości przesunięć (o $\pm 1,2$ stopnie i~$\pm 1,2$ piksele), by ograniczyć czas działania metody.
+
+Transformacje w~większym zakresie
+nie miały większego wpływu na wynik, gdyż jeśli jakieś dwa obrazki były do siebie podobne, to podobieństwo dało się wykryć już przy małych
+wartościach przekształceń, zaś podobieństwo zupełnie różnych od siebie obrazków nie zwiększało się nawet przy większych przekształceniach.
+
+Ostatecznie odległość między obrazkami była minimum ze wszystkich odległości wyliczonych podczas przekształceń obrazka.
+
+\end{enumerate}
+
+Najlepsze rezultaty osiągnęłam dla metryki (\ref{metryka: l2}), z~kolei dla metryki Hamminga (\ref{metryka: hamming}) wyniki były znacznie gorsze 
+(rzadko poprawność klasyfikacji przekraczała 30\%) dlatego też nie będę ich tu prezentować.
+
+Rozczarowaniem były wyniki dla metryki (\ref{metryka: hamming}), gdyż powinna ona poprawiać wyniki klasyfikacji ze względu na możliwość lepszego 
+wykrywania podobnych do siebie obrazków, a~tym samym zmniejszenie odległości między nimi. Wyniki jednak pokazują, że zastosowanie tej metryki nie wpływa na znaczne poprawienie rezultatów.
+
+Ze względu na czasochłonność działania algorytmu nie testowałam metody \emph{k-NN} na zbiorach trenujących mających więcej niż 10000 elementów.
+\subsection{Metoda najbliższej średniej}
+Faza trenująca polega na wyliczeniu wartości średnich dla obiektów ze zbioru trenującego należących do tej samej klasy. Podczas klasyfikacji testowany obiekt jest zaliczany do klasy, od której reprezentanta (czyli wyliczonej wcześniej średniej)
+jego odległość jest najmniejsza.
+
+Wartości reprezentantów wyliczałam z~użyciem średniej arytmetycznej, zaś do obliczania odległości testowanych obrazów od reprezentantów użyłam tych samych metryk co w~metodzie \ref{chapter: knn}.
+\subsection{Maszyna wektorów nośnych (SVM)}\label{chapter:svm - opis}
+Idea tej metody polega na oddzieleniu obiektów należących do różnych klas przy pomocy hiperpłaszczyzn decyzyjnych o~możliwie dużym marginesie, tj. jak najbardziej oddalonych od oddzielanych danych.
+
+Trenowanie SVM polega na minimalizacji funkcji błędu danej wzorem
+\[
+ {1 \over 2} \cdot w^T \cdot w + C \cdot \sum_{i=1}^{N}\xi_i
+\]
+spełniającej zależności
+\[
+ y_i \cdot(w^T \cdot K(x_i) + b) \ge 1 - \xi_i,\;\;\; \xi_i \ge 0,\;\;\; i = 1, \dots, N 
+\]
+gdzie $C$ to stała regularyzacji (im większe $C$ tym większy jest koszt popełnienia błędu), $w$~---~wektor współczynników, $b$~---stała, $\xi_i$ to parametry 
+odpowiadające wejściom, $y \in \{1,-1\}$ odpowiada etykietom klas, a~$x_i$ to zmienne niezależne.
+$K$ to jądro przekształcające dane wejściowe do odpowiedniej przestrzeni cech. W~mojej pracy jądrem jest radialna funkcja bazowa dana wzorem
+\[
+ K(u,v) = e^{-\gamma \cdot |u-v|^2}
+\]
+gdzie $\gamma$ jest modyfikowalnym parametrem.
+
+By z~binarnego klasyfikatora zrobić multiklasyfikator używa się np. metody \emph{jeden-kontra-wszyscy}.
+
+\subsection{Sieć neuronowa}
+\subsubsection{Definicja i struktura}
+Sieci neuronowe są uznawane za bardzo skuteczny klasyfikator~---~ich struktura może być potencjalnie
+nieograniczenie skomplikowana, dzięki czemu są w stanie wychwycić złożone cechy i~zależności między nimi.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.5\textwidth]{schemat_sieci}
+ \caption{Ogólny schemat sieci neuronowej}
+\label{fig:przyrost pca}
+\end{figure}
+
+Sieci neuronowe posiadają strukturę warstwową. Każda warstwa jest zbiorem tzw.~\emph{neuronów}, 
+które obliczają pewną funkcję przejścia. Argumentami tej funkcji są odpowiednio ważone wyjścia neuronów 
+(wyniki ich funkcji przejścia) z~warstwy niższej. W~niniejszej pracy ograniczam się do sieci, 
+w których wyjścia neuronów podpięte są do warstwy bezpośrednio wyższej. 
+
+Pierwsza warstwa nazywa się warstwą wejściową i~liczba neuronów jest równa liczbie cech~---~
+w~niniejszej pracy jest to liczba pikseli obrazka. Ostatnia warstwa, nazywana warstwą wyjściową, 
+zawiera tyle neuronów ile jest klas obiektów~---~tutaj wynosi dziesięć. Wyjścia neuronów z~ostatniej warstwy
+traktowane są jako prawdopodobieństwo, że dana instancja należy do klasy odpowiadającej odpowiedniemu 
+neuronowi. Pozostałe warstwy nazywane są warstwami ukrytymi.
+
+W~swojej pracy testowałam sieci neuronowe z~jedną ukrytą warstwą o~różnej liczbie neuronów.
+
+\subsubsection{Uczenie sieci neuronowych}
+Struktura sieci definiuje już liczności poszczególnych warstw i sposoby połączenia neuronów pomiędzy nimi.
+Zagadnienie uczenia sieci neuronowych polega więc na znalezieniu optymalnych wag połączeń między neuronami.
+
+Dla zadanej instancji danych treningowych o oczekiwanej klasie $t \in \{1, \ldots, 10\}$ 
+definiuje się tzw. \emph{błąd klasyfikacji}. W niniejszej pracy przyjęłam błąd MSE wyrażony wzorem:
+\[
+ MSE = {1 \over 10} \sum_{i=1}^{10} (\widehat{Y}_i - Y_i)^2
+\]
+gdzie
+\[
+\widehat{Y}_i = \left\{ \begin{array}{ll}
+	1 & \textrm{jeżeli } i = t \\
+	0 & \textrm{w przeciwnym przypadku}\\
+\end{array} \right.\
+\]
+zaś $Y_i$ jest wyjściem $i$-tego neuronu warstwy wyjściowej. \\
+\paragraph{Przykład} Sytuacja, kiedy
+\[
+    Y_t \simeq 1
+\]
+\[
+	\forall_{i \neq t}\ \ Y_i \simeq 0
+\]
+i w konsekwencji zachodzi 
+\[
+    MSE \simeq 0
+\]
+odpowiada niemal idealnemu zaklasyfikowaniu instancji do klasy $t$.
+
+Błąd klasyfikacji dla zbioru danych wejściowych jest równy sumie błędów dla każdej danej z osobna.
+
+Dla zadanego zestawu danych trenujących można więc traktować sieć neuronową jako funkcję, której argumentami
+są wagi połączeń między neuronami, zaś wynikiem jest sumaryczny błąd klasyfikacji.
+Oznaczmy tę funkcję przez $Q(w)$, gdzie $w$ jest wektorem wag sieci. 
+Celem fazy uczenia sieci jest znalezienie minimum funkcji $Q$.
+
+W tym celu wykorzystana jest iteracyjnie metoda gradientu sprzężonego (\emph{conjugate gradient method})
+ze wsteczną propagacją błędu. Przestrzeń wag jest przeszukiwana w otoczeniu aktualnego wektora i 
+znajdowany jest kierunek największego spadku. Następnie algorytmem wstecznej propagacji wagi aktualizowane
+są zgodnie z tym kierunkiem. Konkretnie, niech $w_t$ będzie wektorem wag w iteracji $t$, zaś $\overline{w}$ 
+będzie kierunkiem największego spadku, innymi słowy maksymalizującym pochodną 
+\[
+    DQ(\overline{w})
+\]
+Wówczas nowe wagi wyrażają się wzorem
+\[
+    w_{t+1} = w_t + \alpha \overline{w}
+\]
+gdzie $\alpha$ jest stałą uczenia (\emph{learning rate}) i~maleje wraz z kolejnymi iteracjami w celu
+umożliwienia zbiegnięcia procedury.
+Metoda gradientu sprzężonego zapewnia szybsze i stabilniejsze zbieganie, jest jednak wymaga większego nakładu
+czasowego od metody schodzenia prostego (\emph{gradient descent}), gdyż obliczane są drugie
+pochodne.
+
+Ten proces odbywa się tak długo, aż zostanie osiągnięte minimum lokalne funkcji $Q$ lub 
+jej wartość spadnie poniżej ustalonego z~góry progu. 
+
+
+
+
+\section{Sposoby przeprowadzania badań}
+Działanie każdego algorytmu przetestowałam uruchamiając go dla zbiorów uczących o~różnych wielkościach zależnych od testowanego rozwiązania oraz różnej liczby cech obrazka. Zbiór testujący był wielkości 10\% zbioru uczącego.
+Zarówno w~zbiorze uczącym jak i~testującym było po tyle samo próbek z~każdej klasy, aby uniknąć błędów klasyfikacji związanych z~lepszym dopasowaniem modelu do części klas przy jednocześnie słabszym dopasowaniu klas pozostałych.
+\section{Otrzymane rezultaty}
+\subsection{Redukcja cech}
+Wyniki zaprezentowane na Rysunku \ref{fig:przyrost pca} pokazują, że już 60~wymiarów niesie ponad 90\% informacji o~obrazku. Z~kolei przy 200~wymiarach odsetek niesionej informacji sięga już 98\%, a~dalsze zwiększanie liczby wymiarów
+nie powoduje dużego przyrostu informacji. Z tego względu uznałam, że redukcja do 200~wymiarów będzie wystarczająca, by osiągnąć satysfakcjonujące wyniki.
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/pca/przyrost_pca}
+ \caption{Procent informacji zawartej w~zbiorze danych po redukcji wymiarów}
+\label{fig:przyrost pca}
+\end{figure}
+
+Bardziej szczegółowo dane z~wykresu prezentuje Tablica \ref{tab: dokladnosc pca}. Widać w~niej, że ilość zachowanej informacji przy małej liczbie wymiarów jest niewielka, ale szybko rośnie wraz ze wzrostem liczby wymiarów. Wzrost
+ten staje się mniejszy, gdy wymiarów jest więcej niż 100. Niewielka różnica w~ilości niesionej informacji przy projekcji danych na wiele wymiarów skutkuje podobnymi rezultatami podczas klasyfikacji.
+\begin{table}
+\begin{center}
+  \begin{tabular}[H]{|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9} Liczba wymiarów po projekcji & Ilość zachowanej informacji [\%] \\ \hline \hline
+  1 & 31.774 \\ \hline 
+  3 & 43.267 \\ \hline 
+  5 & 51.340 \\ \hline 
+  10 & 62.733 \\ \hline 
+  15 & 69.403 \\ \hline 
+  20 & 74.062 \\ \hline 
+  50 & 87.370 \\ \hline 
+  70 & 90.954 \\ \hline 
+  100 & 93.890 \\ \hline 
+  150 & 96.313 \\ \hline 
+  200 & 97.606 \\ \hline 
+  250 & 98.437 \\ \hline 
+  275 & 98.751 \\ \hline 
+  \end{tabular} 
+\end{center}
+ \caption{Ilość niesionej informacji w~zależności od liczby wymiarów po projekcji} 
+\label{tab: dokladnosc pca}
+\end{table}
+
+
+\subsection{Porównanie poprawności klasyfikacji}
+\subsubsection{Metoda \emph{k} najbliższych sąsiadów}\label{sec:wyniki knn}
+Testując algorytm dla kilku różnych wartości $k$ zaobserwowałam pewną ogólną tendencję zobrazowaną na Rysunku \ref{fig:falka knn}. Ukazuje on, że algorytm daje najlepsze wyniki dla małych wartości $k$. W~szczególności 
+najlepsze wyniki otrzymywałam dla $k = 3$ lub $k = 5$, zależnie od danych wejściowych. Dla większych $k$ błąd sukcesywnie wzrastał, czasem malejąc dla $k$~z~przedziału 12~-~15.
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/knn/knn_blad10000}
+ \caption{Błąd w zależności od parametru $k$ (wykres dla zbioru uczącego wielkości 10000 i~redukcji wymiarów, metryka L2)}
+\label{fig:falka knn}
+\end{figure}
+
+Na Rysunku \ref{fig:pca poprawia knn}) zaprezentowany jest błąd klasyfikacji w~zależności od wielkości zbioru uczącego dla $k=3$. Można na nim zaobserwować, że zastosowanie redukcji wymiarów nieznacznie (przeciętnie o $2-3\%$) poprawia otrzymane rezultaty. 
+
+Dzieje 
+się tak dlatego, że PCA redukuje cechy, które i~tak nie mają dużego znaczenia przy klasyfikowaniu obiektów, czyli m.in. jednorodne zaburzenia. W~konsekwencji tego po redukcji cech dostajemy próbki pozbawione zaburzeń, które łatwiej jest do siebie przyrównać
+i~poprawnie zaklasyfikować.
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/knn/knn_rozne_wym_k3}
+ \caption{Błąd dla $k=3$ w~zależności od rozmiaru zbioru uczącego}
+\label{fig:pca poprawia knn}
+\end{figure}
+Metoda ta dała bardzo dobre wyniki dla większości testowanych przypadków. Dokładność klasyfikacji nierzadko przekraczała $94\%$. Dużym minusem tej metody jest jednak jej czas działania wynikający z~tego, że faza uczenia w~tym przypadku praktycznie
+nie istnieje i~dla każdej próbki testowej należało przejrzeć cały zbiór uczący. \\
+
+
+\subsubsection{Metoda najbliższej średniej}\label{sec:nm wyniki}
+Rysunek \ref{fig:blad nm} przedstawia wykres błędu klasyfikacji w~zależności od rozmiaru zbioru uczącego dla różnych wymiarów próbek (przy metryce euklidesowej). 
+
+Jak widać, dokładność ulega nieznacznej poprawie, gdy zbiór uczący składa się z~więcej niż 100 próbek z~każdej klasy. Wynika to z~faktu, że~reprezentant stworzony ze~100 próbek jest 
+już na tyle typowym przedstawicielem swojej klasy, że kolejne próbki nie wpływają znacznie na zmianę jego wartości.
+  
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/nm_blad}
+ \caption{Błąd klasyfikacji w~zależności od rozmiaru zbioru uczącego i~liczby wymiarów próbek}
+\label{fig:blad nm}
+\end{figure}
+Podobnie dokładność nie ulega większej poprawie wraz ze wzrostem liczby wymiarów próbki~---~dużą różnicę między dokładnościami widać tylko jeśli wymiarów jest mniej niż 50.
+Uśrednianie obrazków powoduje większą utratę informacji niż redukcja cech, dlatego różnica w~dokładności klasyfikacji pomiędzy zbiorami o~różnych wymiarach (o~ile są one wystarczająco duże) nie jest tu widoczna.
+
+Wbrew początkowym oczekiwaniom zastosowanie odległości stycznych nie wpłynęło w dużym stopniu na poprawę wyników. 
+Można zauważyć, że użycie odległości stycznych poprawia nieznacznie wyniki klasyfikacji przy dużej wielkości zbioru uczącego.
+
+Największą poprawę (bo o~3\%)
+widać dla zbioru bez redukcji cech. Jest to prawdopodobnie związane z~tym, że zastosowanie PCA nie zachowuje całkowicie odległości między próbkami,
+co wprowadza dodatkowe zaburzenia podczas klasyfikacji. Odległość stycznych lepiej radzi sobie z~tymi zaburzeniami, gdyż dokonuje transformacji,
+ które mogą pozytywnie wpłynąć na odległość między obrazkami.  
+\begin{table}[H]
+% \begin{center}
+  \begin{tabular}[H]{|c|c|c|c|}
+  \hline 
+  \rowcolor[gray]{0.9} Liczba wymiarów & Rozmiar zbioru uczącego & Błąd (L2) [\%] & Błąd (odl. stycznych) [\%]\\ \hline \hline
+
+  \multirow{2}{*}{10} &  200  & 35.00 & 40.00 \\ \cline{2-4} 
+		      &  2000 & 32.20 & 34.50\\ \hline 
+
+  \multirow{2}{*}{100} &  200  & 35.00 & 35.00 \\ \cline{2-4} 
+		       &  2000 & 22.80 & 22.00\\ \hline 
+
+  \multirow{2}{*}{784 (bez redukcji)} &  200 & 30.00 & 30.00 \\ \cline{2-4} 
+				      &  2000 & 24.10 & 21.50\\ \hline 
+
+  \end{tabular} 
+% \end{center}
+ \caption{Porównanie błędu klasyfikacji w~zależności od użytej metryki} 
+\label{tab: l2 vs tangent}
+\end{table}
+
+% 100 200 35.000000 0.004000 0.004000 0.008000
+% 100 2500 22.400000 0.004001 0.004000 0.008001
+% 
+% 10 200 35.000000 0.000000 0.004000 0.004000
+% 10 2500 32.800000 0.004000 0.004000 0.008000
+% 
+% 2 200 65.000000 0.000000 0.004000 0.004000
+% 2 2500 66.800000 0.004001 0.004000 0.008001
+% # pca_size set_size error_rate train_time test_time total_time_elapsed
+% 784 200 30.000000 0.004000 0.004001 0.008001
+% 784 2500 23.600000 0.020002 0.036002 0.056004
+% tangent
+% 0 2000 78.500000
+% 0 200 70.000000
+% 100 2000 78.000000
+% 100 200 65.000000
+% 10 2000 65.500000
+% 10 200 60.000000
+% 2 2000 35.000000
+% 2 200 35.000000
+% # pca reduce accuracy
+
+Metoda ta nie jest jednak bardzo skuteczna~---~najwyższa skuteczność, jaką udało mi się osiągnąć wynosiła 80\%. Jej czas działania jest jednak bardzo dobry~---~jest to najszybciej działająca metoda spośród wszystkich zaprezentowanych.
+
+
+\subsubsection{Maszyna wektorów nośnych (SVM)}\label{sec:svm wyniki}
+Korzystając z biblioteki \verb libsvm  stworzyłam kilka maszyn testując różne wartości parametrów $C$~oraz $\gamma$~(ich 
+znaczenie wyjaśnione jest w~rozdziale \ref{chapter:svm - opis}). Parametry dobierałam używając zbioru do walidacji krzyżowej. Wyniki dla różnych wielkości zbiorów uczących były zbliżone, dlatego zaprezentuję wykres
+poprawności klasyfikacji w~zależności od parametrów tylko dla 100 wymiarów i~10000 elementów zbioru uczącego.
+
+Wykres zależności dokładności modelu od parametrów przedstawia Rysunek \ref{fig:blad svm}.
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/svm}
+ \caption{Poprawność klasyfikacji \emph{SVM} w~zależności od parametrów $C$ i $\gamma$ dla 100 wymiarów i~10000 elementów zbioru uczącego}
+\label{fig:blad svm}
+\end{figure}
+
+Z~otrzymanych rezultatów wynika, że algorytm działa lepiej dla dużych wartości parametru $C$. Z kolei zmiana parametru $\gamma$ nie miała istotnego wpływu na 
+wyniki. Im większa wartość $C$ tym
+bardziej model dopasowuje się do danych uczących, a~co za tym idzie może wystąpić zjawisko przeuczenia. W~tym wypadku jednak nie mamy z~nim do czynienia~---~wręcz
+przeciwnie: model bardziej dopasowany do danych daje lepsze rezultaty. 
+
+W~przypadku klasyfikacji cyfr nie występuje zjawisko przeuczenia, ponieważ próbki z~zestawu uczącego są podobne do tych z~zestawu testowego.
+
+Zwiększanie $C$ powoduje, że model poprawnie klasyfikuje nawet próbki o~nietypowych dla danej klasy cechach. Skutkuje to potem lepszą klasyfikacją napotkanych próbek,
+nawet tych w~dużym stopniu różniących się od przeciętnych.
+
+
+\subsubsection{Sieć neuronowa}\label{sec:nn wyniki}
+Dokładność działania sieci neuronowej zależy od tego, do jakiego minimum
+lokalnego zbiegnie optymalizowana funkcja wag sieci. Jako że wagi inicjalizowane
+są losowymi wartościami przy każdym uruchomieniu sieci, dokładność 
+klasyfikacji może być za każdym razem inna. 
+Zaprezentowane poniżej wyniki są uśrednionymi wartościami z~10 uruchomień.
+
+% Jak widać sieć osiąga ponad 85\% dokładności dla 1000~elementów  zbior u
+% uczącego. Jest to rezultat gorszy niż w~przypadku algorytmu\emph{kNN} czy
+% \emph{SVM}, jednak (co zostanie poruszone w~Rozdziale \ref{sec :czsnn})     
+% sumaryczny czas potrzebny na jej wytrenowanie i~klasyfikację obiektów
+% testowych jest znacznie mniejszy od czasu pozostałych metod.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{wykresy/blad_nn}
+ \caption{Błąd klasyfikacji dla różnych rozmiarów zbioru uczącego i~liczby neuronów}
+\label{fig:blad nn}
+\end{figure}
+
+Jak widać na Rysunku \ref{fig:blad nn} skuteczność sieci rośnie wraz ze
+zwiększającą się liczbą neuronów i większym zbiorem uczącym. Takie zachowanie
+jest zgodne z oczekiwaniami; im większa liczba neuronów, tym bardziej elastyczny model i~więcej
+skomplikowanych cech sieć jest w stanie wykryć. Natomiast zwiększenie zbioru
+uczącego powoduje wzrost ilości informacji.
+
+Przy liczbie neuronów większej niż 200 według przedstawionych na wykresie
+(zaś bardziej szczegółowo w~Tablicy \ref{tab: blad nn})
+danych dokładność zmienia się zaledwie o~1\%, niemniej zmiana ta pozwala
+osiągnąć (dla zbioru złożonego z~20000 elementów) bardzo wysoką dokładność: aż
+97.1\%. Jest to najwyższy wynik spośród wszystkich testowanych metod.
+
+Jednak w momencie, gdy nie jest potrzebna maksymalna skuteczność zaś
+ważnym czynnikiem jest czas, można rozważyć wzięcie mniejszej liczby
+neuronów. Więcej informacji na temat czasu działania znajduje się~w Rozdziale \ref{sec:czas nn}).
+
+\begin{table}[H]
+\begin{center}
+  \begin{tabular}[H]{|l|l|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9}L. wymiarów & Rozm. zb. ucz. & L. neuronów & Błąd  \\ \hline \hline
+100 &        500  &10&   74     \\ \hline
+100  &       500  &50&   68         \\ \hline
+100   &      500  &100&   24         \\ \hline
+100    &     500  &200&   28        \\ \hline
+\hline
+100  &       1000 &10&   24        \\ \hline
+100   &      1000 &50&   17         \\ \hline
+100    &     1000 &100&   17        \\ \hline
+100     &    1000 &200&   15         \\ \hline
+100      &   1000 &500&   14        \\ \hline
+\hline
+100  &       10000 &10&  9          \\ \hline
+100   &      10000 &100&  8.4       \\ \hline
+100    &     10000 &200&  7.7        \\ \hline
+100   &      10000  &500& 6.5     \\ \hline
+\hline
+100  &       15000 &10&  13        \\ \hline
+100   &      15000 &200&  6.0      \\ \hline
+100    &     15000 &500&  4.0      \\ \hline
+\hline
+100   &      20000 &10&  10      \\ \hline
+100    &     20000 &100&  5          \\ \hline
+100     &    20000 &200&  4         \\ \hline
+100      &   20000   &2.9&        \\ \hline
+  \end{tabular} 
+\end{center}
+ \caption{Dokładność sieci neuronowej w~zależności od wymiarów zbioru uczącego i~liczby neuronów w~warstwie ukrytej} 
+\label{tab: blad nn}
+\end{table}
+
+
+\subsection{Porównanie czasu działania algorytmów}
+Każdy z~testowanych algorytmów działał w~oparciu o~inne założenia, dlatego też występowały spore różnice w~czasie działania pomiędzy algorytmami. Porównanie czasów działania dla różnych algorytmów znajduje się w tablicach poniżej.
+ 
+Czasy dla algorytmu \emph{kNN} oraz \emph{NM} są podane dla normy euklidesowej ze względu na to, że czas działania tych algorytmów z~wykorzystaniem odległości stycznych~---~zależnie od rozmiaru instancji~---~był nawet 200-krotnie dłuższy. 
+Jest to związane z~trudnościami implementacyjnymi i~koniecznością zamiany obrazków z~reprezentacji jedno- do dwuwymiarowej oraz odzyskiwania pełnych wymiarów danych zrzutowanych na mniejszą liczbę wymiarów.
+
+\subsubsection{Metoda \emph{k} najbliższych sąsiadów}
+Zdecydowanie najgorzej pod względem czasu działania wypada algorytm \emph{kNN} (Tablica \ref{tab: czas knn}). Co prawda faza trenowania algorytmu nie istnieje, lecz za to faza testowania trwa bardzo długo~---~przy każdym przykładzie
+ testującym konieczne jest przejrzenie całego zbioru uczącego, co jest wysoce nieoptymalne. Wielkość $k$~nie wpływała na czas obliczeń dla tych samych danych, dlatego prezentuję tu wyniki tylko dla $k=3$.
+
+\begin{table}[H]
+\begin{center}
+  \begin{tabular}[H]{|l|l|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9}L. wymiarów & Rozm. zb. ucz. & Czas uczenia [s] & Czas testowania [s]  \\ \hline \hline
+  50 &100  & 0 &  0.012001 \\ \hline 
+			        100 &100  & 0 &  0.012001 \\ \hline 
+			        200 &100  & 0 &  0.008000 \\ \hline  
+			        784 &100  & 0 & 0.016001 \\ \hline  
+\hline
+			        50 &500  & 0 & 0.060004 \\ \hline 
+			        100& 500  & 0 & 0.072004 \\ \hline 
+			        200& 500  & 0 & 0.104007 \\ \hline 
+			        784 &500  & 0 & 0.396024 \\ \hline 
+\hline
+			        50 &2500  & 0 &  0.732045 \\ \hline  
+			        100& 2500  & 0 & 1.464091 \\ \hline  
+			        200 &2500  & 0 &  2.700169 \\ \hline 
+			        784 &2500 & 0 & 8.588537 \\ \hline  
+\hline
+			        50 &5000 & 0 & 3.096194 \\ \hline 
+			        100 &5000 & 0 & 5.560347 \\ \hline 
+			       200 &5000 & 0 & 10.192637 \\ \hline 
+			        784 &5000 & 0 & 33.290081 \\ \hline  
+\hline
+			       50 &10000 & 0 &12.104756 \\ \hline  
+			        100 &10000 & 0 &21.957372 \\ \hline  
+			        200 &10000 & 0 & 39.722483 \\ \hline 
+			        784 &10000 & 0 & 179.927244 \\ \hline 
+  \end{tabular} 
+\end{center}
+ \caption{Czas działania algorytmu \emph{kNN} dla różnej wielkości zestawów danych. Czas w~fazie testowania jest sumarycznym czasem klasyfikacji dla wszystkich próbek ze~zbioru testującego (zbiór testujący zawsze był wielkości 10\% zbioru uczącego)} 
+\label{tab: czas knn}
+\end{table}
+
+Przy małym rozmiarze zbioru uczącego lub małej liczbie wymiarów próbek czas działania algorytmu był zadowalający, niestety jego skuteczność była niska (o~czym mowa w~Rozdziale \ref{sec:wyniki knn}). By osiągnąć wysoką skuteczność
+konieczne było użycie większego zbioru, co niestety wiązało się ze znacznym wydłużeniem czasu działania (jak widać w Tablicy \ref{tab: czas knn}, nawet do 3~minut).
+
+\subsubsection{Metoda najbliższej średniej}
+Metodę tę charakteryzuje krótki czas zarówno fazy uczenia jak i~rozpoznawania. Czas trwania fazy testów jest kilkukrotnie dłuższy niż czas trwania fazy uczenia. Wynika to z~konieczności przejrzenia każdej próbki z~osobna, by móc ją 
+poprawnie zaklasyfikować, w~związku z~czym nie jest możliwe korzystanie z~optymalizacji dostępnych w~Octave'ie.
+
+Czas działania programu nawet przy dużych zbiorach danych był bardzo krótki (znacznie poniżej $0.5$ s), niestety nie rekompensuje to niskiej poprawności klasyfikacji tego algorytmu (szczegóły są opisane w~Rozdziale \ref{sec:nm wyniki}).
+\begin{table}[H]
+\begin{center}
+  \begin{tabular}[H]{|l|l|l|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9} L. wymiarów & Rozm. zb. ucz. & Czas uczenia [s] & Czas testowania [s]  \\ \hline \hline
+			  50 &100 & 0.004000 &0.004001\\ \hline 
+			  100& 100 & 0.000000& 0.004000\\ \hline 
+			  200 &100 & 0.000000& 0.004000 \\ \hline  
+			  784 &100 & 0.004000 &0.004000 \\ \hline  
+\hline
+			  50 &500 & 0.000000 &0.004001\\ \hline  
+			  100 &500 & 0.000000& 0.004000 \\ \hline  
+			  200 &500 & 0.000000 &0.004000 \\ \hline 
+			  784 &500 & 0.004000 &0.004001 \\ \hline 
+\hline
+			  
+			  50 &2500 & 0.004000 &0.004000 \\ \hline 
+			  100& 2500 & 0.004001 &0.004000\\ \hline 
+			  200 &2500 & 0.004001 &0.008000 \\ \hline 
+			  784 &2500 & 0.020002 &0.036002 \\ \hline 
+\hline
+			  50 &5000 & 0.004000 &0.004000 \\ \hline 
+			  100& 5000 & 0.004000 &0.008000 \\ \hline 
+			  200 &5000 & 0.012001 &0.012001 \\ \hline  
+			  784 &5000 & 0.036002 &0.080005 \\ \hline 
+\hline
+			  50 &10000 &0.004000 &0.008000\\ \hline 
+			  100 &10000 & 0.008001& 0.016001 \\ \hline 
+			  200 &10000 & 0.016001 &0.040002 \\ \hline 
+			  784 &10000 & 0.068004 &0.168010 \\ \hline 
+ \end{tabular} 
+\end{center}
+ \caption{Czas działania algorytmu \emph{NM} dla różnej wielkości zestawów danych. Czas w~fazie testowania jest sumarycznym czasem klasyfikacji dla wszystkich próbek ze~zbioru testującego (zbiór testujący zawsze był wielkości 10\% zbioru uczącego)} 
+\label{tab: czas nm}
+\end{table}
+
+\subsubsection{Maszyna wektorów nośnych (SVM)}
+Dla małych danych faza trenowania trwa mniej niż sekundę, niestety algorytm daje lepsze wyniki, gdy używa się większych zbiorów. Wraz ze zwiększaniem rozmiaru zbioru uczącego czas trenowania drastycznie wzrasta dochodząc nawet
+do kilku godzin przy 60000~próbkach. Nie stanowiłoby to może wielkiej przeszkody w~praktycznych zastosowaniach algorytmu, bowiem fazę trenowania wystarczy przeprowadzić tylko raz, jednak faza testowania przy dużym zbiorze testującym
+również trwa długo (nawet pół godziny dla 10000 przykładów).
+
+Tak długie czasy działania stanowią poważną barierę w~zastosowaniu tej metody na szerszą skalę.
+\begin{table}[H]
+\begin{center}
+  \begin{tabular}[H]{|l|l|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9}L. wymiarów & Rozm. zb. ucz.& Czas uczenia [s] & Czas testowania [s]  \\ \hline \hline
+ 50 & 1000  & 0.028004 & 0.009276 \\ \hline 
+\hline
+		        100 & 1000 & 0.070928 & 0.028746 \\ \hline 
+		         100 & 5000 & 0.305817 & 0.109473 \\ \hline 
+		        100 & 10000 & 1350.893002 & 234.450115\\ \hline 
+\hline
+		         784 & 1000 & 2.149537 & 0.203857 \\ \hline 
+		         784 & 3000 & 4.012837 & 0.923791 \\ \hline 
+		         784 & 10000 & 2540.068050 & 459.683719\\ \hline 
+		         784 & 60000 & 23400.030460 & 1801.313424\\ \hline 
+
+\end{tabular} 
+\end{center}
+ \caption{Czas działania algorytmu \emph{SVM} dla różnej wielkości zestawów danych. Czas w~fazie testowania jest sumarycznym czasem klasyfikacji dla wszystkich próbek ze~zbioru testującego (zbiór testujący zawsze był wielkości 10\% zbioru uczącego)} 
+\label{tab: czas knn}
+\end{table}
+
+
+
+\subsubsection{Sieć neuronowa}\label{sec:czas nn}
+Czas trenowania sieci neuronowej zależy w~dużej mierze od początkowych wartości wag, które inicjalizowane są losowo. Oznacza to, że w~niekorzystnym przypadku trenowanie może trwać nawet kilkadziesiąt minut, co nie musi mieć odzwierciedlenia
+w~dokładności działania gotowego modelu. Zaprezentowane wyniki są średnią z~10 różnych uruchomień algorytmu testującego.
+
+Z~Tablicy \ref{tab:czas nn} odczytać można, że średni czas trenowania sieci wzrasta wraz ze zwiększaniem liczby neuronów w~warstwie ukrytej. Liczba neuronów nie ma jednak większego wpływu na czas potrzebny na klasyfikację obiektów testujących.
+
+Czas uczenia sieci dla zbioru złożonego z~20000 elementów jest stosunkowo duży w~porównaniu do czasów działania sieci trenowanych mniejszym zbiorem, ma to jednak odzwierciedlenie w~dokładności klasyfikacji (patrz Rozdział \ref{sec:nn wyniki}).
+Poprawa nie jest jednak zbyt duża, więc być może korzystniej byłoby podjąć próby lepszego wytrenowania sieci przy pomocy mniejszego zbioru uczącego niż trenować sieć dużym zbiorem, by uzyskać niewielki wzrost dokładności.
+
+\begin{table}[H]
+\begin{center}
+  \begin{tabular}[H]{|l|l|l|l|l|}
+  \hline 
+  \rowcolor[gray]{0.9}L. wymiarów & Rozm. zb. ucz. & L. neuronów & Czas uczenia [s] & Czas testowania [s]  \\ \hline \hline
+
+  100    &     500  & 10  & 74.068272 & 0.001821 \\ \hline 
+100  &       500 & 100    &  1.052546 & 0.076923 \\ \hline 
+100   &      500 & 200    &   4.056632 & 0.790271 \\ \hline 
+\hline
+100   &      1000&100   &   5.3460896 & 0.927161\\ \hline 
+100    &     1000&200 &   11.053567 & 1.023837 \\ \hline 
+100     &    1000&500 &      19.890452 & 1.012847\\ \hline 
+\hline
+100 &        10000  &10&   1.105680  & 1.393628\\ \hline 
+100  &       10000   &100&         5.648654 & 1.408473\\ \hline 
+100   &      10000   &200&       181.789520 & 1.334958\\ \hline 
+\hline
+100 &        15000   &10&       15.453672 & 1.907293\\ \hline 
+100  &       15000   &200&        267.780865 & 2.402918 \\ \hline 
+100   &      15000   &500&       728.094542 & 2.102847\\ \hline 
+\hline
+100 &        20000   &10&          84.2562 & 4.019273\\ \hline 
+100  &       20000   &100&         250.634278 & 3.890372\\ \hline 
+100   &      20000   &200&       340.745256 & 3.997436\\ \hline 
+
+  \end{tabular} 
+\end{center}
+ \caption{Czas działania algorytmów dla różnej wielkości zestawów danych. Czas w~fazie testowania jest sumarycznym czasem klasyfikacji dla wszystkich próbek ze~zbioru testującego (zbiór testujący zawsze był wielkości 10\% zbioru uczącego)} 
+\label{tab:czas nn}
+\end{table}
+
+%  \rowcolor[gray]{0.9} Liczba wymiarów próbki & Rozmiar zbioru uczącego & Błąd (norma L2) [\%] & Błąd (odległość stycznych) [\%] & Czas działania (norma L2) [s] & Czas działania (odległość stycznych) [s]\\ \hline \hline
+%   784 (bez redukcji wymiarów) &  200 & 30.00 & 30.00 & 0.008001 & 15.0\\ \hline 
+%   784 (bez redukcji wymiarów) &  2000 & 24.10 & 21.50 & 0.008001 & 15.0\\ \hline 
+\section{Wnioski i podsumowanie}
+Z~przeprowadzonych testów wynika, że nawet najprostsze rozwiązania (jak \emph{kNN}) mogą mieć bardzo dobrą dokładność klasyfikacji pisma. Niestety dużą wadą tego prostego rozwiązania jest jego czas działania. Zmienić ten fakt mogłoby np.
+samplowanie zbioru uczącego, tj. liczenie odległości między próbką testującą, a~tylko niektórymi elementami zbioru uczącego wybranymi w~sposób losowy tak, by z~każdej klasy było po tyle samo reprezentantów.
+
+Metodę \emph{kNN} można by też połączyć z~metodą \emph{NM} i~policzyć dla każdej klasy średnie złożone z~kilkunastu bądź kilkudziesięciu obiektów ze zbioru uczącego, a~następnie klasyfikację przeprowadzać w~oparciu o~policzone średnie.
+
+Sam algorytm \emph{NM} nie wykazał dużej poprawności działania, co dyskwalifikuje go jako klasyfikator do rozpoznawania pisma.
+
+Najlepszą dokładność klasyfikacji udało mi się osiągnąć przy pomocy \emph{SVM} oraz sieci neuronowych. Niestety dużą wadą \emph{SVM} jest czas potrzebny na jego trenowanie oraz konieczność doboru odpowiednich parametrów. Późniejsza
+klasyfikacja obiektów testujących również wymaga sporego nakładu czasu, co nie czyni z~\emph{SVM} dobrego modelu do praktycznych zastosowań w~rozpoznawaniu pisma.
+
+Ostatecznie najlepszą metodą klasyfikacji okazały się sieci neuronowe. Choć faza trenowania może wymagać kilkudziesięciu lub więcej minut, to ostateczna poprawność klasyfikacji warta jest poświęcenia tego czasu. Za wyborem sieci neuronowych 
+do rozpoznawania dużych zbiorów danych przemawia również fakt, że klasyfikacja obiektu nie jest czasochłonna.
+
+Warto odnotować również fakt, że dodatkową trudnością w~rozpoznawaniu pisma jest nie tylko konieczność posiadania dużego zbioru danych, lecz również liczba wymiarów każdej próbki. Oryginalnie każda cyfra miała wymiary $28 \times 28$ pikseli,
+co w~sumie daje $784$ wymiary. Jest to bardzo ważny czynnik, który wpływa w~istotny sposób zarówno na czas uczenia klasyfikatorów jak i~czas rozpoznawania. Zastosowanie redukcji cech przy pomocy PCA pozwoliło zachować 98\% informacji
+przy jednoczesnym zmniejszeniu liczby wymiarów 7~-~krotnie~---~miało to istotny wpływ na poprawę czasu działania algorytmów nie zmieniając jednak w~zauważalny sposób ich poprawności.
+
+\section{Literatura}
+\renewcommand*{\refname}{}
+\begin{thebibliography}{9}
+   \bibitem{glowna praca}  
+    Yann A. LeCun, Leon Bottou, Joshua Bengio, Patrick Haffner: \emph{Gradient-Based Learning Applied to Document Recognition}. \emph{Proc. of the IEEE}, listopad 1998
+  \bibitem{tangent distance}
+     Patrice Y. Simard, Yann A. LeCun, John S. Denker, and Bernard Victorri: \emph{Transformation Invariance in Pattern Recognition~---~Tangent Distance and Tangent Propagation}. \emph{Lecture Notes in Computer Science} Vol. 1524, 1998, s. 239~-~274
+  \bibitem{zrodlo cyferek}
+    \emph{http://yann.lecun.com/exdb/mnist/}~---~źródło bazy cyfr i~informacje o~metodach rozpoznawania
+  \bibitem{bib: pca}
+     Dan Ventura: \emph{Manifold Learning Examples PCA, LLE and ISOMAP}, Październik 2008, \emph{http://axon.cs.byu.edu/Dan/678/miscellaneous/Manifold.example.pdf}
+  \bibitem{bib:opis algorytmow}
+     Yann LeCun, L. D. Jackel, Leon Bottou, Corinna Cortes, John S. Denker, Harris Drucker, Isabelle Guyon, Urs A. Muller, Eduard Sackinger, Patrice Simard, and Vladimir Vapnik \emph{LEARNING ALGORITHMS FOR CLASSIFICATION:
+A COMPARISON ON HANDWRITTEN DIGIT RECOGNITION}, AT&T Bell Laboratories
+
+\end{thebibliography}
+
+\end{document}
