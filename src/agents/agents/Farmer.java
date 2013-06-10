@@ -65,13 +65,6 @@ public class Farmer extends MarketFieldAgent {
 	}
 
 	@Override
-	public Map<String, Boolean> composeFinalBuyingDecision(
-			Map<String, String> sellOffers) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean confirmSellTransactionWith(String traderName) {
 		// TODO Auto-generated method stub
 		return false;
@@ -81,5 +74,12 @@ public class Farmer extends MarketFieldAgent {
 	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Map<String, Boolean> composeFinalBuyingDecision(
+			ArrayList<AgentOffer> sellOffers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

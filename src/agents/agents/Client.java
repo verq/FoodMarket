@@ -74,17 +74,6 @@ public class Client extends MarketAgent {
 	}
 
 	@Override
-	public Map<String, Boolean> composeFinalBuyingDecision(
-			Map<String, String> sellOffers) {
-		Map<String, Boolean> ans = new HashMap<String, Boolean>();
-		for (String agent_name : sellOffers.keySet()) {
-			ans.put(agent_name, true);
-		}
-		return ans;
-
-	}
-
-	@Override
 	public boolean confirmSellTransactionWith(String traderName) {
 		// TODO Auto-generated method stub
 		return false;
@@ -94,5 +83,12 @@ public class Client extends MarketAgent {
 	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Map<String, Boolean> composeFinalBuyingDecision(
+			ArrayList<AgentOffer> sellOffers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

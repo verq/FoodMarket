@@ -276,7 +276,7 @@ public abstract class MarketAgent extends Agent {
 				case 3:
 					// received all decisions: sending confirmation
 					// (accept/reject the offer)
-					Map<String, Boolean> myDecisions = composeFinalBuyingDecision(sellOffers);
+					Map<String, Boolean> myDecisions = createFinalBuyingDecision(sellOffers);
 					Iterator<String> decisionIterator = myDecisions.keySet()
 							.iterator();
 
@@ -500,7 +500,7 @@ public abstract class MarketAgent extends Agent {
 	 */
 	// TODO: implement this method
 	public abstract Map<String, Boolean> composeFinalBuyingDecision(
-			Map<String, String> sellOffers);
+			ArrayList<AgentOffer> sellOffers);
 
 	/**
 	 * takes list of agents' offers, computes what I want to do and returns list
@@ -573,6 +573,11 @@ public abstract class MarketAgent extends Agent {
 						.createListOfOffers(offers)));
 	}
 
+	private Map<String, Boolean> createFinalBuyingDecision(
+			Map<String, String> offers) {
+		return composeFinalBuyingDecision(AgentsUtilities
+						.createListOfOffers(offers));
+	}
 	/**
 	 * format my sell offer content based on my current supplies
 	 * 
@@ -726,7 +731,7 @@ public abstract class MarketAgent extends Agent {
 	 */
 	protected EnumMap<Products, Double> have;
 	/**
-	 * how much of everything I can to sell
+	 * how much of everything I can sell
 	 */
 	protected EnumMap<Products, Double> sell;
 	/**
@@ -749,4 +754,10 @@ public abstract class MarketAgent extends Agent {
 	 * list of currently available agents I can buy items from
 	 */
 	private ArrayList<AID> sellerAgentsList;
+	
+	/**
+	 * how many weeks have passed;
+	 * useful also to let eg. growers sell products only during the summer
+	 */
+	protected int weeks = 0;
 }
