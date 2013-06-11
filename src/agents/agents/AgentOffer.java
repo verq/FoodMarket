@@ -65,8 +65,8 @@ public class AgentOffer {
 		itemPrice.put(Products.valueOf(item), price);
 	}
 
-	public void addItemAmount(String item, double price) {
-		itemAmount.put(Products.valueOf(item), price);
+	public void addItemAmount(String item, double amount) {
+		itemAmount.put(Products.valueOf(item), amount);
 	}
 
 	private void parseListElements(String[] items) {
@@ -88,7 +88,8 @@ public class AgentOffer {
 
 	public void parseIncommingOffer(String agentName, String offer) {
 		this.agentName = agentName;
-		if (offer.isEmpty())
+		//System.out.println(agentName + "   " + this.agentName);
+		if (offer == null || offer.isEmpty())
 			return;
 		String[] str = offer.split(OfferFormatUtilities.OFFER_FIELD_DELIMITER);
 		this.agentType = Participants

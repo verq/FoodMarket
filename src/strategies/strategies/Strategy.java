@@ -2,6 +2,7 @@ package strategies;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import constants.Participants;
@@ -11,30 +12,26 @@ import agents.AgentOffer;
 
 public abstract class Strategy {
 	/**
-	 * @author beatka
-	 *
-	 */
-	public class SimpleBuyingStrategy {
-
-	}
-
-	/**
 	 * buying stage 1:
 	 * 
 	 * takes list of agents' offers, computes what I want to do and returns list
 	 * of offers I want to make
 	 * 
+	 * used by BUYER after getting first offer from SELLER
+	 * 
 	 * @param offers
-	 *            from buyers
-	 * @return list of {@link AgentOffer} items containing buy offer details
+	 *            from sellers
+	 * @return list of {@link AgentOffer} items containing sell offer details
 	 */
-	protected abstract ArrayList<AgentOffer> decideAboutBuyOffer(
+	public abstract ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers);
 
 	/**
 	 * buying stage 2:
 	 * 
 	 * decide wether to agree for the offer or not  
+	 * 
+	 * used by BUYER after getting final decision from SELLER
 	 * 
 	 * @param sellOffers
 	 * @return map: to whose offer I respond and what is my answer
@@ -48,6 +45,8 @@ public abstract class Strategy {
 	 * 
 	 * update supplies after transaction
 	 * 
+	 * used by BUYER after getting confirmation from SELLER
+	 * 
 	 * buyer: update my supplies after positive transaction with seller
 	 * traderName
 	 * 
@@ -58,14 +57,16 @@ public abstract class Strategy {
 	/**
 	 * selling stage 1:
 	 * 
-	 * takes list of agents' offers, computes what I want to do and returns list
+	 * takes list of buying agents' offers, computes what I want to do and returns list
 	 * of offers I want to make
 	 * 
+	 * used by SELLER to decide about BUYER offer
+	 * 
 	 * @param offers
-	 *            from sellers
-	 * @return list of {@link AgentOffer} items containing sell offer details
+	 *            from buyers
+	 * @return list of {@link AgentOffer} items containing buy offer details
 	 */
-	protected abstract ArrayList<AgentOffer> decideAboutSellOffer(
+	public abstract ArrayList<AgentOffer> decideAboutBuyOffer(
 			ArrayList<AgentOffer> offers);
 
 	/**
@@ -74,11 +75,80 @@ public abstract class Strategy {
 	 * invoked at the very end of transaction to confirm it; don't forget to
 	 * update the store here!
 	 * 
+	 * used by SELLER to confirm transaction with BUYER
+	 * 
 	 * @param traderName
 	 * @return return true if I can complete transaction with this buyer,
 	 *         otherwise return false
 	 */
 	public abstract boolean confirmSellTransactionWith(String traderName);
+
+	public Strategy() {
+		buy = new EnumMap<Products, Double>(Products.class);
+		have = new EnumMap<Products, Double>(Products.class);
+		sell = new EnumMap<Products, Double>(Products.class);
+		pricePerItem = new EnumMap<Products, Double>(Products.class);
+		currentWeekBuyOffersHistory = new HashMap<String, ArrayList<AgentOffer>>();
+		currentWeekSellOffersHistory = new HashMap<String, ArrayList<AgentOffer>>();
+		myMoney = 0.0;
+	}
+	public EnumMap<Products, Double> getBuy() {
+		return buy;
+	}
+
+	public void setBuy(EnumMap<Products, Double> buy) {
+		this.buy = buy;
+	}
+
+	public EnumMap<Products, Double> getHave() {
+		return have;
+	}
+
+	public void setHave(EnumMap<Products, Double> have) {
+		this.have = have;
+	}
+
+	public EnumMap<Products, Double> getSell() {
+		return sell;
+	}
+
+	public void setSell(EnumMap<Products, Double> sell) {
+		this.sell = sell;
+	}
+
+	public EnumMap<Products, Double> getPricePerItem() {
+		return pricePerItem;
+	}
+
+	public void setPricePerItem(EnumMap<Products, Double> pricePerItem) {
+		this.pricePerItem = pricePerItem;
+	}
+
+	public Map<String, ArrayList<AgentOffer>> getCurrentWeekBuyOffersHistory() {
+		return currentWeekBuyOffersHistory;
+	}
+
+	public void setCurrentWeekBuyOffersHistory(
+			Map<String, ArrayList<AgentOffer>> buyOffersHistory) {
+		this.currentWeekBuyOffersHistory = buyOffersHistory;
+	}
+
+	public Map<String, ArrayList<AgentOffer>> getCurrentWeekSellOffersHistory() {
+		return currentWeekSellOffersHistory;
+	}
+
+	public void setCurrentWeekSellOffersHistory(
+			Map<String, ArrayList<AgentOffer>> sellOffersHistory) {
+		this.currentWeekSellOffersHistory = sellOffersHistory;
+	}
+
+	public double getMyMoney() {
+		return myMoney;
+	}
+
+	public void setMyMoney(double myMoney) {
+		this.myMoney = myMoney;
+	}
 
 	protected EnumMap<Products, Double> buy;
 	/**
@@ -94,14 +164,23 @@ public abstract class Strategy {
 	 */
 	protected EnumMap<Products, Double> pricePerItem;
 	/**
+	 * whom from I bought {@link Products} this week
+	 * name of the agent : answers to offers from current week
+	 */
+	protected Map<String, ArrayList<AgentOffer>> currentWeekBuyOffersHistory;
+	/**
+	 * to whom I sell {@link Products} this week
+	 */
+	protected Map<String, ArrayList<AgentOffer>> currentWeekSellOffersHistory;
+	
+	/**
 	 * whom from can I buy {@link Products}
 	 * name of the agent : offers from every week
 	 */
-	protected Map<String, ArrayList<AgentOffer>> buyOffersHistory;
+	protected Map<String, ArrayList<AgentOffer>> suyOffersHistory;
 	/**
-	 * to whom I sell {@link Products}
+	 * to whom I sell {@link Products} - all time offers
 	 */
 	protected Map<String, ArrayList<AgentOffer>> sellOffersHistory;
-	
 	protected double myMoney;
 }
