@@ -84,7 +84,7 @@ public class Grower extends MarketFieldAgent {
 	public Map<String, Boolean> composeFinalBuyingDecision(
 			ArrayList<AgentOffer> sellOffers) {
 		// TODO Auto-generated method stub
-		return null;
+		return new HashMap<String, Boolean>();
 	}
 
 	@Override
