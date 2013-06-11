@@ -1,4 +1,4 @@
-package strategies;
+package strategies.strategies;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

@@ -1,6 +1,7 @@
 package agents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import utilities.AgentsUtilities;
@@ -8,43 +9,44 @@ import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
 
-public class Baker extends MarketEmployeeAgent {
+public class Milkman extends MarketEmployeeAgent {
+
 	@Override
 	protected void fillInitialBuy() {
-		buy.put(Products.GRAIN, numberOfEmployees
-				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
+		buy.put(Products.MILK, numberOfEmployees
+				* MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
 	}
 
 	@Override
 	protected void fillInitialHave() {
-		myType = Participants.BAKER;
+		myType = Participants.MILKMAN;
 		numberOfEmployees = AgentsUtilities.randomInt(
-				MarketConstants.BAKER_MIN_EMPLOYEE,
-				MarketConstants.BAKER_MAX_EMPLOYEE);
-		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1)
+				MarketConstants.MILKMAN_MIN_EMPLOYEE,
+				MarketConstants.MILKMAN_MAX_EMPLOYEE);
+		have.put(Products.MILK, AgentsUtilities.randomDouble(0.5, 1)
 				* numberOfEmployees
-				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
-		have.put(Products.BREAD, (double) AgentsUtilities.randomInt(
-				MarketConstants.BAKER_MIN_BREAD_PRODUCT,
-				MarketConstants.BAKER_MAX_BREAD_PRODUCT));
+				* MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT);
+		have.put(Products.MILK_PRODUCT, (double) AgentsUtilities.randomInt(
+				MarketConstants.MILKMAN_MIN_MILK_PRODUCT,
+				MarketConstants.MILKMAN_MAX_MILK_PRODUCT));
 
 	}
 
 	@Override
 	protected void fillInitialSell() {
-		sell.put(Products.BREAD, have.get(Products.BREAD));
-		pricePerItem.put(Products.BREAD, MarketConstants.BAKER_BREAD_COST);
-
+		sell.put(Products.MILK_PRODUCT, have.get(Products.MILK_PRODUCT));
+		pricePerItem.put(Products.MILK_PRODUCT,
+				MarketConstants.MILKMAN_MILK_COST);
 	}
 
 	@Override
 	protected void fillBuyFrom() {
-		buyFrom.put(Participants.FARMER, Products.GRAIN);
+		buyFrom.put(Participants.KEEPER, Products.MILK);
 	}
 
 	@Override
 	protected void fillSellTo() {
-		sellTo.put(Participants.CLIENT, Products.BREAD);
+		sellTo.put(Participants.CLIENT, Products.MILK_PRODUCT);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
-		return offers;
+		return null;
 		// TODO Auto-generated method stub
 
 	}
@@ -64,7 +66,7 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected ArrayList<AgentOffer> decideAboutBuyOffer(
 			ArrayList<AgentOffer> offers) {
-		return offers;
+		return null;
 		// TODO Auto-generated method stub
 
 	}
@@ -90,20 +92,20 @@ public class Baker extends MarketEmployeeAgent {
 
 	@Override
 	protected double getUsedProductUsage() {
-		return MarketConstants.BAKER_GRAIN_PER_BREAD;
+		return MarketConstants.MILKMAN_MILK_PER_PRODUCT;
 	}
 
 	@Override
 	protected Products getProductUsedToProduce(Products product) {
-		if (product == Products.BREAD) {
-			return Products.GRAIN;
+		if (product == Products.MILK_PRODUCT) {
+			return Products.MILK;
 		}
 		return null;
 	}
 
 	@Override
 	protected double getNumberOfProductPerEmployee() {
-		return MarketConstants.BAKER_PRODUCTIVITY_CONSTANT;
+		return MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT;
 	}
 
 }

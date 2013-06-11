@@ -1,4 +1,4 @@
-package strategies;
+package strategies.strategies;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -12,7 +12,11 @@ import constants.Products;
 import agents.AgentOffer;
 
 /**
- * agent using this strategy will agree for the cheapest sell offer he gets
+ * agent using this strategy will agree for the cheapest sell offer he gets for every
+ * available {@link Products} he needs to buy
+ * 
+ * when total price for everything is too high he reduces amount of each answer by
+ * 1/number_of_transactions
  * @author beatka
  *
  */
@@ -24,11 +28,13 @@ public class SimpleStrategy extends Strategy {
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		// needed to choose best offers:
 		EnumMap<Products, Double> lowestPrices = new EnumMap<Products, Double>(Products.class);
+		EnumMap<Products, Double> lowestPriceAmount = new EnumMap<Products, Double>(Products.class);
 		EnumMap<Products, String> cheapestAgents = new EnumMap<Products, String>(Products.class);
 		Iterator<Products> buyIterator = buy.keySet().iterator();
 		while(buyIterator.hasNext()) {
 			Products prod = buyIterator.next();
 			lowestPrices.put(prod, Double.MAX_VALUE);
+			lowestPriceAmount.put(prod, 0.0);
 			cheapestAgents.put(prod, "");
 		}
 		for (AgentOffer agentOffer : offers) { // checking every offer
@@ -46,10 +52,23 @@ public class SimpleStrategy extends Strategy {
 						lowestPrices.put(prod,
 								agentOffer.getItemPrice().get(prod));
 						cheapestAgents.put(prod, agentOffer.getAgentName());
+						lowestPriceAmount.put(prod, Math.min(agentOffer
+								.getItemAmount().get(prod), buy.get(prod)));
 					}
 				}
 			}
 		}
+		double nonEmptyOffers = 0.0;
+		for (Products product : cheapestAgents.keySet()) {
+			if(!cheapestAgents.get(product).equals("")) nonEmptyOffers += 1.0;
+		}
+		double amountToPay = 0.0;
+		// checking if we can afford to buy that much
+		for (Products product : cheapestAgents.keySet()) {
+			System.out.println(lowestPrices.get(product) + " " + lowestPriceAmount.get(product));
+			amountToPay += lowestPrices.get(product) * lowestPriceAmount.get(product);
+		}
+		double decreaseMoneyToSpend =  (amountToPay > myMoney) ? (amountToPay - myMoney)/nonEmptyOffers : 0.0;
 		for (AgentOffer agentOffer : offers) {
 			AgentOffer currentAnswer = new AgentOffer(
 					agentOffer.getAgentName(), "");
@@ -59,7 +78,14 @@ public class SimpleStrategy extends Strategy {
 					Products currProd = iter.next();
 					if(cheapestAgents.get(currProd).equals(agentOffer.getAgentName())) { // adding products he offered lowest price for
 						currentAnswer.addItemPrice(currProd.name(), lowestPrices.get(currProd));
-						currentAnswer.addItemAmount(currProd.name(), Math.min(agentOffer.getItemAmount().get(currProd), buy.get(currProd)));
+						double newAmount = lowestPriceAmount.get(currProd) > 0 ? lowestPriceAmount.get(currProd) - 
+								decreaseMoneyToSpend/ lowestPrices.get(currProd) : 0;
+						System.out.println("amountToPay: " + amountToPay
+								+ "dec: " + decreaseMoneyToSpend
+								+ " curr amount: "
+								+ lowestPriceAmount.get(currProd)
+								+ " new amount: " + newAmount);
+						currentAnswer.addItemAmount(currProd.name(), newAmount);
 					}
 				}
 			}
@@ -90,11 +116,15 @@ public class SimpleStrategy extends Strategy {
 															// agent
 				for (Products product : agentOffer.getItemAmount().keySet()) { // check every position in this offer
 					for (AgentOffer ans : myAnswers) {
-						if (ans.getItemAmount().get(product).equals(agentOffer
-										.getItemAmount().get(product))
+						System.out.println(ans.getItemAmount().get(product).doubleValue() + " " +agentOffer
+										.getItemAmount().get(product).doubleValue()
+								+ " " + ans.getItemPrice().get(product).doubleValue() + " " + agentOffer
+										.getItemPrice().get(product).doubleValue());
+						if (ans.getItemAmount().get(product).doubleValue() <= agentOffer
+										.getItemAmount().get(product).doubleValue()
 								&& ans.getItemPrice().get(product).doubleValue() >= agentOffer
-										.getItemPrice().get(product).doubleValue()) {} // if it's different from the previous one - resign
-						// TODO: when price stays the same but the amount increases
+										.getItemPrice().get(product).doubleValue()) {} // if it's worse from the previous one - resign
+						// TODO: update history if offer changes!!
 						else {
 							agreeForThisOffer = false;
 							break;
@@ -111,7 +141,22 @@ public class SimpleStrategy extends Strategy {
 
 	@Override
 	public void updateBuyerStore(String traderName) {
-		// TODO Auto-generated method stub
+		ArrayList<AgentOffer> transactions = currentWeekBuyOffersHistory.get(traderName);
+		for (Iterator<AgentOffer> iterator = transactions.iterator(); iterator.hasNext();) {
+			AgentOffer agentOffer = (AgentOffer) iterator.next();
+			double moneyPaid = 0.0;
+			Map<Products, Double> prices = agentOffer.getItemPrice();
+			for (Iterator<Products> prodIter = prices.keySet().iterator(); prodIter.hasNext();) {
+				Products currProd = prodIter.next();
+				moneyPaid += prices.get(currProd) * agentOffer.getItemAmount().get(currProd);
+				System.out.println("--> " + buy.get(currProd) + "-" + agentOffer.getItemAmount().get(currProd)
+						+"=" + (buy.get(currProd) - agentOffer.getItemAmount().get(currProd)));
+				
+				buy.put(currProd, buy.get(currProd) - agentOffer.getItemAmount().get(currProd));
+				
+			}
+			myMoney -= moneyPaid;
+		}
 		
 	}
 
