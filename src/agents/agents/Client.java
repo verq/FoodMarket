@@ -37,11 +37,11 @@ public class Client extends MarketAgent {
 
 	@Override
 	protected void fillBuyFrom() {
-		buyFrom.put(Participants.BAKER, Products.BREAD);
+		//buyFrom.put(Participants.BAKER, Products.BREAD);
 		buyFrom.put(Participants.FARMER, Products.VEGETABLE);
-		buyFrom.put(Participants.KEEPER, Products.MEAT);
-		buyFrom.put(Participants.GROWER, Products.FRUIT);
-		buyFrom.put(Participants.MILKMAN, Products.MILK_PRODUCT);
+		//buyFrom.put(Participants.KEEPER, Products.MEAT);
+		//buyFrom.put(Participants.GROWER, Products.FRUIT);
+		//buyFrom.put(Participants.MILKMAN, Products.MILK_PRODUCT);
 	}
 
 	@Override
