@@ -85,15 +85,20 @@ public abstract class MarketAgent extends Agent {
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
 			@Override
 			protected void onTick() {
-				produce();
-				use();
+				produceAndUse();
+				prepareForSelling();
 			}
 		});
 	}
 
-	protected abstract void produce();
+	protected void prepareForSelling() {
+		for (Products product : sellTo.values()) {
+			sell.put(product, have.get(product));
+			have.put(product, 0D);
+		}
+	}
 
-	protected abstract void use();
+	protected abstract void produceAndUse();
 
 	protected void takeDown() {
 		System.out.println("Agent " + this.getClass().getName() + " " + getAID().getName() + " is terminating.");
@@ -112,9 +117,6 @@ public abstract class MarketAgent extends Agent {
 		DFAgentDescription agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
 		Set<Products> t = new HashSet<Products>(sellTo.values());
-		// TODO: warning: [unchecked] unchecked call to
-		// HashSet(java.util.Collection<? extends E>) as a member of the raw
-		// type java.util.HashSet
 		Iterator<Products> sellProductsIterator = t.iterator();
 		while (sellProductsIterator.hasNext()) {
 			String name = sellProductsIterator.next().toString();

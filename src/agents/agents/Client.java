@@ -50,8 +50,9 @@ public class Client extends MarketAgent {
 	}
 
 	@Override
-	protected void produce() {
+	protected void produceAndUse() {
 		money += money + income;
+		use();
 	}
 
 	protected void use() {

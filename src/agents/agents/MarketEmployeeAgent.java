@@ -6,7 +6,7 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected int numberOfEmployees;
 	protected double productCost;
 
-	protected void produce() {
+	protected void produceAndUse() {
 		for (Products product : sellTo.values()) {
 			double numberOfProduct = have.get(product);
 			double numberOfUsedProduct = numberOfEmployees * getNumberOfProductPerEmployee();
@@ -26,10 +26,6 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected abstract Products getProductUsedToProduce(Products product);
 
 	protected abstract double getNumberOfProductPerEmployee();
-
-	protected void use() {
-		// TODO
-	}
 
 	@Override
 	protected abstract void fillInitialBuy();
