@@ -3,25 +3,31 @@ package agents;
 import java.util.ArrayList;
 import java.util.Map;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
-import utilities.*;
 
 public class Grower extends MarketFieldAgent {
 
 	@Override
 	protected void fillInitialBuy() {
-		buy.put(Products.MANURE, numberOfFields * MarketConstants.GROWER_MANURE_NEEDED_FOR_FIELD);
+		buy.put(Products.MANURE, numberOfFields
+				* MarketConstants.GROWER_MANURE_NEEDED_FOR_FIELD);
 	}
 
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.GROWER;
-		numberOfFields = AgentsUtilities.randomInt(MarketConstants.GROWER_MIN_FIELD, MarketConstants.GROWER_MAX_FIELD);
-		have.put(Products.MANURE, AgentsUtilities.randomDouble(0.5, 1) * numberOfFields
+		numberOfFields = AgentsUtilities.randomInt(
+				MarketConstants.GROWER_MIN_FIELD,
+				MarketConstants.GROWER_MAX_FIELD);
+		have.put(Products.MANURE, AgentsUtilities.randomDouble(0.5, 1)
+				* numberOfFields
 				* MarketConstants.GROWER_MANURE_NEEDED_FOR_FIELD);
-		have.put(Products.FRUIT, (double) AgentsUtilities.randomInt(MarketConstants.GROWER_MIN_FRUIT, MarketConstants.GROWER_MAX_FRUIT));
+		have.put(Products.FRUIT, (double) AgentsUtilities.randomInt(
+				MarketConstants.GROWER_MIN_FRUIT,
+				MarketConstants.GROWER_MAX_FRUIT));
 	}
 
 	@Override
@@ -43,21 +49,23 @@ public class Grower extends MarketFieldAgent {
 	@Override
 	protected void updateResources() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -69,7 +77,7 @@ public class Grower extends MarketFieldAgent {
 	@Override
 	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -77,6 +85,15 @@ public class Grower extends MarketFieldAgent {
 			ArrayList<AgentOffer> sellOffers) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected double getNumberOfProductsPerField(Products product) {
+		if (product == Products.FRUIT) {
+			return MarketConstants.GROWER_FRUIT_PER_FIELD;
+		} else {
+			return 0;
+		}
 	}
 
 }

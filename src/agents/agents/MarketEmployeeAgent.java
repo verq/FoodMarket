@@ -1,25 +1,43 @@
 package agents;
 
+import constants.Products;
+
 public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected int numberOfEmployees;
-	protected int productivity;
 	protected double productCost;
 
-	@Override
-	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
+	protected void produceAndUse() {
+		for (Products product : sellTo.values()) {
+			double numberOfProduct = have.get(product);
+			double numberOfUsedProduct = numberOfEmployees
+					* getNumberOfProductPerEmployee();
+			if (numberOfUsedProduct <= have
+					.get(getProductUsedToProduce(product))) {
+				have.put(product, numberOfProduct + numberOfUsedProduct
+						* getUsedProductUsage());
+				have.put(getProductUsedToProduce(product),
+						have.get(getProductUsedToProduce(product))
+								- numberOfUsedProduct);
+			} else {
+				have.put(product, have.get(getProductUsedToProduce(product))
+						* getUsedProductUsage());
+				have.put(getProductUsedToProduce(product), 0D);
+			}
+		}
 	}
 
+	protected abstract double getUsedProductUsage();
+
+	protected abstract Products getProductUsedToProduce(Products product);
+
+	protected abstract double getNumberOfProductPerEmployee();
+
 	@Override
-	protected void fillInitialHave() {
-		// TODO Auto-generated method stub
-
-	}
+	protected abstract void fillInitialBuy();
 
 	@Override
-	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
+	protected abstract void fillInitialHave();
 
-	}
+	@Override
+	protected abstract void fillInitialSell();
 }

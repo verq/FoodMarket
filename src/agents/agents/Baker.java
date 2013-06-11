@@ -3,12 +3,12 @@ package agents;
 import java.util.ArrayList;
 import java.util.Map;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
-import utilities.*;
 
-public class Baker extends MarketEmployeeAgent {	
+public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialBuy() {
 		buy.put(Products.GRAIN, numberOfEmployees
@@ -18,14 +18,15 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.BAKER;
-		numberOfEmployees = AgentsUtilities.randomInt(MarketConstants.BAKER_MIN_EMPLOYEE,
+		numberOfEmployees = AgentsUtilities.randomInt(
+				MarketConstants.BAKER_MIN_EMPLOYEE,
 				MarketConstants.BAKER_MAX_EMPLOYEE);
-		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1) * numberOfEmployees
+		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1)
+				* numberOfEmployees
 				* MarketConstants.BAKER_PRODUCTIVITY_CONSTANT);
-		have.put(
-				Products.BREAD,
-				(double) AgentsUtilities.randomInt(MarketConstants.BAKER_MIN_BREAD_PRODUCT,
-						MarketConstants.BAKER_MAX_BREAD_PRODUCT));
+		have.put(Products.BREAD, (double) AgentsUtilities.randomInt(
+				MarketConstants.BAKER_MIN_BREAD_PRODUCT,
+				MarketConstants.BAKER_MAX_BREAD_PRODUCT));
 
 	}
 
@@ -49,21 +50,23 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	protected void updateResources() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class Baker extends MarketEmployeeAgent {
 	@Override
 	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -83,6 +86,24 @@ public class Baker extends MarketEmployeeAgent {
 			ArrayList<AgentOffer> sellOffers) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected double getUsedProductUsage() {
+		return MarketConstants.BAKER_GRAIN_PER_BREAD;
+	}
+
+	@Override
+	protected Products getProductUsedToProduce(Products product) {
+		if (product == Products.BREAD) {
+			return Products.GRAIN;
+		}
+		return null;
+	}
+
+	@Override
+	protected double getNumberOfProductPerEmployee() {
+		return MarketConstants.BAKER_PRODUCTIVITY_CONSTANT;
 	}
 
 }

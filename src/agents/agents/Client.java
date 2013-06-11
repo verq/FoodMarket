@@ -2,13 +2,12 @@ package agents;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.Participants;
 import constants.Products;
-import utilities.*;
 
 public class Client extends MarketAgent {
 	private double income;
@@ -17,8 +16,10 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillInitialBuy() {
 		for (Products p : Products.values()) {
-			if (MarketConstants.CLIENT_NEEDS_MAX.containsKey(p) && MarketConstants.CLIENT_NEEDS_MIN.containsKey(p)) {
-				double productNeed = AgentsUtilities.randomDouble(MarketConstants.CLIENT_NEEDS_MIN.get(p),
+			if (MarketConstants.CLIENT_NEEDS_MAX.containsKey(p)
+					&& MarketConstants.CLIENT_NEEDS_MIN.containsKey(p)) {
+				double productNeed = AgentsUtilities.randomDouble(
+						MarketConstants.CLIENT_NEEDS_MIN.get(p),
 						MarketConstants.CLIENT_NEEDS_MAX.get(p));
 				if (productNeed != 0) {
 					buy.put(p, productNeed);
@@ -30,7 +31,9 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.CLIENT;
-		income = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
+		income = AgentsUtilities.randomDouble(
+				MarketConstants.CLIENT_MIN_INCOME,
+				MarketConstants.CLIENT_MAX_INCOME);
 		money = income;
 	}
 
@@ -56,21 +59,23 @@ public class Client extends MarketAgent {
 	@Override
 	protected void updateResources() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutSellOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutSellOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected ArrayList<AgentOffer> decideAboutBuyOffer(ArrayList<AgentOffer> offers) {
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(
+			ArrayList<AgentOffer> offers) {
 		return offers;
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class Client extends MarketAgent {
 	@Override
 	public void updateBuyerStore(String traderName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -90,5 +95,15 @@ public class Client extends MarketAgent {
 			ArrayList<AgentOffer> sellOffers) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void produceAndUse() {
+		money += money + income;
+		use();
+	}
+
+	protected void use() {
+		// TODO
 	}
 }

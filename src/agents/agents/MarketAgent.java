@@ -1,24 +1,25 @@
 package agents;
 
-import utilities.*;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.*;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
 import constants.Participants;
@@ -26,8 +27,7 @@ import constants.Products;
 
 public abstract class MarketAgent extends Agent {
 	/**
-	 * main inner class responsible for selling actions, more info within
-	 * {@link SellRequestPerformer.action} method
+	 * main inner class responsible for selling actions, more info within {@link SellRequestPerformer.action} method
 	 * 
 	 */
 	// TODO: perhaps extract SellRequestPerformer to another file
@@ -176,8 +176,7 @@ public abstract class MarketAgent extends Agent {
 	// end of SellRequestPerformer
 
 	/**
-	 * main inner class responsible for buying actions, more info within
-	 * {@link SellRequestPerformer.action} method
+	 * main inner class responsible for buying actions, more info within {@link SellRequestPerformer.action} method
 	 * 
 	 */
 	// TODO: perhaps extract BuyRequestPerformer to another file
@@ -466,23 +465,10 @@ public abstract class MarketAgent extends Agent {
 		});
 	}
 
-	/**
-	 * invoked to mantain weekly resource updates
-	 */
-	private void weeklyResourceUpdateAction() {
-		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
-			@Override
-			protected void onTick() {
-				updateResources();
-			}
-		});
-	}
-
 	/************ beginning of strategy related methods ************/
 
 	/**
-	 * takes list of agents' offers, computes what I want to do and returns list
-	 * of offers I want to make
+	 * takes list of agents' offers, computes what I want to do and returns list of offers I want to make
 	 * 
 	 * @param offers
 	 *            from buyers
@@ -495,16 +481,14 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * 
 	 * @param sellOffers
-	 * @return map: to whose offer I respond and what is my answer
-	 *         (accept/reject: true/false)
+	 * @return map: to whose offer I respond and what is my answer (accept/reject: true/false)
 	 */
 	// TODO: implement this method
 	public abstract Map<String, Boolean> composeFinalBuyingDecision(
 			ArrayList<AgentOffer> sellOffers);
 
 	/**
-	 * takes list of agents' offers, computes what I want to do and returns list
-	 * of offers I want to make
+	 * takes list of agents' offers, computes what I want to do and returns list of offers I want to make
 	 * 
 	 * @param offers
 	 *            from sellers
@@ -515,19 +499,16 @@ public abstract class MarketAgent extends Agent {
 			ArrayList<AgentOffer> offers);
 
 	/**
-	 * invoked at the very end of transaction to confirm it; don't forget to
-	 * update my store here!
+	 * invoked at the very end of transaction to confirm it; don't forget to update my store here!
 	 * 
 	 * @param traderName
-	 * @return return true if I can complete transaction with this buyer,
-	 *         otherwise return false
+	 * @return return true if I can complete transaction with this buyer, otherwise return false
 	 */
 	// TODO: implement this method
 	public abstract boolean confirmSellTransactionWith(String traderName);
 
 	/**
-	 * buyer: update my supplies after positive transaction with seller
-	 * traderName
+	 * buyer: update my supplies after positive transaction with seller traderName
 	 * 
 	 * @param traderName
 	 */
@@ -548,8 +529,7 @@ public abstract class MarketAgent extends Agent {
 	 * 
 	 * @param buy
 	 *            offers containing offerer's name and offer as String
-	 * @return answers to buy offers containing recepient name and answer as
-	 *         String
+	 * @return answers to buy offers containing recepient name and answer as String
 	 */
 	private Map<String, String> createAnswerToSellOffer(
 			Map<String, String> offers) {
@@ -563,8 +543,7 @@ public abstract class MarketAgent extends Agent {
 	 * 
 	 * @param buy
 	 *            offers containing offerer's name and offer as String
-	 * @return answers to buy offers containing recepient name and answer as
-	 *         String
+	 * @return answers to buy offers containing recepient name and answer as String
 	 */
 	private Map<String, String> createAnswerToBuyOffer(
 			Map<String, String> offers) {
@@ -576,8 +555,9 @@ public abstract class MarketAgent extends Agent {
 	private Map<String, Boolean> createFinalBuyingDecision(
 			Map<String, String> offers) {
 		return composeFinalBuyingDecision(AgentsUtilities
-						.createListOfOffers(offers));
+				.createListOfOffers(offers));
 	}
+
 	/**
 	 * format my sell offer content based on my current supplies
 	 * 
@@ -615,7 +595,7 @@ public abstract class MarketAgent extends Agent {
 		register();
 		buyAction();
 		sellAction();
-		weeklyResourceUpdateAction();
+		timeAction();
 	}
 
 	/**
@@ -708,6 +688,28 @@ public abstract class MarketAgent extends Agent {
 		fillSellTo();
 	}
 
+	/**
+	 * invoked to mantain weekly resource updates
+	 */
+	private void timeAction() {
+		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
+			@Override
+			protected void onTick() {
+				produceAndUse();
+				prepareForSelling();
+			}
+		});
+	}
+
+	protected void prepareForSelling() {
+		for (Products product : sellTo.values()) {
+			sell.put(product, have.get(product));
+			have.put(product, 0D);
+		}
+	}
+
+	protected abstract void produceAndUse();
+
 	protected void initializeAddProducts(EnumMap<Products, Double> products) {
 		for (Products p : Products.values()) {
 			products.put(p, 0.0);
@@ -754,10 +756,9 @@ public abstract class MarketAgent extends Agent {
 	 * list of currently available agents I can buy items from
 	 */
 	private ArrayList<AID> sellerAgentsList;
-	
+
 	/**
-	 * how many weeks have passed;
-	 * useful also to let eg. growers sell products only during the summer
+	 * how many weeks have passed; useful also to let eg. growers sell products only during the summer
 	 */
 	protected int weeks = 0;
 }

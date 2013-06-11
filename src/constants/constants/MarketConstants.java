@@ -33,8 +33,8 @@ public class MarketConstants {
 	public static final int BAKER_MIN_BREAD_PRODUCT = 2;
 	public static final int BAKER_MAX_BREAD_PRODUCT = 10;
 
+	public static final double BAKER_GRAIN_PER_BREAD = 0.5;
 	public static final double BAKER_PRODUCTIVITY_CONSTANT = 5;
-	public static final double BAKER_EMPLOYEE_PRODUCTIVITY = 20;
 
 	public static final double BAKER_BREAD_COST = 3;
 
@@ -44,8 +44,8 @@ public class MarketConstants {
 	public static final int MILKMAN_MIN_MILK_PRODUCT = 2;
 	public static final int MILKMAN_MAX_MILK_PRODUCT = 4;
 
+	public static final double MILKMAN_MILK_PER_PRODUCT = 0.5;
 	public static final double MILKMAN_PRODUCTIVITY_CONSTANT = 5;
-	public static final double MILKMAN_EMPLOYEE_PRODUCTIVITY = 20 * 7; // per week
 
 	public static final double MILKMAN_MILK_COST = 3;
 
@@ -91,6 +91,7 @@ public class MarketConstants {
 	public static final double FARMER_TRESHOLD_SOLD_VEGETABLES = 0.5;
 
 	public static final double FARMER_GRAIN_FROM_FIELD = 2;
+	public static final double FARMER_VEGETABLE_FROM_FIELD = 2;
 	public static final double FARMER_MANURE_NEEDED_FOR_FIELD = 1;
 	public static final double FARMER_MAX_GRAIN_NEEDED_PER_FIELD = 2;
 
