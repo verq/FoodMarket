@@ -36,4 +36,13 @@ public class Grower extends MarketFieldAgent {
 		sellTo.put(Participants.CLIENT, Products.FRUIT);
 	}
 
+	@Override
+	protected double getNumberOfProductsPerField(Products product) {
+		if (product == Products.FRUIT) {
+			return MarketConstants.GROWER_FRUIT_PER_FIELD;
+		} else {
+			return 0;
+		}
+	}
+
 }

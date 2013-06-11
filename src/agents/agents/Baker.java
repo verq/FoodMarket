@@ -38,4 +38,22 @@ public class Baker extends MarketEmployeeAgent {
 		sellTo.put(Participants.CLIENT, Products.BREAD);
 	}
 
+	@Override
+	protected double getUsedProductUsage() {
+		return MarketConstants.BAKER_GRAIN_PER_BREAD;
+	}
+
+	@Override
+	protected Products getProductUsedToProduce(Products product) {
+		if (product == Products.BREAD) {
+			return Products.GRAIN;
+		}
+		return null;
+	}
+
+	@Override
+	protected double getNumberOfProductPerEmployee() {
+		return MarketConstants.BAKER_PRODUCTIVITY_CONSTANT;
+	}
+
 }

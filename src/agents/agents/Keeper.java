@@ -47,4 +47,16 @@ public class Keeper extends MarketFieldAgent {
 		sellTo.put(Participants.FARMER, Products.MANURE);
 	}
 
+	@Override
+	protected double getNumberOfProductsPerField(Products product) {
+		if (product == Products.MANURE) {
+			return MarketConstants.KEEPER_MANURE_FROM_ANIMAL;
+		} else if (product == Products.MILK) {
+			return MarketConstants.KEEPER_MILK_FROM_ANIMAL;
+		} else if (product == Products.MEAT) {
+			return MarketConstants.KEEPER_MEET_PER_ANIMAL;
+		} else {
+			return 0;
+		}
+	}
 }

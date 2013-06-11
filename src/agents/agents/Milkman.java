@@ -38,4 +38,22 @@ public class Milkman extends MarketEmployeeAgent {
 		sellTo.put(Participants.CLIENT, Products.MILK_PRODUCT);
 	}
 
+	@Override
+	protected double getUsedProductUsage() {
+		return MarketConstants.MILKMAN_MILK_PER_PRODUCT;
+	}
+
+	@Override
+	protected Products getProductUsedToProduce(Products product) {
+		if (product == Products.MILK_PRODUCT) {
+			return Products.MILK;
+		}
+		return null;
+	}
+
+	@Override
+	protected double getNumberOfProductPerEmployee() {
+		return MarketConstants.MILKMAN_PRODUCTIVITY_CONSTANT;
+	}
+
 }

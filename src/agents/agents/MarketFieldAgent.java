@@ -1,25 +1,32 @@
 package agents;
 
+import constants.Products;
+
 public abstract class MarketFieldAgent extends MarketAgent {
 	protected int numberOfFields;
 	protected int tresholdSale;
 
-	@Override
-	protected void fillInitialBuy() {
-		// TODO Auto-generated method stub
-
+	protected void produce() {
+		for (Products product : sellTo.values()) {
+			double numberOfProduct = have.get(product);
+			numberOfProduct = numberOfProduct + numberOfFields * getNumberOfProductsPerField(product);
+			have.put(product, numberOfProduct);
+		}
 	}
 
-	@Override
-	protected void fillInitialHave() {
-		// TODO Auto-generated method stub
-
+	protected void use() {
+		// TODO
 	}
 
-	@Override
-	protected void fillInitialSell() {
-		// TODO Auto-generated method stub
+	protected abstract double getNumberOfProductsPerField(Products product);
 
-	}
+	@Override
+	protected abstract void fillInitialBuy();
+
+	@Override
+	protected abstract void fillInitialHave();
+
+	@Override
+	protected abstract void fillInitialSell();
 
 }

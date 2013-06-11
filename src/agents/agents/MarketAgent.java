@@ -2,20 +2,21 @@ package agents;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.*;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.EnumMap;
-import java.util.Iterator;
-import java.util.Random;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import constants.MarketConstants;
@@ -80,18 +81,31 @@ public abstract class MarketAgent extends Agent {
 
 	protected abstract void fillSellTo();
 
+	private void timeAction() {
+		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
+			@Override
+			protected void onTick() {
+				produce();
+				use();
+			}
+		});
+	}
+
+	protected abstract void produce();
+
+	protected abstract void use();
+
 	protected void takeDown() {
-		System.out.println("Agent " + this.getClass().getName() + " "
-				+ getAID().getName() + " is terminating.");
+		System.out.println("Agent " + this.getClass().getName() + " " + getAID().getName() + " is terminating.");
 	}
 
 	protected void setup() {
 		initializeProducts();
-		System.out.println("Agent " + this.getClass().getName() + " "
-				+ getAID().getName() + " is starting");
+		System.out.println("Agent " + this.getClass().getName() + " " + getAID().getName() + " is starting");
 		register();
 		buyAction();
 		sellAction();
+		timeAction();
 	}
 
 	private void register() {
@@ -129,38 +143,31 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	/*
-	 * private void printMyOwnServices(AID myAgent) { jade.util.leap.Iterator
-	 * mdd = agentDescription.getAllServices();
-	 * System.out.println(myAgent.getName() + "My services:");
-	 * while(mdd.hasNext()) { ServiceDescription sd = (ServiceDescription)
-	 * mdd.next(); System.out.println(this.myAgent.getName() +" my services: " +
-	 * sd.getName() + " " + sd.getType()); } }
+	 * private void printMyOwnServices(AID myAgent) { jade.util.leap.Iterator mdd = agentDescription.getAllServices();
+	 * System.out.println(myAgent.getName() + "My services:"); while(mdd.hasNext()) { ServiceDescription sd =
+	 * (ServiceDescription) mdd.next(); System.out.println(this.myAgent.getName() +" my services: " + sd.getName() + " "
+	 * + sd.getType()); } }
 	 */
 	private void buyAction() {
-		if(buyFrom.isEmpty()) {
+		if (buyFrom.isEmpty()) {
 			System.out.println(myType + ": not buying from anyone!");
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
 			protected void onTick() {
 				DFAgentDescription agentDescription = new DFAgentDescription();
-				Iterator<Products> buyProductsIterator = buyFrom.values()
-						.iterator();
+				Iterator<Products> buyProductsIterator = buyFrom.values().iterator();
 				while (buyProductsIterator.hasNext()) {
 					ServiceDescription serviceDescription = new ServiceDescription();
 					String name = buyProductsIterator.next().name();
 					serviceDescription.setType(name);
 					serviceDescription.setName("sell");
 					agentDescription.addServices(serviceDescription);
-					System.out.println(this.myAgent.getName()
-							+ ": I'm looking for someone to buy " + name
-							+ " from");
+					System.out.println(this.myAgent.getName() + ": I'm looking for someone to buy " + name + " from");
 				}
 				try {
-					DFAgentDescription[] sellingAgents = DFService.search(
-							myAgent, agentDescription);
-					System.out.println(this.myAgent.getName()
-							+ " found the following " + sellingAgents.length
+					DFAgentDescription[] sellingAgents = DFService.search(myAgent, agentDescription);
+					System.out.println(this.myAgent.getName() + " found the following " + sellingAgents.length
 							+ " seller agents:");
 					sellerAgents = new AID[sellingAgents.length];
 					for (int i = 0; i < sellingAgents.length; ++i) {
@@ -168,13 +175,10 @@ public abstract class MarketAgent extends Agent {
 						// != 0) continue;
 						sellerAgents[i] = sellingAgents[i].getName();
 						System.out.println("** " + sellerAgents[i].getName());
-						jade.util.leap.Iterator dd = sellingAgents[i]
-								.getAllServices();
+						jade.util.leap.Iterator dd = sellingAgents[i].getAllServices();
 						while (dd.hasNext()) {
-							ServiceDescription sd = (ServiceDescription) dd
-									.next();
-							System.out.println("service: " + sd.getName() + " "
-									+ sd.getType());
+							ServiceDescription sd = (ServiceDescription) dd.next();
+							System.out.println("service: " + sd.getName() + " " + sd.getType());
 						}
 					}
 				} catch (FIPAException fe) {
@@ -187,15 +191,14 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	private void sellAction() {
-		if(sellTo.isEmpty()) {
+		if (sellTo.isEmpty()) {
 			System.out.println(myType + ": not selling to anyone!");
 			return;
 		}
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
 			protected void onTick() {
 				DFAgentDescription agentDescription = new DFAgentDescription();
-				Iterator<Products> sellProductsIterator = sellTo.values()
-						.iterator();
+				Iterator<Products> sellProductsIterator = sellTo.values().iterator();
 
 				while (sellProductsIterator.hasNext()) {
 					ServiceDescription serviceDescription = new ServiceDescription();
@@ -203,15 +206,11 @@ public abstract class MarketAgent extends Agent {
 					serviceDescription.setType(name);
 					serviceDescription.setName("buy");
 					agentDescription.addServices(serviceDescription);
-					System.out.println(this.myAgent.getName()
-							+ ": I'm looking for someone to sell " + name
-							+ " to");
+					System.out.println(this.myAgent.getName() + ": I'm looking for someone to sell " + name + " to");
 				}
 				try {
-					DFAgentDescription[] buyingAgents = DFService.search(
-							myAgent, agentDescription);
-					System.out.println(this.myAgent.getName()
-							+ " found the following " + buyingAgents.length
+					DFAgentDescription[] buyingAgents = DFService.search(myAgent, agentDescription);
+					System.out.println(this.myAgent.getName() + " found the following " + buyingAgents.length
 							+ " buyer agents:");
 					// if(buyingAgents.length > 0)
 					buyerAgents = new AID[buyingAgents.length];// Math.max(0,buyingAgents.length-1)];
@@ -219,8 +218,7 @@ public abstract class MarketAgent extends Agent {
 						// if(buyingAgents[i].getName().getName().compareTo(this.myAgent.getName())
 						// == 0) continue;
 						buyerAgents[i] = buyingAgents[i].getName();
-						System.out.println("* " + buyerAgents[i].getName()
-								+ " all: " + buyerAgents[i].getName());
+						System.out.println("* " + buyerAgents[i].getName() + " all: " + buyerAgents[i].getName());
 						i++;
 					}
 				} catch (FIPAException fe) {
@@ -240,8 +238,7 @@ public abstract class MarketAgent extends Agent {
 		while (sellProductsIterator.hasNext()) {
 			Products p = sellProductsIterator.next();
 			if (sell.get(p) > 0.0) {
-				content += p + " " + sell.get(p) + " " + pricePerItem.get(p)
-						+ ":";
+				content += p + " " + sell.get(p) + " " + pricePerItem.get(p) + ":";
 				nonzero = true;
 			}
 		}
@@ -258,8 +255,7 @@ public abstract class MarketAgent extends Agent {
 		while (buyProductsIterator.hasNext()) {
 			Products p = buyProductsIterator.next();
 			if (buy.get(p) > 0.0)
-				content += p + " " + buy.get(p) + " " + pricePerItem.get(p)
-						+ ":";
+				content += p + " " + buy.get(p) + " " + pricePerItem.get(p) + ":";
 		}
 		return content;
 	}
@@ -297,23 +293,20 @@ public abstract class MarketAgent extends Agent {
 				// if(buyerAgents.length == 0) block();
 				ACLMessage offer_inform = new ACLMessage(ACLMessage.INFORM);
 				for (int i = 0; i < buyerAgents.length; ++i) {
-					System.out.println(myAgent.getName()
-							+ " 1) sell: sending sell offer to: "
+					System.out.println(myAgent.getName() + " 1) sell: sending sell offer to: "
 							+ buyerAgents[i].getName());
 					offer_inform.addReceiver(buyerAgents[i]);
 				}
 				offer_inform.setContent(composeSellContent());
 				offer_inform.setConversationId(conversationID); // this
-																	// should be
-																	// type of
-																	// the agent
-				offer_inform.setReplyWith(conversationID
-						+ System.currentTimeMillis());
+																// should be
+																// type of
+																// the agent
+				offer_inform.setReplyWith(conversationID + System.currentTimeMillis());
 				myAgent.send(offer_inform);
 				// Prepare the template to get proposals
-				mt = MessageTemplate.and(MessageTemplate
-						.MatchConversationId(conversationID), MessageTemplate
-						.MatchInReplyTo(offer_inform.getReplyWith()));
+				mt = MessageTemplate.and(MessageTemplate.MatchConversationId(conversationID),
+						MessageTemplate.MatchInReplyTo(offer_inform.getReplyWith()));
 				step = 1;
 				break;
 			case 1:
@@ -322,14 +315,10 @@ public abstract class MarketAgent extends Agent {
 				ACLMessage reply = myAgent.receive(mt);
 				if (reply != null) {
 					// This is a proposal
-					System.out.println(myAgent.getName()
-							+ " 4) sell: got offer from "
-							+ reply.getSender().getName() + "  :  "
-							+ reply.getContent());
-					buyOffers.put(reply.getSender().getName(),
-							reply.getContent());
-					buyTraders.put(reply.getSender().getName(),
-							reply.getSender());
+					System.out.println(myAgent.getName() + " 4) sell: got offer from " + reply.getSender().getName()
+							+ "  :  " + reply.getContent());
+					buyOffers.put(reply.getSender().getName(), reply.getContent());
+					buyTraders.put(reply.getSender().getName(), reply.getSender());
 					repliesCnt++;
 					if (repliesCnt >= buyerAgents.length) {
 						// We received all CFPs
@@ -341,13 +330,10 @@ public abstract class MarketAgent extends Agent {
 				break;
 			case 2:
 				// Respond buyers with your decision
-				System.out
-						.println(myAgent.getName()
-								+ " 5) sell: got all offers - responding with decision");
+				System.out.println(myAgent.getName() + " 5) sell: got all offers - responding with decision");
 				ACLMessage cfp = new ACLMessage(ACLMessage.PROPOSE);
 				for (int i = 0; i < buyerAgents.length; ++i) {
-					System.out.println(myAgent.getName()
-							+ " 5a) sell: sending decision to: "
+					System.out.println(myAgent.getName() + " 5a) sell: sending decision to: "
 							+ buyerAgents[i].getName());
 					cfp.addReceiver(buyerAgents[i]); // buyOffers
 				}
@@ -361,13 +347,11 @@ public abstract class MarketAgent extends Agent {
 			case 3:
 				// Get confirmation from buyers, update supplies store and
 				// confirm back
-				mt = MessageTemplate
-						.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+				mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
 				ACLMessage msg = myAgent.receive(mt);
 				if (msg != null) {
 					String title = msg.getContent();
-					System.out.println(myAgent.getName() + " 7) sell: " + title
-							+ "got accepted confirmation from "
+					System.out.println(myAgent.getName() + " 7) sell: " + title + "got accepted confirmation from "
 							+ msg.getSender().getName());
 					ACLMessage confirm = msg.createReply();
 					confirm.setPerformative(ACLMessage.CONFIRM);
@@ -410,14 +394,10 @@ public abstract class MarketAgent extends Agent {
 				ACLMessage sell_offer = myAgent.receive(mt);
 				if (sell_offer != null) {
 					// Reply received
-					System.out.println(myAgent.getName()
-							+ " 2) buy: got offer from "
-							+ sell_offer.getSender().getName() + "  :  "
-							+ sell_offer.getContent());
-					sellOffers.put(sell_offer.getSender().getName(),
-							sell_offer.getContent());
-					sellTraders.put(sell_offer.getSender().getName(),
-							sell_offer.getSender());
+					System.out.println(myAgent.getName() + " 2) buy: got offer from "
+							+ sell_offer.getSender().getName() + "  :  " + sell_offer.getContent());
+					sellOffers.put(sell_offer.getSender().getName(), sell_offer.getContent());
+					sellTraders.put(sell_offer.getSender().getName(), sell_offer.getSender());
 					offersCnt++;
 					if (offersCnt >= sellerAgents.length) {
 						// We received all information
@@ -428,10 +408,8 @@ public abstract class MarketAgent extends Agent {
 			case 1:
 				// Send CFP to sellers
 				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-				System.out.println(myAgent.getName()
-						+ " 3) buy: received all info, sending cfp");
-				Iterator<String> tradersIterator = sellTraders.keySet()
-						.iterator();
+				System.out.println(myAgent.getName() + " 3) buy: received all info, sending cfp");
+				Iterator<String> tradersIterator = sellTraders.keySet().iterator();
 				while (tradersIterator.hasNext()) {
 					String name = tradersIterator.next();
 					System.out.println("3) buy: sending to " + name);
@@ -451,8 +429,7 @@ public abstract class MarketAgent extends Agent {
 					String title = msg.getContent();
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-					System.out.println(myAgent.getName() + " 6) buy: " + title
-							+ "accepted offer from "
+					System.out.println(myAgent.getName() + " 6) buy: " + title + "accepted offer from "
 							+ msg.getSender().getName());
 					myAgent.send(reply);
 					step = 3;
@@ -465,8 +442,7 @@ public abstract class MarketAgent extends Agent {
 				mt = MessageTemplate.MatchPerformative(ACLMessage.CONFIRM);
 				msg = myAgent.receive(mt);
 				if (msg != null) {
-					System.out.println(myAgent.getName()
-							+ " 8) buy: received confirmation from "
+					System.out.println(myAgent.getName() + " 8) buy: received confirmation from "
 							+ msg.getSender().getName());
 					step = 3;
 				}

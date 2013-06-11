@@ -5,7 +5,6 @@ import constants.Participants;
 import constants.Products;
 
 public class Farmer extends MarketFieldAgent {
-	private double grainCost;
 
 	@Override
 	protected void fillInitialBuy() {
@@ -35,8 +34,19 @@ public class Farmer extends MarketFieldAgent {
 
 	@Override
 	protected void fillSellTo() {
-		//sellTo.put(Participants.KEEPER, Products.GRAIN);
-		//sellTo.put(Participants.BAKER, Products.GRAIN);
+		sellTo.put(Participants.KEEPER, Products.GRAIN);
+		sellTo.put(Participants.BAKER, Products.GRAIN);
 		sellTo.put(Participants.CLIENT, Products.VEGETABLE);
+	}
+
+	@Override
+	protected double getNumberOfProductsPerField(Products product) {
+		if (product == Products.GRAIN) {
+			return MarketConstants.FARMER_GRAIN_FROM_FIELD;
+		} else if (product == Products.VEGETABLE) {
+			return MarketConstants.FARMER_VEGETABLE_FROM_FIELD;
+		} else {
+			return 0;
+		}
 	}
 }
