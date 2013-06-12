@@ -24,7 +24,7 @@ public class SimpleStrategyTest {
 	SimpleStrategy ss = new SimpleStrategy();
 	ArrayList<AgentOffer> firstStageSellOffers = new ArrayList<AgentOffer>();
 	ArrayList<String> testNames = new ArrayList<String>();
-	EnumMap<Products, Double> buy;
+	EnumMap<Products, Double> buy = new EnumMap<Products, Double>(Products.class);;
 	
 	String sellOfferPrefix = Participants.BAKER
 			+ OfferFormatUtilities.OFFER_FIELD_DELIMITER
@@ -42,7 +42,6 @@ public class SimpleStrategyTest {
 	@Before
 	public void setUp() throws Exception {
 		ss.setMyMoney(100.0);
-		buy = new EnumMap<Products, Double>(Products.class);
 		buy.put(Products.ANIMAL, 12.0);
 		ss.setBuy(buy);
 		for (int i = 0; i < 10; i++) {
