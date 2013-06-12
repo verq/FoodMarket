@@ -49,12 +49,6 @@ public class Baker extends MarketEmployeeAgent {
 	}
 
 	@Override
-	protected void updateResources() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
 		return offers;
