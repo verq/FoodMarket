@@ -73,8 +73,15 @@ public abstract class Strategy {
 	 * @param buyerOffer
 	 * @return return true if I can complete transaction with this buyer, otherwise return false
 	 */
-	public abstract boolean confirmSellTransactionWith(AgentOffer buyerOffer,
-			Products product);
+	public boolean confirmSellTransactionWith(AgentOffer buyerOffer,
+			Products product) {
+		if (sell.get(product) >= buyerOffer.getItemAmount().get(product)) {
+			sell.put(product, sell.get(product)
+					- buyerOffer.getItemAmount().get(product));
+			return true;
+		}
+		return false;
+	}
 
 	public Strategy() {
 		buy = new EnumMap<Products, Double>(Products.class);

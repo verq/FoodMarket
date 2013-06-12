@@ -276,14 +276,4 @@ public class SimpleStrategy extends Strategy {
 		return answer;
 	}
 
-	@Override
-	public boolean confirmSellTransactionWith(AgentOffer buyerOffer,
-			Products product) {
-		if (sell.get(product) >= buyerOffer.getItemAmount().get(product)) {
-			sell.put(product, sell.get(product)
-					- buyerOffer.getItemAmount().get(product));
-			return true;
-		}
-		return false;
-	}
 }
