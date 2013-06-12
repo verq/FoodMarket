@@ -64,12 +64,6 @@ public class Keeper extends MarketFieldAgent {
 	}
 
 	@Override
-	protected void updateResources() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
 		return offers;

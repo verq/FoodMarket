@@ -58,12 +58,6 @@ public class Client extends MarketAgent {
 	}
 
 	@Override
-	protected void updateResources() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
 		return offers;

@@ -9,18 +9,12 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected void produceAndUse() {
 		for (Products product : sellTo.values()) {
 			double numberOfProduct = have.get(product);
-			double numberOfUsedProduct = numberOfEmployees
-					* getNumberOfProductPerEmployee();
-			if (numberOfUsedProduct <= have
-					.get(getProductUsedToProduce(product))) {
-				have.put(product, numberOfProduct + numberOfUsedProduct
-						* getUsedProductUsage());
-				have.put(getProductUsedToProduce(product),
-						have.get(getProductUsedToProduce(product))
-								- numberOfUsedProduct);
+			double numberOfUsedProduct = numberOfEmployees * getNumberOfProductPerEmployee();
+			if (numberOfUsedProduct <= have.get(getProductUsedToProduce(product))) {
+				have.put(product, numberOfProduct + numberOfUsedProduct * getUsedProductUsage());
+				have.put(getProductUsedToProduce(product), have.get(getProductUsedToProduce(product)) - numberOfUsedProduct);
 			} else {
-				have.put(product, have.get(getProductUsedToProduce(product))
-						* getUsedProductUsage());
+				have.put(product, have.get(getProductUsedToProduce(product)) * getUsedProductUsage());
 				have.put(getProductUsedToProduce(product), 0D);
 			}
 		}
