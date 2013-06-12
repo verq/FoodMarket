@@ -265,9 +265,9 @@ public class SimpleStrategyTest {
 		firstStageSellOffers.add(e3);
 		ArrayList<AgentOffer> answers = ss.decideAboutSellOffer(firstStageSellOffers);
 		assertEquals(3, ss.getCurrentWeekBuyOffersHistory().size());
-		ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 1);
-		ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 2);
-		ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 3);
+		assertTrue(ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 1));
+		assertTrue(ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 2));
+		assertTrue(ss.getCurrentWeekBuyOffersHistory().keySet().contains(offerAgentName + 3));
 	} 
 	
 	@Test

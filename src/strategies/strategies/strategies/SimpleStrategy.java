@@ -166,8 +166,8 @@ public class SimpleStrategy extends Strategy {
 							//		.getItemAmount().get(product).doubleValue()
 							//+ " " + ans.getItemPrice().get(product).doubleValue() + " " + agentOffer
 							//		.getItemPrice().get(product).doubleValue());
-						} // if it's worse from the previous one - resign
-						else {
+						} 
+						else { // if it's worse from the previous one - resign
 							agreeForThisOffer = false;
 							break;
 						}
@@ -199,7 +199,6 @@ public class SimpleStrategy extends Strategy {
 			}
 			myMoney -= moneyPaid;
 		}
-		
 	}
 
 	@Override
