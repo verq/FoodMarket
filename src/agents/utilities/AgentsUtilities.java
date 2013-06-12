@@ -6,9 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-import constants.OfferFormatUtilities;
-
 import agents.AgentOffer;
+import constants.OfferFormatUtilities;
 
 public class AgentsUtilities {
 	public static final boolean DEBUG_ST_1 = false;
@@ -57,7 +56,6 @@ public class AgentsUtilities {
 	public static Map<String, String> createMapOfOffers(
 			ArrayList<AgentOffer> response) {
 		Map<String, String> map = new HashMap<String, String>();
-		try {
 			for (AgentOffer agentOffer : response) {
 				map.put(agentOffer.getAgentName(),
 						OfferFormatUtilities.composeOfferContent(
@@ -66,10 +64,6 @@ public class AgentsUtilities {
 								agentOffer.getAgentType(),
 								agentOffer.getOfferType()));
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return map;
 	}
 }
