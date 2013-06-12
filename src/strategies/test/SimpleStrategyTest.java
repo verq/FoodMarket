@@ -518,6 +518,10 @@ public class SimpleStrategyTest {
 		ss.setMyMoney(myMoney);
 		buy.put(Products.VEGETABLE, 20.0);
 		buy.put(Products.FRUIT, 8.0);
+		EnumMap<Products, Double> have = new EnumMap<Products, Double>(Products.class);
+		have.put(Products.VEGETABLE, 3.0);
+		have.put(Products.FRUIT, 1.2);
+		ss.setHave(have);
 		ArrayList<AgentOffer> firstStageSellOffers = new ArrayList<AgentOffer>();
 		AgentOffer e1 = new AgentOffer(offerAgentName + 1, sellOfferPrefix + "VEGETABLE 12.0 14.0:FRUIT 10.0 3.5:MANURE 9.0 8.9:");
 		firstStageSellOffers.add(e1);
@@ -556,10 +560,17 @@ public class SimpleStrategyTest {
 	
 	@Test
 	public void  test_composeFinalBuyingDecision_should_update_store_buy_and_have_map_correctly() {
+		SimpleStrategy strag = new SimpleStrategy();
 		double myMoney = 61;
-		ss.setMyMoney(myMoney);
+		strag.setMyMoney(myMoney);
 		buy.put(Products.VEGETABLE, 20.0);
 		buy.put(Products.FRUIT, 8.0);
+		strag.setBuy(buy);
+		EnumMap<Products, Double> have = new EnumMap<Products, Double>(Products.class);
+		have.put(Products.VEGETABLE, 3.0);
+		have.put(Products.FRUIT, 1.2);
+		strag.setHave(have);
+		
 		ArrayList<AgentOffer> firstStageSellOffers = new ArrayList<AgentOffer>();
 		AgentOffer e1 = new AgentOffer(offerAgentName + 1, sellOfferPrefix + "VEGETABLE 12.0 14.0:FRUIT 10.0 3.5:MANURE 9.0 8.9:");
 		firstStageSellOffers.add(e1);
@@ -570,7 +581,7 @@ public class SimpleStrategyTest {
 		
 		AgentOffer e3 = new AgentOffer(offerAgentName + 3, sellOfferPrefix + "FRUIT 12.0 4.0:MANURE 1.0 5.5:VEGETABLE 9.0 8.9:");
 		firstStageSellOffers.add(e3);
-		ArrayList<AgentOffer> answers = ss.decideAboutSellOffer(firstStageSellOffers);
+		ArrayList<AgentOffer> answers = strag.decideAboutSellOffer(firstStageSellOffers);
 		double totalPaid = 0.0;
 		for (AgentOffer agentOffer : answers) {
 			if (!agentOffer.getAgentName().equals(bestTraderName))
@@ -585,18 +596,18 @@ public class SimpleStrategyTest {
 		e1 = new AgentOffer(offerAgentName + 1, sellOfferPrefix + "");
 		secondStageSellOffers.add(e1);
 		
-		e2 = new AgentOffer(bestTraderName, sellOfferPrefix + "VEGETABLE 8.28 5.5:FRUIT 4.84 3.0:");
+		e2 = new AgentOffer(bestTraderName, sellOfferPrefix + "VEGETABLE 8.4 5.5:FRUIT 5.1 3.0:");
 		secondStageSellOffers.add(e2); // the best one
 		
 		e3 = new AgentOffer(offerAgentName + 3, sellOfferPrefix + "");
 		secondStageSellOffers.add(e3);
-		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
+		Map<String, Boolean> result = strag.composeFinalBuyingDecision(secondStageSellOffers);
 
-		ss.updateBuyerStore(bestTraderName);
-		assertEquals(20.0 - 8.28, ss.getBuy().get(Products.VEGETABLE), 0.1);
-		assertEquals(8.0 - 4.84, ss.getBuy().get(Products.FRUIT), 0.1);
-		assertEquals(8.28, ss.getHave().get(Products.VEGETABLE), 0.1);
-		assertEquals(4.84, ss.getHave().get(Products.FRUIT), 0.1);
+		strag.updateBuyerStore(bestTraderName);
+		assertEquals(20.0 - 8.4, strag.getBuy().get(Products.VEGETABLE), 0.1);
+		assertEquals(8.0 - 5.1, strag.getBuy().get(Products.FRUIT), 0.1);
+		assertEquals(3.0 + 8.4, strag.getHave().get(Products.VEGETABLE), 0.1);
+		assertEquals(1.2 + 5.1, strag.getHave().get(Products.FRUIT), 0.1);
 	} 
 
 }

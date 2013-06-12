@@ -104,8 +104,8 @@ public abstract class Strategy {
 		return have;
 	}
 
-	public void setHave(EnumMap<Products, Double> have) {
-		this.have = have;
+	public void setHave(EnumMap<Products, Double> have2) {
+		this.have = have2;
 	}
 
 	public EnumMap<Products, Double> getSell() {
