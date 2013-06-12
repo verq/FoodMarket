@@ -315,8 +315,8 @@ public class SimpleStrategyTest {
 		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
 		
 		assertEquals(3, result.size());
-		assertEquals(true, result.get(offerAgentName + 1));
-		assertEquals(true, result.get(offerAgentName + 3));
+		assertEquals(false, result.get(offerAgentName + 1));
+		assertEquals(false, result.get(offerAgentName + 3));
 		assertEquals(true, result.get(offerAgentName + 2));
 
 	} 
@@ -348,8 +348,8 @@ public class SimpleStrategyTest {
 		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
 		
 		assertEquals(3, result.size());
-		assertEquals(true, result.get(offerAgentName + 1));
-		assertEquals(true, result.get(offerAgentName + 3));
+		assertEquals(false, result.get(offerAgentName + 1));
+		assertEquals(false, result.get(offerAgentName + 3));
 		assertEquals(true, result.get(offerAgentName + 2));
 
 	} 
@@ -381,8 +381,8 @@ public class SimpleStrategyTest {
 		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
 		
 		assertEquals(3, result.size());
-		assertEquals(true, result.get(offerAgentName + 1));
-		assertEquals(true, result.get(offerAgentName + 3));
+		assertEquals(false, result.get(offerAgentName + 1));
+		assertEquals(false, result.get(offerAgentName + 3));
 		assertEquals(false, result.get(offerAgentName + 2));
 	} 
 	
@@ -413,8 +413,8 @@ public class SimpleStrategyTest {
 		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
 		
 		assertEquals(3, result.size());
-		assertEquals(true, result.get(offerAgentName + 1));
-		assertEquals(true, result.get(offerAgentName + 3));
+		assertEquals(false, result.get(offerAgentName + 1));
+		assertEquals(false, result.get(offerAgentName + 3));
 		assertEquals(true, result.get(offerAgentName + 2));
 	} 
 
@@ -506,8 +506,8 @@ public class SimpleStrategyTest {
 		Map<String, Boolean> result = ss.composeFinalBuyingDecision(secondStageSellOffers);
 		
 		assertEquals(3, result.size());
-		assertEquals(true, result.get(offerAgentName + 1));
-		assertEquals(true, result.get(offerAgentName + 3));
+		assertEquals(false, result.get(offerAgentName + 1));
+		assertEquals(false, result.get(offerAgentName + 3));
 		assertEquals(true, result.get(offerAgentName + 2));
 	} 
 	
@@ -534,19 +534,21 @@ public class SimpleStrategyTest {
 		ArrayList<AgentOffer> answers = ss.decideAboutSellOffer(firstStageSellOffers);
 		double totalPaid = 0.0;
 		for (AgentOffer agentOffer : answers) {
-			if (!agentOffer.getAgentName().equals(bestTraderName))
-				continue;
-			totalPaid += agentOffer.getItemAmount().get(Products.VEGETABLE)
-					* agentOffer.getItemPrice().get(Products.VEGETABLE)
-					+ agentOffer.getItemAmount().get(Products.FRUIT)
-					* agentOffer.getItemPrice().get(Products.FRUIT);
+			if (agentOffer.getItemAmount().containsKey(Products.VEGETABLE))
+				totalPaid += agentOffer.getItemAmount().get(
+						Products.VEGETABLE)
+						* agentOffer.getItemPrice().get(Products.VEGETABLE);
+
+			if (agentOffer.getItemAmount().containsKey(Products.FRUIT))
+				totalPaid += agentOffer.getItemAmount().get(Products.FRUIT)
+						* agentOffer.getItemPrice().get(Products.FRUIT);
 		}
 		
 		ArrayList<AgentOffer> secondStageSellOffers = new ArrayList<AgentOffer>();
 		e1 = new AgentOffer(offerAgentName + 1, sellOfferPrefix + "");
 		secondStageSellOffers.add(e1);
 		
-		e2 = new AgentOffer(bestTraderName, sellOfferPrefix + "VEGETABLE 8.28 5.5:FRUIT 4.84 3.0:");
+		e2 = new AgentOffer(bestTraderName, sellOfferPrefix + "VEGETABLE 8.37 5.5:FRUIT 5.0 3.0:");
 		secondStageSellOffers.add(e2); // the best one
 		
 		e3 = new AgentOffer(offerAgentName + 3, sellOfferPrefix + "");

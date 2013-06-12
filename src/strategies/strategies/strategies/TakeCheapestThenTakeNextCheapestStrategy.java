@@ -191,12 +191,10 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 						 * agentOffer.getItemPrice().get(product)
 						 * .doubleValue());
 						 */
-						if (ans.getItemAmount().get(product).doubleValue() <= agentOffer
-								.getItemAmount().get(product).doubleValue()
-								&& ans.getItemPrice().get(product)
-										.doubleValue() >= agentOffer
-										.getItemPrice().get(product)
-										.doubleValue()) {
+						double additionalProfit = agentOffer.getItemAmount().get(product).doubleValue() - ans.getItemAmount().get(product).doubleValue();
+						if (additionalProfit <= 1.0 && additionalProfit >= 0 
+								&& ans.getItemPrice().get(product).doubleValue() >= agentOffer
+										.getItemPrice().get(product).doubleValue()) {
 
 							ans.getItemAmount().put(
 									product,
