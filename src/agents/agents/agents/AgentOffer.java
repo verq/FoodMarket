@@ -1,9 +1,11 @@
 package agents;
 
-import constants.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import constants.OfferFormatUtilities;
+import constants.Participants;
+import constants.Products;
 
 public class AgentOffer {
 
@@ -65,6 +67,14 @@ public class AgentOffer {
 		itemPrice.put(Products.valueOf(item), price);
 	}
 
+	public void addItemAmount(Products item, double amount) {
+		itemAmount.put(item, amount);
+	}
+
+	public void addItemPrice(Products item, double price) {
+		itemPrice.put(item, price);
+	}
+
 	public void addItemAmount(String item, double amount) {
 		itemAmount.put(Products.valueOf(item), amount);
 	}
@@ -88,7 +98,7 @@ public class AgentOffer {
 
 	public void parseIncommingOffer(String agentName, String offer) {
 		this.agentName = agentName;
-		//System.out.println(agentName + "   " + this.agentName);
+		// System.out.println(agentName + "   " + this.agentName);
 		if (offer == null || offer.isEmpty())
 			return;
 		String[] str = offer.split(OfferFormatUtilities.OFFER_FIELD_DELIMITER);
