@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import strategies.strategies.Strategy;
 import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
@@ -32,51 +33,7 @@ public abstract class MarketAgent extends Agent {
 				System.out.println(myType + ": not buying from anyone!");
 			return;
 		}
-		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
-			@Override
-			protected void onTick() {
-				Iterator<Products> buyProductsIterator = buyFrom.values()
-						.iterator();
-				sellerAgentsList.clear();
-				while (buyProductsIterator.hasNext()) {
-					DFAgentDescription agentDescription = new DFAgentDescription();
-					ServiceDescription serviceDescription = new ServiceDescription();
-					String name = buyProductsIterator.next().name();
-					serviceDescription.setType(name);
-					serviceDescription
-							.setName(OfferFormatUtilities.SELL_OFFER_TAG);
-					agentDescription.addServices(serviceDescription);
-					if (AgentsUtilities.DEBUG_ST_1)
-						System.out.println(this.myAgent.getName()
-								+ ": I'm looking for someone to buy " + name
-								+ " from");
-
-					try {
-						DFAgentDescription[] sellingAgents = DFService.search(
-								myAgent, agentDescription);
-
-						for (int i = 0; i < sellingAgents.length; ++i) {
-							sellerAgentsList.add(sellingAgents[i].getName());
-						}
-					} catch (FIPAException fe) {
-						fe.printStackTrace();
-					}
-				}
-
-				if (!sellerAgentsList.isEmpty()) {
-					System.out.println(this.myAgent.getName()
-							+ " found the following " + sellerAgentsList.size()
-							+ " seller agents:");
-					for (int i = 0; i < sellerAgentsList.size(); ++i) {
-						System.out.println("** "
-								+ sellerAgentsList.get(i).getName());
-					}
-					myAgent.addBehaviour(new BuyRequestPerformer(
-							MarketAgent.this));
-
-				}
-			}
-		});
+		addBehaviour(new BuyTickerBehaviour(this, this, MarketConstants.WEEK));
 	}
 
 	/**
@@ -89,50 +46,7 @@ public abstract class MarketAgent extends Agent {
 				System.out.println(myType + ": not selling to anyone!");
 			return;
 		}
-		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
-			@Override
-			protected void onTick() {
-				Iterator<Products> sellProductsIterator = sellTo.values()
-						.iterator();
-				DFAgentDescription[] buyingAgents;
-				buyerAgentsList.clear();
-				while (sellProductsIterator.hasNext()) {
-					DFAgentDescription agentDescription = new DFAgentDescription();
-					ServiceDescription serviceDescription = new ServiceDescription();
-					String name = sellProductsIterator.next().name();
-					serviceDescription.setType(name);
-					serviceDescription
-							.setName(OfferFormatUtilities.BUY_OFFER_TAG);
-					agentDescription.addServices(serviceDescription);
-					if (AgentsUtilities.DEBUG_ST_1)
-						System.out.println(this.myAgent.getName()
-								+ ": I'm looking for someone to sell " + name
-								+ " to");
-					try {
-						buyingAgents = DFService.search(myAgent,
-								agentDescription);
-						for (int i = 0; i < buyingAgents.length; i++) {
-							buyerAgentsList.add(buyingAgents[i].getName());
-						}
-					} catch (FIPAException fe) {
-						fe.printStackTrace();
-					}
-				}
-
-				if (!buyerAgentsList.isEmpty()) {
-					System.out.println(this.myAgent.getName()
-							+ " found the following " + buyerAgentsList.size()
-							+ " buyer agents:");
-					for (int i = 0; i < buyerAgentsList.size(); i++) {
-						System.out.println("* "
-								+ buyerAgentsList.get(i).getName());
-					}
-					myAgent.addBehaviour(new SellRequestPerformer(
-							MarketAgent.this));
-				}
-			}
-
-		});
+		addBehaviour(new SellTickerBehaviour(this, this, MarketConstants.WEEK));
 	}
 
 	/************ beginning of strategy related methods ************/
@@ -434,4 +348,6 @@ public abstract class MarketAgent extends Agent {
 	 * only during the summer
 	 */
 	protected int weeks = 0;
+	
+	Strategy myStrategy;
 }
