@@ -265,9 +265,9 @@ public class OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy extends
 	}
 
 	@Override
-	public ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers) {
-		// TODO Auto-generated method stub
-		return null;
+	protected boolean getSellingCondition(double buyerItemPrice,
+			double sellerItemPrice) {
+		return buyerItemPrice >= sellerItemPrice;
 	}
+
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import utilities.AgentsUtilities;
 import agents.AgentOffer;
 import constants.OfferFormatUtilities;
 import constants.Products;
@@ -220,9 +221,8 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 	}
 
 	@Override
-	public ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers) {
-		// TODO Auto-generated method stub
-		return null;
+	protected boolean getSellingCondition(double buyerItemPrice,
+			double sellerItemPrice) {
+		return AgentsUtilities.randomDouble(0, 1) < 0.4;
 	}
 }

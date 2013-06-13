@@ -3,6 +3,7 @@ package strategies.strategies;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import agents.AgentOffer;
@@ -60,8 +61,32 @@ public abstract class Strategy {
 	 *            from buyers
 	 * @return list of {@link AgentOffer} items containing buy offer details
 	 */
-	public abstract ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers);
+	public ArrayList<AgentOffer> decideAboutBuyOffer(
+			ArrayList<AgentOffer> offers) {
+		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
+		Iterator<Products> sellIterator = sell.keySet().iterator();
+		while (sellIterator.hasNext()) {
+			Products product = sellIterator.next();
+			Iterator<AgentOffer> offersIterator = offers.iterator();
+			while (offersIterator.hasNext()) {
+				AgentOffer offer = offersIterator.next();
+				AgentOffer currentAnswer = new AgentOffer(offer.getAgentName(),
+						"");
+				if (getSellingCondition(offer.getItemPrice().get(product),
+						pricePerItem.get(product))) {
+					currentAnswer.addItemAmount(product, sell.get(product));
+					currentAnswer.addItemPrice(product, offer.getItemPrice()
+							.get(product));
+				}
+				answer.add(currentAnswer);
+			}
+
+		}
+		return answer;
+	}
+
+	protected abstract boolean getSellingCondition(double buyerItemPrice,
+			double sellerItemPrice);
 
 	/**
 	 * selling stage 2:
