@@ -23,7 +23,7 @@ import constants.Products;
 
 public abstract class MarketAgent extends Agent {
 	/**
-	 * invoked to mantain buying part of the agent
+	 * invoked to maintain buying part of the agent
 	 */
 	// TODO: perhaps extract TickerBehaviour to another file
 	private void buyAction() {
@@ -71,7 +71,8 @@ public abstract class MarketAgent extends Agent {
 						System.out.println("** "
 								+ sellerAgentsList.get(i).getName());
 					}
-					myAgent.addBehaviour(new BuyRequestPerformer(MarketAgent.this));
+					myAgent.addBehaviour(new BuyRequestPerformer(
+							MarketAgent.this));
 
 				}
 			}
@@ -79,7 +80,7 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	/**
-	 * invoked to mantain selling part of the agent
+	 * invoked to maintain selling part of the agent
 	 */
 	// TODO: perhaps extract TickerBehaviour to another file
 	private void sellAction() {
@@ -126,7 +127,8 @@ public abstract class MarketAgent extends Agent {
 						System.out.println("* "
 								+ buyerAgentsList.get(i).getName());
 					}
-					myAgent.addBehaviour(new SellRequestPerformer(MarketAgent.this));
+					myAgent.addBehaviour(new SellRequestPerformer(
+							MarketAgent.this));
 				}
 			}
 
@@ -136,7 +138,8 @@ public abstract class MarketAgent extends Agent {
 	/************ beginning of strategy related methods ************/
 
 	/**
-	 * takes list of agents' offers, computes what I want to do and returns list of offers I want to make
+	 * takes list of agents' offers, computes what I want to do and returns list
+	 * of offers I want to make
 	 * 
 	 * @param offers
 	 *            from buyers
@@ -149,14 +152,16 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * 
 	 * @param sellOffers
-	 * @return map: to whose offer I respond and what is my answer (accept/reject: true/false)
+	 * @return map: to whose offer I respond and what is my answer
+	 *         (accept/reject: true/false)
 	 */
 	// TODO: implement this method
 	public abstract Map<String, Boolean> composeFinalBuyingDecision(
 			ArrayList<AgentOffer> sellOffers);
 
 	/**
-	 * takes list of agents' offers, computes what I want to do and returns list of offers I want to make
+	 * takes list of agents' offers, computes what I want to do and returns list
+	 * of offers I want to make
 	 * 
 	 * @param offers
 	 *            from sellers
@@ -167,16 +172,19 @@ public abstract class MarketAgent extends Agent {
 			ArrayList<AgentOffer> offers);
 
 	/**
-	 * invoked at the very end of transaction to confirm it; don't forget to update my store here!
+	 * invoked at the very end of transaction to confirm it; don't forget to
+	 * update my store here!
 	 * 
 	 * @param traderName
-	 * @return return true if I can complete transaction with this buyer, otherwise return false
+	 * @return return true if I can complete transaction with this buyer,
+	 *         otherwise return false
 	 */
 	// TODO: implement this method
 	public abstract boolean confirmSellTransactionWith(String traderName);
 
 	/**
-	 * buyer: update my supplies after positive transaction with seller traderName
+	 * buyer: update my supplies after positive transaction with seller
+	 * traderName
 	 * 
 	 * @param traderName
 	 */
@@ -196,10 +204,10 @@ public abstract class MarketAgent extends Agent {
 	 * 
 	 * @param buy
 	 *            offers containing offerer's name and offer as String
-	 * @return answers to buy offers containing recepient name and answer as String
+	 * @return answers to buy offers containing recipient name and answer as
+	 *         String
 	 */
-	Map<String, String> createAnswerToSellOffer(
-			Map<String, String> offers) {
+	Map<String, String> createAnswerToSellOffer(Map<String, String> offers) {
 		return AgentsUtilities
 				.createMapOfOffers(decideAboutSellOffer(AgentsUtilities
 						.createListOfOffers(offers)));
@@ -210,17 +218,16 @@ public abstract class MarketAgent extends Agent {
 	 * 
 	 * @param buy
 	 *            offers containing offerer's name and offer as String
-	 * @return answers to buy offers containing recepient name and answer as String
+	 * @return answers to buy offers containing recipient name and answer as
+	 *         String
 	 */
-	Map<String, String> createAnswerToBuyOffer(
-			Map<String, String> offers) {
+	Map<String, String> createAnswerToBuyOffer(Map<String, String> offers) {
 		return AgentsUtilities
 				.createMapOfOffers(decideAboutBuyOffer(AgentsUtilities
 						.createListOfOffers(offers)));
 	}
 
-	Map<String, Boolean> createFinalBuyingDecision(
-			Map<String, String> offers) {
+	Map<String, Boolean> createFinalBuyingDecision(Map<String, String> offers) {
 		return composeFinalBuyingDecision(AgentsUtilities
 				.createListOfOffers(offers));
 	}
@@ -306,14 +313,14 @@ public abstract class MarketAgent extends Agent {
 		}
 	}
 
-	/* ============= just initialization down there ============= */
+	/* ============= just initialisation down there ============= */
 	/**
 	 * Set how much of everything I need to buy first week
 	 */
 	protected abstract void fillInitialBuy();
 
 	/**
-	 * Set how much of everything I have in the begining
+	 * Set how much of everything I have in the beginning
 	 */
 	protected abstract void fillInitialHave();
 
@@ -356,7 +363,7 @@ public abstract class MarketAgent extends Agent {
 	}
 
 	/**
-	 * invoked to mantain weekly resource updates
+	 * invoked to maintain weekly resource updates
 	 */
 	private void timeAction() {
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
@@ -423,7 +430,8 @@ public abstract class MarketAgent extends Agent {
 	ArrayList<AID> sellerAgentsList;
 
 	/**
-	 * how many weeks have passed; useful also to let eg. growers sell products only during the summer
+	 * how many weeks have passed; useful also to let eg. growers sell products
+	 * only during the summer
 	 */
 	protected int weeks = 0;
 }
