@@ -31,9 +31,9 @@ class SellRequestPerformer extends Behaviour {
 	}
 
 	private final int STEP_START_ACTION = 0;
-	private final int STEP_SENDED_PRICE_TO_INTERESTED_BUYERS = 1;
+	private final int STEP_SENT_PRICE_TO_INTERESTED_BUYERS = 1;
 	private final int STEP_RECIVED_PROPOSALS_AND_REFUSALS_FROM_BUYERS = 2;
-	private final int STEP_MAKED_DECISTION_ABOUT_SELLING = 3;
+	private final int STEP_MADE_DECISION_ABOUT_SELLING = 3;
 	private final int STEP_GOT_CONFIRMATION_FROM_BUYERS = 4;
 	private final int STEP_BLOCK = 5;
 
@@ -58,7 +58,7 @@ class SellRequestPerformer extends Behaviour {
 		offer_inform.setReplyWith(conversationID
 				+ System.currentTimeMillis());
 		myAgent.send(offer_inform);
-		return STEP_SENDED_PRICE_TO_INTERESTED_BUYERS;
+		return STEP_SENT_PRICE_TO_INTERESTED_BUYERS;
 	}
 
 	private int reciveProposalsAndRefusalsFromBuyers() {
@@ -82,7 +82,7 @@ class SellRequestPerformer extends Behaviour {
 		} else {
 			return STEP_BLOCK;
 		}
-		return STEP_SENDED_PRICE_TO_INTERESTED_BUYERS;
+		return STEP_SENT_PRICE_TO_INTERESTED_BUYERS;
 	}
 
 	private int makeDecisionAboutSelling() {
@@ -109,7 +109,7 @@ class SellRequestPerformer extends Behaviour {
 			cfp.setReplyWith("propose" + System.currentTimeMillis());
 			myAgent.send(cfp);
 		}
-		return STEP_MAKED_DECISTION_ABOUT_SELLING;
+		return STEP_MADE_DECISION_ABOUT_SELLING;
 	}
 
 	private int getConfirmationFromBuyers() {
@@ -141,7 +141,7 @@ class SellRequestPerformer extends Behaviour {
 		} else {
 			return STEP_BLOCK;
 		}
-		return STEP_MAKED_DECISTION_ABOUT_SELLING;
+		return STEP_MADE_DECISION_ABOUT_SELLING;
 	}
 
 	public void action() {
@@ -153,14 +153,14 @@ class SellRequestPerformer extends Behaviour {
 				buyTraders.clear();
 				step = sendPriceToInterestedBuyers(conversationID);
 				break;
-			case STEP_SENDED_PRICE_TO_INTERESTED_BUYERS:
+			case STEP_SENT_PRICE_TO_INTERESTED_BUYERS:
 				step = reciveProposalsAndRefusalsFromBuyers();
 				break;
 			case STEP_RECIVED_PROPOSALS_AND_REFUSALS_FROM_BUYERS:
 				repliesCnt = 0;
 				step = makeDecisionAboutSelling();
 				break;
-			case STEP_MAKED_DECISTION_ABOUT_SELLING:
+			case STEP_MADE_DECISION_ABOUT_SELLING:
 				step = getConfirmationFromBuyers();
 				break;
 			case STEP_GOT_CONFIRMATION_FROM_BUYERS:

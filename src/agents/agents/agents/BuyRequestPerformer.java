@@ -12,7 +12,8 @@ import java.util.Map;
 import utilities.AgentsUtilities;
 
 /**
- * main inner class responsible for buying actions, more info within {@link SellRequestPerformer.action} method
+ * main inner class responsible for buying actions, more info within
+ * {@link SellRequestPerformer.action} method
  * 
  */
 // TODO: perhaps extract BuyRequestPerformer to another file
@@ -68,7 +69,8 @@ class BuyRequestPerformer extends Behaviour {
 				// got offers from everyone, send CFP to all sellers
 
 				// make some decision first
-				Map<String, String> responsesToSend = this.marketAgent.createAnswerToSellOffer(sellOffers);
+				Map<String, String> responsesToSend = this.marketAgent
+						.createAnswerToSellOffer(sellOffers);
 
 				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
 					System.out
@@ -102,8 +104,8 @@ class BuyRequestPerformer extends Behaviour {
 					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
 						System.out.println(myAgent.getName()
 								+ " 6) buy: got decision from "
-								+ sellerDecision.getSender().getName()
-								+ ": " + sellerDecision.getContent());
+								+ sellerDecision.getSender().getName() + ": "
+								+ sellerDecision.getContent());
 
 					// remember decisions and content
 					sellOffers.put(sellerDecision.getSender().getName(),
@@ -123,11 +125,12 @@ class BuyRequestPerformer extends Behaviour {
 			case 3:
 				// received all decisions: sending confirmation
 				// (accept/reject the offer)
-				Map<String, Boolean> myDecisions = this.marketAgent.createFinalBuyingDecision(sellOffers);
+				Map<String, Boolean> myDecisions = this.marketAgent
+						.createFinalBuyingDecision(sellOffers);
 				Iterator<String> decisionIterator = myDecisions.keySet()
 						.iterator();
 
-				// send your deficion to evey seller
+				// send your decision to every seller
 				while (decisionIterator.hasNext()) {
 					String recipientName = decisionIterator.next();
 					ACLMessage dec;
@@ -151,19 +154,18 @@ class BuyRequestPerformer extends Behaviour {
 				step = 4;
 			case 4:
 				// receive confirmation of transaction and update supplies
-				mt = MessageTemplate.or(MessageTemplate
-						.MatchPerformative(ACLMessage.CONFIRM),
-						MessageTemplate
-								.MatchPerformative(ACLMessage.REFUSE));
+				mt = MessageTemplate.or(
+						MessageTemplate.MatchPerformative(ACLMessage.CONFIRM),
+						MessageTemplate.MatchPerformative(ACLMessage.REFUSE));
 				msg = myAgent.receive(mt);
 				if (msg != null) {
 					if (msg.getPerformative() == ACLMessage.CONFIRM) {
 						if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
-							System.out
-									.println(myAgent.getName()
-											+ " 8) buy: received confirmation from "
-											+ msg.getSender().getName());
-						this.marketAgent.updateBuyerStore(msg.getSender().getName());
+							System.out.println(myAgent.getName()
+									+ " 8) buy: received confirmation from "
+									+ msg.getSender().getName());
+						this.marketAgent.updateBuyerStore(msg.getSender()
+								.getName());
 					}
 					offersCnt++;
 					if (offersCnt >= this.marketAgent.sellerAgentsList.size()) {
