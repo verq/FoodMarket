@@ -17,7 +17,7 @@ public enum Participants {
 		this.participantClass = participant;
 	}
 
-	private Class getParticipant() {
+	public Class getParticipant() {
 		return participantClass;
 	}
 }
