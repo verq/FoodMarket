@@ -2,17 +2,14 @@ package strategies.strategies;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
-
-import constants.OfferFormatUtilities;
-import constants.Products;
+import java.util.TreeMap;
 
 import agents.AgentOffer;
+import constants.Products;
 
 public class OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy extends
 		Strategy {
@@ -273,10 +270,4 @@ public class OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy extends
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public boolean confirmSellTransactionWith(String traderName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

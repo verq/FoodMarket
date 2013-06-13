@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import agents.AgentOffer;
 import constants.OfferFormatUtilities;
 import constants.Products;
-
-import agents.AgentOffer;
 
 /**
  * agent using this strategy will agree for the cheapest sell offer he gets for every
@@ -225,10 +224,5 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 			ArrayList<AgentOffer> offers) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public boolean confirmSellTransactionWith(String traderName) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

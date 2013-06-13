@@ -260,10 +260,4 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public boolean confirmSellTransactionWith(String traderName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
