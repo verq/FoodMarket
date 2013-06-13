@@ -10,7 +10,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import strategies.strategies.SimpleStrategy;
+import strategies.strategies.TakeAsMuchAsYouCanFromTheCheapestOfferStrategy;
 import strategies.strategies.TakeCheapestThenTakeNextCheapestStrategy;
 import agents.AgentOffer;
 import constants.OfferFormatUtilities;
@@ -34,7 +34,7 @@ public class TakeNextCheapestStrategyTest {
 			+ OfferFormatUtilities.OFFER_FIELD_DELIMITER;
 	
 	String sampleBuyOffer = buyOfferPrefix
-			+ "VEGETABLE 12.0 4.0:FRUIT 1.0 5.5:MILK 9.0 8.9:";
+			+ "VEGETABLE 12.0 4.0:FRUIT 1.0 5.5:MILK 9.0 8.9: ";
 	String sampleSellOffer = sellOfferPrefix
 			+ "MANURE 12.0 4.0:FRUIT 1.0 5.5:MILK 9.0 8.9:";
 	

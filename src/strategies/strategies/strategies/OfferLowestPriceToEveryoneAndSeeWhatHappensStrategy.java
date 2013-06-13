@@ -2,16 +2,20 @@ package strategies.strategies;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
-import agents.AgentOffer;
+import constants.OfferFormatUtilities;
 import constants.Products;
 
-public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
+import agents.AgentOffer;
+
+public class OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy extends
+		Strategy {
 
 	@Override
 	public ArrayList<AgentOffer> decideAboutSellOffer(
@@ -25,21 +29,25 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 			myAnswers.put(agentOffer.getAgentName(),
 					new AgentOffer(agentOffer.getAgentName(), null));
 		}
-		double totalPriceToPay = 0.0, nonemptyOffersNum = 0.0;
+		double totalPriceToPay = 0.0;
 		for (Iterator<Products> buyProdIterator = buy.keySet().iterator(); buyProdIterator
 				.hasNext();) {
 			Products currentBuyProduct = buyProdIterator.next();
 			TreeMap<String, Double> sortedProductOffers = returnSortedOffersForSingleProduct(
 					offers, currentBuyProduct);
+			if(sortedProductOffers.firstEntry() == null) continue;
 
 			double needToBuy = buy.get(currentBuyProduct);
+			double lowestPriceInThisCategory = sortedProductOffers.firstEntry()
+					.getValue();
+
 			for (Iterator<Entry<String, Double>> iterator = sortedProductOffers
 					.entrySet().iterator(); iterator.hasNext();) {
 				Entry<String, Double> entry = iterator.next();
 				if (needToBuy <= 0.0 || totalPriceToPay >= myMoney)
 					break;
 				String cheapestNowName = entry.getKey();
-				double cheapestNowPrice = entry.getValue();
+				double cheapestNowPrice = lowestPriceInThisCategory;
 				AgentOffer cheapestNow = offersMap.get(cheapestNowName);
 				AgentOffer currentAnswer = myAnswers.get(cheapestNowName);
 				/*
@@ -66,7 +74,6 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 				currentAnswer.addItemAmount(currentBuyProduct.name(),
 						amountToBuy);
 				totalPriceToPay += amountToBuy * cheapestNowPrice;
-				nonemptyOffersNum += 1;
 				/*
 				 * System.out.println("buying " + amountToBuy + " of " +
 				 * currentBuyProduct + " for " + cheapestNowPrice + " from " +
@@ -86,9 +93,9 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 		answer = new ArrayList<AgentOffer>(myAnswers.values());
 		saveOffersToHistory(myAnswers, decreaseMoneyToSpend);
 		/*
-		 * for (AgentOffer agentOffer : answer) {
-		 * System.out.println(agentOffer.getAgentName() + ": " +
-		 * agentOffer.getItemAmount() + " " + agentOffer.getItemPrice()); }
+		 for (AgentOffer agentOffer : answer) {
+		 System.out.println(agentOffer.getAgentName() + ": " +
+		 agentOffer.getItemAmount() + " " + agentOffer.getItemPrice()); }
 		 */
 		return answer;
 	}
@@ -191,10 +198,16 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 						 * agentOffer.getItemPrice().get(product)
 						 * .doubleValue());
 						 */
-						double additionalProfit = agentOffer.getItemAmount().get(product).doubleValue() - ans.getItemAmount().get(product).doubleValue();
-						if (additionalProfit <= 1.0 && additionalProfit >= 0 
-								&& ans.getItemPrice().get(product).doubleValue() >= agentOffer
-										.getItemPrice().get(product).doubleValue()) {
+						double additionalProfit = agentOffer.getItemAmount()
+								.get(product).doubleValue()
+								- ans.getItemAmount().get(product)
+										.doubleValue();
+						if (additionalProfit <= 1.0
+								&& additionalProfit >= 0
+								&& ans.getItemPrice().get(product)
+										.doubleValue() >= agentOffer
+										.getItemPrice().get(product)
+										.doubleValue()) {
 
 							ans.getItemAmount().put(
 									product,
@@ -236,7 +249,7 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 						* agentOffer.getItemAmount().get(currProd);
 				/*
 				 * System.out.println("updating transacion with: " + traderName
-				 *  + ": money paid =" + moneyPaid + "price = " +
+				 * + ": money paid =" + moneyPaid + "price = " +
 				 * prices.get(currProd) + " amount = " +
 				 * agentOffer.getItemAmount().get(currProd));
 				 */
