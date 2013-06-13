@@ -197,6 +197,18 @@ public abstract class MarketAgent extends Agent {
 		// TODO: warning: [unchecked] unchecked call to
 		// HashSet(java.util.Collection<? extends E>) as a member of the raw
 		// type java.util.HashSet
+		registerSellServices(agentDescription, t);
+
+		registerBuyServices(agentDescription);
+		try {
+			DFService.register(this, agentDescription);
+		} catch (FIPAException fe) {
+			fe.printStackTrace();
+		}
+	}
+
+	private void registerSellServices(DFAgentDescription agentDescription,
+			Set<Products> t) {
 		Iterator<Products> sellProductsIterator = t.iterator();
 		while (sellProductsIterator.hasNext()) {
 			String name = sellProductsIterator.next().toString();
@@ -208,9 +220,11 @@ public abstract class MarketAgent extends Agent {
 				System.out
 						.println(myType + ": I register for selling: " + name);
 		}
+	}
 
-		t = new HashSet<Products>(buyFrom.values());
-		Iterator<Products> buyProductsIterator = t.iterator();
+	private void registerBuyServices(DFAgentDescription agentDescription) {
+		Set<Products> t2 = new HashSet<Products>(buyFrom.values());
+		Iterator<Products> buyProductsIterator = t2.iterator();
 		while (buyProductsIterator.hasNext()) {
 			String name = buyProductsIterator.next().toString();
 			ServiceDescription serviceDescription = new ServiceDescription();
@@ -219,11 +233,6 @@ public abstract class MarketAgent extends Agent {
 			agentDescription.addServices(serviceDescription);
 			if (AgentsUtilities.DEBUG_ST_1)
 				System.out.println(myType + ": I register for buying: " + name);
-		}
-		try {
-			DFService.register(this, agentDescription);
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
 		}
 	}
 
