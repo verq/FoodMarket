@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import agents.AgentOffer;
+import constants.OfferFormatUtilities;
 import constants.Participants;
 import constants.Products;
 
@@ -66,23 +67,32 @@ public abstract class Strategy {
 			ArrayList<AgentOffer> offers) {
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		Iterator<Products> sellIterator = sell.keySet().iterator();
-		while (sellIterator.hasNext()) {
-			Products product = sellIterator.next();
-			Iterator<AgentOffer> offersIterator = offers.iterator();
-			while (offersIterator.hasNext()) {
-				AgentOffer offer = offersIterator.next();
-				AgentOffer currentAnswer = new AgentOffer(offer.getAgentName(),
-						"");
+		Iterator<AgentOffer> offersIterator = offers.iterator();
+		while (offersIterator.hasNext()) {
+			AgentOffer offer = offersIterator.next();
+			AgentOffer currentAnswer = new AgentOffer(offer.getAgentName(), "");
+			while (sellIterator.hasNext()) {
+				Products product = sellIterator.next();
 				currentAnswer.setAgentType(myType);
-				if (pricePerItem.containsKey(product) && offer.getItemPrice().containsKey(product) && getSellingCondition(offer.getItemPrice().get(product),
-						pricePerItem.get(product))) {
-					currentAnswer.addItemAmount(product, offer.getItemAmount().get(product));	// tu nie powinno być tyle, ile sprzedający chce sprzedać w ogóle,
-																								// tylko odpowiedź na to, ile dany klient chce kupić
+				currentAnswer.setOfferType(OfferFormatUtilities.SELL_OFFER_TAG);
+				if (pricePerItem.containsKey(product)
+						&& offer.getItemPrice().containsKey(product)
+						&& getSellingCondition(offer.getItemPrice()
+								.get(product), pricePerItem.get(product))) {
+					System.out.println(myType + " product details: " + product
+							+ " " + offer.getItemAmount().get(product));
+					currentAnswer.addItemAmount(product, offer.getItemAmount()
+							.get(product)); // tu nie powinno być tyle, ile
+											// sprzedający chce sprzedać w
+											// ogóle,
+											// tylko odpowiedź na to, ile dany
+											// klient chce kupić
 					currentAnswer.addItemPrice(product, offer.getItemPrice()
 							.get(product));
 				}
-				answer.add(currentAnswer);
 			}
+		answer.add(currentAnswer);
+		// jedna odpowiedź przypada na jedną ofertę od kupującego, a nie na pojedynczy produkt
 		}
 		return answer;
 	}
@@ -101,12 +111,20 @@ public abstract class Strategy {
 	 * @return return true if I can complete transaction with this buyer, otherwise return false
 	 */
 	public boolean confirmSellTransactionWith(AgentOffer buyerOffer, boolean accepted) {
+		if(!accepted) return false;
+		// check if you can complete the offer:
 		for (Products product : buyerOffer.getItemAmount().keySet()) {
 			if (sell.get(product) < buyerOffer.getItemAmount().get(product)) {
-				sell.put(product, sell.get(product)
-						- buyerOffer.getItemAmount().get(product));
 				return false;
 			}
+		}
+		// update store:
+		for (Products product : buyerOffer.getItemAmount().keySet()) {
+			sell.put(product, sell.get(product)
+					- buyerOffer.getItemAmount().get(product));
+			have.put(product, have.get(product)
+					- buyerOffer.getItemAmount().get(product));
+			myMoney -= buyerOffer.getItemPrice().get(product);
 		}
 		return true;
 	}
@@ -119,6 +137,7 @@ public abstract class Strategy {
 		currentWeekBuyOffersHistory = new HashMap<String, ArrayList<AgentOffer>>();
 		currentWeekSellOffersHistory = new HashMap<String, ArrayList<AgentOffer>>();
 		myMoney = 0.0;
+		myType = Participants.MILKMAN;
 	}
 
 	public EnumMap<Products, Double> getBuy() {

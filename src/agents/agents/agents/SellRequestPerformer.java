@@ -86,13 +86,13 @@ class SellRequestPerformer extends Behaviour {
 	}
 
 	private int makeDecisionAboutSelling() {
-		Map<String, String> responsesToSend = this.marketAgent.createAnswerToBuyOffer(buyOffers);
 		// Respond to buyers with your decision
 		if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 			System.out
 					.println(myAgent.getName()
 							+ " 5) sell: got all offers - responding with decision");
 		}
+		Map<String, String> responsesToSend = this.marketAgent.createAnswerToBuyOffer(buyOffers);
 		Iterator<String> buyerIterator = responsesToSend.keySet()
 				.iterator();
 		while (buyerIterator.hasNext()) {
@@ -101,10 +101,10 @@ class SellRequestPerformer extends Behaviour {
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
 				System.out.println(myAgent.getName()
 						+ " 5a) sell: sending decision to: "
-						+ buyTraders.get(name).getName());
+						+ buyTraders.get(name).getName() + " content: " + responsesToSend.get(name));
 
 			cfp.addReceiver(buyTraders.get(name));
-			cfp.setContent(this.marketAgent.composeSellContent());
+			cfp.setContent(responsesToSend.get(name));
 			cfp.setConversationId("propose" + this.marketAgent.myType);
 			cfp.setReplyWith("propose" + System.currentTimeMillis());
 			myAgent.send(cfp);
@@ -131,11 +131,11 @@ class SellRequestPerformer extends Behaviour {
 			if (confirmed) {
 				confirm.setPerformative(ACLMessage.CONFIRM);
 				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
-					System.out.println(myAgent.getName() + "7a) I can complete this transaction");
+					System.out.println(myAgent.getName() + " 7a) I can complete this transaction");
 			} else {
 				confirm.setPerformative(ACLMessage.REFUSE);
 				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
-					System.out.println(myAgent.getName() + "7a) I cannot complete this transaction");
+					System.out.println(myAgent.getName() + " 7a) I cannot complete this transaction");
 			}
 			confirm.setReplyWith("cfp" + System.currentTimeMillis());
 			myAgent.send(confirm);
@@ -159,11 +159,9 @@ class SellRequestPerformer extends Behaviour {
 				step = sendPriceToInterestedBuyers(conversationID);
 				break;
 			case STEP_SENT_PRICE_TO_INTERESTED_BUYERS:
-				System.out.println("seller in stage 2");
 				step = reciveProposalsAndRefusalsFromBuyers();
 				break;
 			case STEP_RECIVED_PROPOSALS_AND_REFUSALS_FROM_BUYERS:
-				System.out.println("seller in stage 3");
 				repliesCnt = 0;
 				step = makeDecisionAboutSelling();
 				break;

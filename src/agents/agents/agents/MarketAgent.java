@@ -119,6 +119,7 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * used to update my supplies in weekly manner (eg. add some money)
 	 */
+	//TODO: implement this method
 	protected abstract void produceAndUse();
 
 	/*************** end of strategy related methods ***************/

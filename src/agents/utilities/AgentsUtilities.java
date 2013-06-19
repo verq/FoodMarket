@@ -26,7 +26,7 @@ public class AgentsUtilities {
 	 * 
 	 * @param offers
 	 *            sent as String from remote agents and these agents' names
-	 * @return list of offers converted to easily accesible format as
+	 * @return list of offers converted to easily accessible format as
 	 *         {@link AgentOffer}
 	 */
 	public static ArrayList<AgentOffer> createListOfOffers(
@@ -56,14 +56,15 @@ public class AgentsUtilities {
 	public static Map<String, String> createMapOfOffers(
 			ArrayList<AgentOffer> response) {
 		Map<String, String> map = new HashMap<String, String>();
-			for (AgentOffer agentOffer : response) {
-				map.put(agentOffer.getAgentName(),
-						OfferFormatUtilities.composeOfferContent(
-								agentOffer.getItemAmount(),
-								agentOffer.getItemPrice(),
-								agentOffer.getAgentType(),
-								agentOffer.getOfferType()));
-			}
+		for (AgentOffer agentOffer : response) {
+			String content = OfferFormatUtilities.composeOfferContent(
+					agentOffer.getItemAmount(),
+					agentOffer.getItemPrice(),
+					agentOffer.getAgentType(),
+					agentOffer.getOfferType());
+			map.put(agentOffer.getAgentName(), content
+					);
+		}
 		return map;
 	}
 }
