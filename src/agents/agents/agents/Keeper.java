@@ -80,7 +80,7 @@ public class Keeper extends MarketFieldAgent {
 	}
 
 	@Override
-	public boolean confirmSellTransactionWith(String traderName) {
+	public boolean confirmSellTransactionWith(String traderName, String offer) {
 		// TODO Auto-generated method stub
 		return false;
 	}

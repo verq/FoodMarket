@@ -20,10 +20,10 @@ public class Farmer extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.FARMER;
-		numberOfFields = AgentsUtilities.randomInt(
-				MarketConstants.FARMER_MIN_FIELD,
-				MarketConstants.FARMER_MAX_FIELD);
-		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1)
+		numberOfFields = 1000;//AgentsUtilities.randomInt(
+				//MarketConstants.FARMER_MIN_FIELD,
+				//MarketConstants.FARMER_MAX_FIELD);
+		have.put(Products.GRAIN, 0.5//AgentsUtilities.randomDouble(0.5, 1)
 				* numberOfFields
 				* MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD);
 	}
@@ -50,7 +50,7 @@ public class Farmer extends MarketFieldAgent {
 		sellTo.put(Participants.BAKER, Products.GRAIN);
 		sellTo.put(Participants.CLIENT, Products.VEGETABLE);
 	}
-
+/*
 	@Override
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
@@ -68,7 +68,7 @@ public class Farmer extends MarketFieldAgent {
 	}
 
 	@Override
-	public boolean confirmSellTransactionWith(String traderName) {
+	public boolean confirmSellTransactionWith(String traderName, String offer) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -85,7 +85,7 @@ public class Farmer extends MarketFieldAgent {
 		// TODO Auto-generated method stub
 		return new HashMap<String, Boolean>();
 	}
-
+*/
 	@Override
 	protected double getNumberOfProductsPerField(Products product) {
 		if (product == Products.GRAIN) {

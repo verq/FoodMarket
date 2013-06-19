@@ -32,16 +32,20 @@ public class OfferFormatUtilities {
 		while (sellProductsIterator.hasNext()) {
 			Products p = sellProductsIterator.next();
 			if (itemAmount.get(p) > 0.0) {
-				content += p + OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER
-						+ itemAmount.get(p)
-						+ OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER
-						+ pricePerItem.get(p)
-						+ OfferFormatUtilities.OFFER_ITEM_DELIMITER;
 				nonzero = true;
+
+				String amount = String.format("%.2f", itemAmount.get(p).doubleValue());
+				String price = String.format("%.2f", pricePerItem.get(p).doubleValue());
+				content += p + OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER
+						+ itemAmount.get(p).doubleValue()//String.format("%.2f", itemAmount.get(p).doubleValue())
+						+ OfferFormatUtilities.OFFER_ITEM_PARTS_DELIMITER
+						+ pricePerItem.get(p).doubleValue()//String.format("%.2f", pricePerItem.get(p).doubleValue())
+						+ OfferFormatUtilities.OFFER_ITEM_DELIMITER;
 			}
 		}
 		if (!nonzero)
 			return "";
+
 		return content;
 	}
 }

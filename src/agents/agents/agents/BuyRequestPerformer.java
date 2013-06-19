@@ -83,13 +83,13 @@ class BuyRequestPerformer extends Behaviour {
 					ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 					String name = sellersIterator.next();
 
-					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
-						System.out.println(myAgent.getName()
-								+ "3a) buy: sending to " + name);
-
 					cfp.addReceiver(sellTraders.get(name));
 					cfp.setContent(responsesToSend.get(name));
 					myAgent.send(cfp);
+
+					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+						System.out.println(myAgent.getName()
+								+ "3a) buy: sending to " + name + "my response: " + responsesToSend.get(name));
 				}
 				sellTraders.clear();
 				sellOffers.clear();
@@ -148,6 +148,7 @@ class BuyRequestPerformer extends Behaviour {
 									+ recipientName);
 					}
 					dec.addReceiver(sellTraders.get(recipientName));
+					dec.setContent(sellOffers.get(recipientName));
 					myAgent.send(dec);
 				}
 				offersCnt = 0;

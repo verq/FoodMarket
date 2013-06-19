@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import strategies.strategies.SimpleStrategy;
 import strategies.strategies.Strategy;
 import utilities.AgentsUtilities;
 import constants.MarketConstants;
@@ -60,8 +61,10 @@ public abstract class MarketAgent extends Agent {
 	 * @return list of {@link AgentOffer} items containing buy offer details
 	 */
 	// TODO: implement this method
-	protected abstract ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers);
+	protected ArrayList<AgentOffer> decideAboutBuyOffer(
+			ArrayList<AgentOffer> offers) {
+		return myStrategy.decideAboutBuyOffer(offers);
+	}
 
 	/**
 	 * 
@@ -70,8 +73,10 @@ public abstract class MarketAgent extends Agent {
 	 *         (accept/reject: true/false)
 	 */
 	// TODO: implement this method
-	public abstract Map<String, Boolean> composeFinalBuyingDecision(
-			ArrayList<AgentOffer> sellOffers);
+	public Map<String, Boolean> composeFinalBuyingDecision(
+			ArrayList<AgentOffer> sellOffers) {
+		return myStrategy.composeFinalBuyingDecision(sellOffers);
+	}
 
 	/**
 	 * takes list of agents' offers, computes what I want to do and returns list
@@ -82,8 +87,10 @@ public abstract class MarketAgent extends Agent {
 	 * @return list of {@link AgentOffer} items containing sell offer details
 	 */
 	// TODO: implement this method
-	protected abstract ArrayList<AgentOffer> decideAboutSellOffer(
-			ArrayList<AgentOffer> offers);
+	protected ArrayList<AgentOffer> decideAboutSellOffer(
+			ArrayList<AgentOffer> offers) {
+		return myStrategy.decideAboutSellOffer(offers);
+	}
 
 	/**
 	 * invoked at the very end of transaction to confirm it; don't forget to
@@ -94,7 +101,9 @@ public abstract class MarketAgent extends Agent {
 	 *         otherwise return false
 	 */
 	// TODO: implement this method
-	public abstract boolean confirmSellTransactionWith(String traderName);
+	public boolean confirmSellTransactionWith(String traderName, String offer, boolean accepted) {
+		return myStrategy.confirmSellTransactionWith(new AgentOffer(traderName, offer), accepted);
+	}
 
 	/**
 	 * buyer: update my supplies after positive transaction with seller
@@ -103,7 +112,9 @@ public abstract class MarketAgent extends Agent {
 	 * @param traderName
 	 */
 	// TODO: implement this method
-	public abstract void updateBuyerStore(String traderName);
+	public void updateBuyerStore(String traderName) {
+		myStrategy.updateBuyerStore(traderName);
+	}
 
 	/**
 	 * used to update my supplies in weekly manner (eg. add some money)
@@ -184,6 +195,13 @@ public abstract class MarketAgent extends Agent {
 		buyAction();
 		sellAction();
 		timeAction();
+		myStrategy = new SimpleStrategy();
+		myStrategy.setBuy(buy);
+		myStrategy.setHave(have);
+		myStrategy.setSell(sell);
+		myStrategy.setPricePerItem(pricePerItem);
+		myStrategy.setMyMoney(money);
+		myStrategy.setMyType(myType);
 	}
 
 	/**

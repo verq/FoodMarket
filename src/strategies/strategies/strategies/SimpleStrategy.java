@@ -62,6 +62,8 @@ public class SimpleStrategy extends Strategy {
 		for (AgentOffer agentOffer : offers) {
 			AgentOffer currentAnswer = new AgentOffer(
 					agentOffer.getAgentName(), "");
+			currentAnswer.setOfferType(OfferFormatUtilities.BUY_OFFER_TAG);
+			currentAnswer.setAgentType(myType);
 			if (cheapestAgents.containsValue(agentOffer.getAgentName())) { // checking if this agent offered cheapest
 																			// price somewhere
 				Iterator<Products> iter = cheapestAgents.keySet().iterator();

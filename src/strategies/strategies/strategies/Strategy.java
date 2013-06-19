@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import agents.AgentOffer;
+import constants.Participants;
 import constants.Products;
 
 public abstract class Strategy {
@@ -27,7 +28,7 @@ public abstract class Strategy {
 	/**
 	 * buying stage 2:
 	 * 
-	 * decide wether to agree for the offer or not
+	 * decide whether to agree for the offer or not
 	 * 
 	 * used by BUYER after getting final decision from SELLER
 	 * 
@@ -72,15 +73,16 @@ public abstract class Strategy {
 				AgentOffer offer = offersIterator.next();
 				AgentOffer currentAnswer = new AgentOffer(offer.getAgentName(),
 						"");
-				if (getSellingCondition(offer.getItemPrice().get(product),
+				currentAnswer.setAgentType(myType);
+				if (pricePerItem.containsKey(product) && offer.getItemPrice().containsKey(product) && getSellingCondition(offer.getItemPrice().get(product),
 						pricePerItem.get(product))) {
-					currentAnswer.addItemAmount(product, sell.get(product));
+					currentAnswer.addItemAmount(product, offer.getItemAmount().get(product));	// tu nie powinno być tyle, ile sprzedający chce sprzedać w ogóle,
+																								// tylko odpowiedź na to, ile dany klient chce kupić
 					currentAnswer.addItemPrice(product, offer.getItemPrice()
 							.get(product));
 				}
 				answer.add(currentAnswer);
 			}
-
 		}
 		return answer;
 	}
@@ -98,14 +100,15 @@ public abstract class Strategy {
 	 * @param buyerOffer
 	 * @return return true if I can complete transaction with this buyer, otherwise return false
 	 */
-	public boolean confirmSellTransactionWith(AgentOffer buyerOffer,
-			Products product) {
-		if (sell.get(product) >= buyerOffer.getItemAmount().get(product)) {
-			sell.put(product, sell.get(product)
-					- buyerOffer.getItemAmount().get(product));
-			return true;
+	public boolean confirmSellTransactionWith(AgentOffer buyerOffer, boolean accepted) {
+		for (Products product : buyerOffer.getItemAmount().keySet()) {
+			if (sell.get(product) < buyerOffer.getItemAmount().get(product)) {
+				sell.put(product, sell.get(product)
+						- buyerOffer.getItemAmount().get(product));
+				return false;
+			}
 		}
-		return false;
+		return true;
 	}
 
 	public Strategy() {
@@ -171,7 +174,14 @@ public abstract class Strategy {
 	public double getMyMoney() {
 		return myMoney;
 	}
+	
+	public Participants getMyType() {
+		return myType;
+	}
 
+	public void setMyType(Participants myType) {
+		this.myType = myType;
+	}
 	public void setMyMoney(double myMoney) {
 		this.myMoney = myMoney;
 	}
@@ -207,4 +217,5 @@ public abstract class Strategy {
 	 */
 	protected Map<String, ArrayList<AgentOffer>> sellOffersHistory;
 	protected double myMoney;
+	protected Participants myType;
 }

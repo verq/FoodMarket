@@ -63,7 +63,7 @@ class SellRequestPerformer extends Behaviour {
 
 	private int reciveProposalsAndRefusalsFromBuyers() {
 		// Receive all proposals/refusals from buyers agents
-		mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
 		ACLMessage reply = myAgent.receive(mt);
 		if (reply != null) {
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
@@ -80,7 +80,7 @@ class SellRequestPerformer extends Behaviour {
 				return STEP_RECIVED_PROPOSALS_AND_REFUSALS_FROM_BUYERS;
 			}
 		} else {
-			return STEP_BLOCK;
+			block();//return STEP_BLOCK;
 		}
 		return STEP_SENT_PRICE_TO_INTERESTED_BUYERS;
 	}
@@ -122,15 +122,20 @@ class SellRequestPerformer extends Behaviour {
 		if (msg != null) {
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
 				System.out.println(myAgent.getName()
-						+ " 7) sell: got accepted confirmation from "
+						+ " 7) sell: got confirmation from "
 						+ msg.getSender().getName());
 			ACLMessage confirm = msg.createReply();
 			boolean confirmed = this.marketAgent.confirmSellTransactionWith(msg.getSender()
-					.getName());
+					.getName(), buyOffers.get(msg.getSender()
+					.getName()), msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL);
 			if (confirmed) {
 				confirm.setPerformative(ACLMessage.CONFIRM);
+				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+					System.out.println(myAgent.getName() + "7a) I can complete this transaction");
 			} else {
 				confirm.setPerformative(ACLMessage.REFUSE);
+				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+					System.out.println(myAgent.getName() + "7a) I cannot complete this transaction");
 			}
 			confirm.setReplyWith("cfp" + System.currentTimeMillis());
 			myAgent.send(confirm);
@@ -139,7 +144,7 @@ class SellRequestPerformer extends Behaviour {
 				return STEP_GOT_CONFIRMATION_FROM_BUYERS;
 			}
 		} else {
-			return STEP_BLOCK;
+			block();//return STEP_BLOCK;
 		}
 		return STEP_MADE_DECISION_ABOUT_SELLING;
 	}
@@ -154,9 +159,11 @@ class SellRequestPerformer extends Behaviour {
 				step = sendPriceToInterestedBuyers(conversationID);
 				break;
 			case STEP_SENT_PRICE_TO_INTERESTED_BUYERS:
+				System.out.println("seller in stage 2");
 				step = reciveProposalsAndRefusalsFromBuyers();
 				break;
 			case STEP_RECIVED_PROPOSALS_AND_REFUSALS_FROM_BUYERS:
+				System.out.println("seller in stage 3");
 				repliesCnt = 0;
 				step = makeDecisionAboutSelling();
 				break;

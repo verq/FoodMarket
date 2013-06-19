@@ -225,4 +225,5 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 			double sellerItemPrice) {
 		return AgentsUtilities.randomDouble(0, 1) < 0.4;
 	}
+	
 }

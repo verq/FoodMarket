@@ -32,9 +32,9 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.CLIENT;
-		income = AgentsUtilities.randomDouble(
-				MarketConstants.CLIENT_MIN_INCOME,
-				MarketConstants.CLIENT_MAX_INCOME);
+		income = 1300.0;//AgentsUtilities.randomDouble(
+				//MarketConstants.CLIENT_MIN_INCOME,
+				//MarketConstants.CLIENT_MAX_INCOME);
 		money = income;
 	}
 
@@ -56,42 +56,7 @@ public class Client extends MarketAgent {
 	protected void fillSellTo() {
 		// nothing
 	}
-
-	@Override
-	protected ArrayList<AgentOffer> decideAboutSellOffer(
-			ArrayList<AgentOffer> offers) {
-		return offers;
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers) {
-		return offers;
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean confirmSellTransactionWith(String traderName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void updateBuyerStore(String traderName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Map<String, Boolean> composeFinalBuyingDecision(
-			ArrayList<AgentOffer> sellOffers) {
-		// TODO Auto-generated method stub
-		return new HashMap<String, Boolean>();
-	}
-
+	
 	@Override
 	protected void produceAndUse() {
 		money += money + income;
