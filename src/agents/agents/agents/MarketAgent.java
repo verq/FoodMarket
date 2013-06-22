@@ -18,16 +18,17 @@ import java.util.Set;
 import strategies.strategies.SimpleStrategy;
 import strategies.strategies.Strategy;
 import utilities.AgentsUtilities;
+import utilities.ExcelLogger;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
 import constants.Participants;
 import constants.Products;
 
 public abstract class MarketAgent extends Agent {
+
 	/**
 	 * invoked to maintain buying part of the agent
 	 */
-	// TODO: perhaps extract TickerBehaviour to another file
 	private void buyAction() {
 		if (buyFrom.isEmpty()) {
 			if (AgentsUtilities.DEBUG_ST_1)
@@ -40,7 +41,6 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * invoked to maintain selling part of the agent
 	 */
-	// TODO: perhaps extract TickerBehaviour to another file
 	private void sellAction() {
 		if (sellTo.isEmpty()) {
 			if (AgentsUtilities.DEBUG_ST_1)
@@ -372,10 +372,58 @@ public abstract class MarketAgent extends Agent {
 	ArrayList<AID> sellerAgentsList;
 
 	/**
-	 * how many weeks have passed; useful also to let eg. growers sell products
-	 * only during the summer
+	 * how many weeks have passed; useful also to let eg. growers sell products only during the summer
 	 */
 	protected int weeks = 0;
 	
-	Strategy myStrategy;
+	protected Strategy myStrategy;
+	
+	// getters needed in ExcelLogger
+	public double getMoney() {
+		return money;
+	}
+
+	public Participants getMyType() {
+		return myType;
+	}
+
+	public EnumMap<Products, Double> getBuy() {
+		return buy;
+	}
+
+	public EnumMap<Products, Double> getHave() {
+		return have;
+	}
+
+	public EnumMap<Products, Double> getSell() {
+		return sell;
+	}
+
+	public EnumMap<Products, Double> getPricePerItem() {
+		return pricePerItem;
+	}
+
+	public EnumMap<Participants, Products> getBuyFrom() {
+		return buyFrom;
+	}
+
+	public EnumMap<Participants, Products> getSellTo() {
+		return sellTo;
+	}
+
+	public ArrayList<AID> getBuyerAgentsList() {
+		return buyerAgentsList;
+	}
+
+	public ArrayList<AID> getSellerAgentsList() {
+		return sellerAgentsList;
+	}
+
+	public int getWeeks() {
+		return weeks;
+	}
+
+	public Strategy getMyStrategy() {
+		return myStrategy;
+	}
 }

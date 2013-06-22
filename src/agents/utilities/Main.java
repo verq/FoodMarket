@@ -7,7 +7,7 @@ import java.util.EnumMap;
 import constants.Participants;
 
 public class Main extends Boot {
-
+	private static ExcelLogger excelLogger;
 	private static EnumMap<Participants, Integer> numberOfAgents = new EnumMap<Participants, Integer>(
 			Participants.class);
 
@@ -16,6 +16,7 @@ public class Main extends Boot {
 	}
 
 	public static void main(String[] args) {
+		excelLogger = new ExcelLogger();
 		int howManyAgents = 20;
 		runAgent(howManyAgents);
 
@@ -44,5 +45,9 @@ public class Main extends Boot {
 			sb.append(participant.name() + i + ":" + className + ";");
 		}
 		return sb.toString();
+	}
+
+	public static ExcelLogger getExcelLogger() {
+		return excelLogger;
 	}
 }

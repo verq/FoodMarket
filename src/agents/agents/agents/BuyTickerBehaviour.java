@@ -10,6 +10,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.Iterator;
 
 import utilities.AgentsUtilities;
+import utilities.ExcelLogger;
+import utilities.Main;
 import constants.OfferFormatUtilities;
 import constants.Products;
 
@@ -26,6 +28,7 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 
 	@Override
 	protected void onTick() {
+		Main.getExcelLogger().writeAgent(marketAgent);
 		Iterator<Products> buyProductsIterator = this.marketAgent.buyFrom.values()
 				.iterator();
 		this.marketAgent.sellerAgentsList.clear();
