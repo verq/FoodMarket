@@ -20,10 +20,10 @@ public class Farmer extends MarketFieldAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.FARMER;
-		numberOfFields = 1000;//AgentsUtilities.randomInt(
-				//MarketConstants.FARMER_MIN_FIELD,
-				//MarketConstants.FARMER_MAX_FIELD);
-		have.put(Products.GRAIN, 0.5//AgentsUtilities.randomDouble(0.5, 1)
+		numberOfFields = AgentsUtilities.randomInt(
+				MarketConstants.FARMER_MIN_FIELD,
+				MarketConstants.FARMER_MAX_FIELD);
+		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1)
 				* numberOfFields
 				* MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD);
 	}

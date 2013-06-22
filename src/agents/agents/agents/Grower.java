@@ -46,42 +46,6 @@ public class Grower extends MarketFieldAgent {
 	protected void fillSellTo() {
 		sellTo.put(Participants.CLIENT, Products.FRUIT);
 	}
-
-	@Override
-	protected ArrayList<AgentOffer> decideAboutSellOffer(
-			ArrayList<AgentOffer> offers) {
-		return offers;
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected ArrayList<AgentOffer> decideAboutBuyOffer(
-			ArrayList<AgentOffer> offers) {
-		return offers;
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean confirmSellTransactionWith(String traderName, String offer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void updateBuyerStore(String traderName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Map<String, Boolean> composeFinalBuyingDecision(
-			ArrayList<AgentOffer> sellOffers) {
-		// TODO Auto-generated method stub
-		return new HashMap<String, Boolean>();
-	}
-
 	@Override
 	protected double getNumberOfProductsPerField(Products product) {
 		if (product == Products.FRUIT) {

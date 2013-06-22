@@ -12,7 +12,6 @@ import constants.Products;
 
 public class Client extends MarketAgent {
 	private double income;
-	private EnumMap<Products, Integer> weekProductNeeds;
 
 	@Override
 	protected void fillInitialBuy() {
@@ -32,9 +31,7 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.CLIENT;
-		income = 1300.0;//AgentsUtilities.randomDouble(
-				//MarketConstants.CLIENT_MIN_INCOME,
-				//MarketConstants.CLIENT_MAX_INCOME);
+		AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 		money = income;
 	}
 
@@ -64,6 +61,9 @@ public class Client extends MarketAgent {
 	}
 
 	protected void use() {
-		// TODO
+		for (Map.Entry<Products, Double> haveEntry : have.entrySet()) {
+			Double value = haveEntry.getValue();
+			have.put(haveEntry.getKey(), haveEntry.setValue(AgentsUtilities.randomDouble(0.5, 1) * value));
+		}
 	}
 }
