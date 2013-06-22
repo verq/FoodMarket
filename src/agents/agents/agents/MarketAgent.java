@@ -313,14 +313,16 @@ public abstract class MarketAgent extends Agent {
 			protected void onTick() {
 				produceAndUse();
 				prepareForSelling();
-			}
+				}
 		});
 	}
 
 	protected void prepareForSelling() {
+		if (!(this instanceof Client)) {
 		for (Products product : sellTo.values()) {
-			sell.put(product, have.get(product));
-			have.put(product, 0D);
+				sell.put(product, have.get(product));
+				have.put(product, 0D);
+		}
 		}
 	}
 
