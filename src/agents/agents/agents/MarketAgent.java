@@ -18,7 +18,6 @@ import java.util.Set;
 import strategies.strategies.SimpleStrategy;
 import strategies.strategies.Strategy;
 import utilities.AgentsUtilities;
-import utilities.ExcelLogger;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
 import constants.Participants;
@@ -60,7 +59,6 @@ public abstract class MarketAgent extends Agent {
 	 *            from buyers
 	 * @return list of {@link AgentOffer} items containing buy offer details
 	 */
-	// TODO: implement this method
 	protected ArrayList<AgentOffer> decideAboutBuyOffer(
 			ArrayList<AgentOffer> offers) {
 		return myStrategy.decideAboutBuyOffer(offers);
@@ -72,7 +70,6 @@ public abstract class MarketAgent extends Agent {
 	 * @return map: to whose offer I respond and what is my answer
 	 *         (accept/reject: true/false)
 	 */
-	// TODO: implement this method
 	public Map<String, Boolean> composeFinalBuyingDecision(
 			ArrayList<AgentOffer> sellOffers) {
 		return myStrategy.composeFinalBuyingDecision(sellOffers);
@@ -86,7 +83,6 @@ public abstract class MarketAgent extends Agent {
 	 *            from sellers
 	 * @return list of {@link AgentOffer} items containing sell offer details
 	 */
-	// TODO: implement this method
 	protected ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
 		return myStrategy.decideAboutSellOffer(offers);
@@ -100,7 +96,6 @@ public abstract class MarketAgent extends Agent {
 	 * @return return true if I can complete transaction with this buyer,
 	 *         otherwise return false
 	 */
-	// TODO: implement this method
 	public boolean confirmSellTransactionWith(String traderName, String offer, boolean accepted) {
 		return myStrategy.confirmSellTransactionWith(new AgentOffer(traderName, offer), accepted);
 	}
@@ -111,7 +106,6 @@ public abstract class MarketAgent extends Agent {
 	 * 
 	 * @param traderName
 	 */
-	// TODO: implement this method
 	public void updateBuyerStore(String traderName) {
 		myStrategy.updateBuyerStore(traderName);
 	}
@@ -119,7 +113,6 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * used to update my supplies in weekly manner (eg. add some money)
 	 */
-	//TODO: implement this method
 	protected abstract void produceAndUse();
 
 	/*************** end of strategy related methods ***************/
@@ -208,21 +201,17 @@ public abstract class MarketAgent extends Agent {
 	/**
 	 * register my both selling and buying services
 	 */
-	// TODO: refactor to shorten this method
 	private void register() {
 		DFAgentDescription agentDescription = new DFAgentDescription();
 		agentDescription.setName(getAID());
 		Set<Products> t = new HashSet<Products>(sellTo.values());
-		// TODO: warning: [unchecked] unchecked call to
-		// HashSet(java.util.Collection<? extends E>) as a member of the raw
-		// type java.util.HashSet
 		registerSellServices(agentDescription, t);
 
 		registerBuyServices(agentDescription);
 		try {
 			DFService.register(this, agentDescription);
 		} catch (FIPAException fe) {
-			fe.printStackTrace();
+			System.out.println(fe.getMessage());
 		}
 	}
 
