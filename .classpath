@@ -7,8 +7,21 @@
 	<classpathentry kind="src" path="src/agents/agents/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jade.jar"/>
+	<classpathentry kind="lib" path="lib/jade.jar" sourcepath="C:/Users/Weronika/Studies/semester_II/sia/JADE-all-4.2.0/JADE-src-4.2.0.zip"/>
 	<classpathentry kind="lib" path="lib/CalendarBean.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/lib/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-examples-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-excelant-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-ooxml-3.9-20121203.jar" sourcepath="C:/Users/Weronika/Studies/semester_II/sia/JADE-all-4.2.0/JADE-src-4.2.0.zip"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-ooxml-schemas-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/poi-scratchpad-3.9-20121203.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/ooxml-lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/ooxml-lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/poi-3.9/ooxml-lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

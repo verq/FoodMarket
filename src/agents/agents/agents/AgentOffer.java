@@ -98,7 +98,6 @@ public class AgentOffer {
 
 	public void parseIncommingOffer(String agentName, String offer) {
 		this.agentName = agentName;
-		// System.out.println(agentName + "   " + this.agentName);
 		if (offer == null || offer.isEmpty())
 			return;
 		String[] str = offer.split(OfferFormatUtilities.OFFER_FIELD_DELIMITER);

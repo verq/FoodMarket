@@ -10,7 +10,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.Iterator;
 
 import utilities.AgentsUtilities;
-import utilities.ExcelLogger;
 import utilities.Main;
 import constants.OfferFormatUtilities;
 import constants.Products;
