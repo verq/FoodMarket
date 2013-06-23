@@ -15,7 +15,6 @@ import utilities.AgentsUtilities;
  * main inner class responsible for selling actions, more info within {@link SellRequestPerformer.action} method
  * 
  */
-// TODO: perhaps extract SellRequestPerformer to another file
 
 class SellRequestPerformer extends Behaviour {
 	/**
@@ -64,8 +63,8 @@ class SellRequestPerformer extends Behaviour {
 
 	private int reciveProposalsAndRefusalsFromBuyers() {
 		// Receive all proposals/refusals from buyers agents
-		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-		ACLMessage reply = myAgent.receive(mt);
+		MessageTemplate message = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+		ACLMessage reply = myAgent.receive(message);
 		if (reply != null) {
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 				System.out.println(myAgent.getName()
@@ -149,14 +148,13 @@ class SellRequestPerformer extends Behaviour {
 				return STEP_GOT_CONFIRMATION_FROM_BUYERS;
 			}
 		} else {
-			block();//return STEP_BLOCK;
+			return STEP_BLOCK;
 		}
 		return STEP_MADE_DECISION_ABOUT_SELLING;
 	}
 
 	public void action() {
 		String conversationID = this.marketAgent.myType + "=inform";
-		try {
 			switch (step) {
 			case STEP_START_ACTION:
 				buyOffers.clear();
@@ -187,9 +185,6 @@ class SellRequestPerformer extends Behaviour {
 				block();
 				break;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -200,6 +195,6 @@ class SellRequestPerformer extends Behaviour {
 
 	@Override
 	public boolean done() {
-		return step == 4;
+		return step == STEP_GOT_CONFIRMATION_FROM_BUYERS;
 	}
 }
