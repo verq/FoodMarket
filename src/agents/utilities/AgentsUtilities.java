@@ -11,7 +11,9 @@ import constants.OfferFormatUtilities;
 
 public class AgentsUtilities {
 	public static final boolean DEBUG_ST_1 = false;
-	public static final boolean PRINT_COMMUNICATION_STAGE = true;
+	public static final boolean PRINT_COMMUNICATION_STAGE = false;
+	public static final boolean PRINT_FINDING_STAGE = false;
+	public static final boolean PRINT_PRODUCTS_DETAILS = false;
 	protected static Random rand = new Random();
 
 	public static int randomInt(int min, int max) {
@@ -56,6 +58,8 @@ public class AgentsUtilities {
 	public static Map<String, String> createMapOfOffers(
 			ArrayList<AgentOffer> response) {
 		Map<String, String> map = new HashMap<String, String>();
+		if (response == null)
+			return map;
 		for (AgentOffer agentOffer : response) {
 			String content = OfferFormatUtilities.composeOfferContent(
 					agentOffer.getItemAmount(),

@@ -46,12 +46,12 @@ class BuyRequestPerformer extends Behaviour {
 				ACLMessage sell_offer = myAgent.receive(mt);
 				if (sell_offer != null) {
 					// reply received
-					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 						System.out.println(myAgent.getName()
 								+ " 2) buy: got offer from "
 								+ sell_offer.getSender().getName() + ": "
 								+ sell_offer.getContent());
-
+					}
 					// remember this offer
 					sellOffers.put(sell_offer.getSender().getName(),
 							sell_offer.getContent());
@@ -72,10 +72,11 @@ class BuyRequestPerformer extends Behaviour {
 				Map<String, String> responsesToSend = this.marketAgent
 						.createAnswerToSellOffer(sellOffers);
 
-				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 					System.out
 							.println(myAgent.getName()
 									+ " 3) buy: received all offers, sending cfp with decision");
+				}
 				Iterator<String> sellersIterator = responsesToSend.keySet()
 						.iterator();
 				// send offer specific response to every agent
@@ -87,9 +88,10 @@ class BuyRequestPerformer extends Behaviour {
 					cfp.setContent(responsesToSend.get(name));
 					myAgent.send(cfp);
 
-					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 						System.out.println(myAgent.getName()
 								+ "3a) buy: sending to " + name + "my response: " + responsesToSend.get(name));
+					}
 				}
 				sellTraders.clear();
 				sellOffers.clear();
@@ -101,12 +103,12 @@ class BuyRequestPerformer extends Behaviour {
 				ACLMessage sellerDecision = myAgent.receive(mt);
 				if (sellerDecision != null) {
 					// receive decisions from sellers
-					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+					if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 						System.out.println(myAgent.getName()
 								+ " 6) buy: got decision from "
 								+ sellerDecision.getSender().getName() + ": "
 								+ sellerDecision.getContent());
-
+					}
 					// remember decisions and content
 					sellOffers.put(sellerDecision.getSender().getName(),
 							sellerDecision.getContent());
@@ -142,10 +144,11 @@ class BuyRequestPerformer extends Behaviour {
 									+ recipientName);
 					} else {
 						dec = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
-						if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+						if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 							System.out.println(myAgent.getName()
 									+ " 6a) buy: rejected offer from "
 									+ recipientName);
+						}
 					}
 					dec.addReceiver(sellTraders.get(recipientName));
 					dec.setContent(sellOffers.get(recipientName));
@@ -161,12 +164,14 @@ class BuyRequestPerformer extends Behaviour {
 				msg = myAgent.receive(mt);
 				if (msg != null) {
 					if (msg.getPerformative() == ACLMessage.CONFIRM) {
-						if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+						if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 							System.out.println(myAgent.getName()
 									+ " 8) buy: received confirmation from "
 									+ msg.getSender().getName());
+						}
 						this.marketAgent.updateBuyerStore(msg.getSender()
 								.getName());
+
 					}
 					offersCnt++;
 					if (offersCnt >= this.marketAgent.sellerAgentsList.size()) {
@@ -175,8 +180,9 @@ class BuyRequestPerformer extends Behaviour {
 				}
 				break;
 			case 5:
-				if (AgentsUtilities.DEBUG_ST_1)
+				if (AgentsUtilities.DEBUG_ST_1) {
 					System.out.println("buy: step = end");
+				}
 				step = 0;
 				offersCnt = 0;
 				sellOffers.clear();

@@ -47,10 +47,11 @@ class SellRequestPerformer extends Behaviour {
 	private int sendPriceToInterestedBuyers(String conversationID) {
 		ACLMessage offer_inform = new ACLMessage(ACLMessage.INFORM);
 		for (int i = 0; i < this.marketAgent.buyerAgentsList.size(); ++i) {
-			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 				System.out.println(myAgent.getName()
 						+ " 1) sell: sending sell offer to: "
 						+ this.marketAgent.buyerAgentsList.get(i).getName());
+			}
 			offer_inform.addReceiver(this.marketAgent.buyerAgentsList.get(i));
 		}
 		offer_inform.setContent(this.marketAgent.composeSellContent());
@@ -66,11 +67,12 @@ class SellRequestPerformer extends Behaviour {
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
 		ACLMessage reply = myAgent.receive(mt);
 		if (reply != null) {
-			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 				System.out.println(myAgent.getName()
 						+ " 4) sell: got offer from "
 						+ reply.getSender().getName() + ": "
 						+ reply.getContent());
+			}
 			// remember buyers
 			buyOffers.put(reply.getSender().getName(), reply.getContent());
 			buyTraders.put(reply.getSender().getName(), reply.getSender());
@@ -98,11 +100,11 @@ class SellRequestPerformer extends Behaviour {
 		while (buyerIterator.hasNext()) {
 			ACLMessage cfp = new ACLMessage(ACLMessage.PROPOSE);
 			String name = buyerIterator.next();
-			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 				System.out.println(myAgent.getName()
 						+ " 5a) sell: sending decision to: "
 						+ buyTraders.get(name).getName() + " content: " + responsesToSend.get(name));
-
+			}
 			cfp.addReceiver(buyTraders.get(name));
 			cfp.setContent(responsesToSend.get(name));
 			cfp.setConversationId("propose" + this.marketAgent.myType);
@@ -120,22 +122,25 @@ class SellRequestPerformer extends Behaviour {
 						.MatchPerformative(ACLMessage.REJECT_PROPOSAL));
 		ACLMessage msg = myAgent.receive(mt);
 		if (msg != null) {
-			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 				System.out.println(myAgent.getName()
 						+ " 7) sell: got confirmation from "
 						+ msg.getSender().getName());
+			}
 			ACLMessage confirm = msg.createReply();
 			boolean confirmed = this.marketAgent.confirmSellTransactionWith(msg.getSender()
 					.getName(), buyOffers.get(msg.getSender()
 					.getName()), msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL);
 			if (confirmed) {
 				confirm.setPerformative(ACLMessage.CONFIRM);
-				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 					System.out.println(myAgent.getName() + " 7a) I can complete this transaction");
+				}
 			} else {
 				confirm.setPerformative(ACLMessage.REFUSE);
-				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE)
+				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
 					System.out.println(myAgent.getName() + " 7a) I cannot complete this transaction");
+				}
 			}
 			confirm.setReplyWith("cfp" + System.currentTimeMillis());
 			myAgent.send(confirm);

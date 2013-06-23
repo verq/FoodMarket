@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import utilities.AgentsUtilities;
 import agents.AgentOffer;
 import constants.OfferFormatUtilities;
 import constants.Participants;
@@ -79,8 +80,10 @@ public abstract class Strategy {
 						&& offer.getItemPrice().containsKey(product)
 						&& getSellingCondition(offer.getItemPrice()
 								.get(product), pricePerItem.get(product))) {
+					if (AgentsUtilities.PRINT_PRODUCTS_DETAILS) {
 					System.out.println(myType + " product details: " + product
 							+ " " + offer.getItemAmount().get(product));
+					}
 					currentAnswer.addItemAmount(product, offer.getItemAmount()
 							.get(product)); // tu nie powinno być tyle, ile
 											// sprzedający chce sprzedać w

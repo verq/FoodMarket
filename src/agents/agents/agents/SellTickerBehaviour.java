@@ -40,10 +40,11 @@ final class SellTickerBehaviour extends TickerBehaviour {
 			serviceDescription
 					.setName(OfferFormatUtilities.BUY_OFFER_TAG);
 			agentDescription.addServices(serviceDescription);
-			if (AgentsUtilities.DEBUG_ST_1)
+			if (AgentsUtilities.DEBUG_ST_1) {
 				System.out.println(this.myAgent.getName()
 						+ ": I'm looking for someone to sell " + name
 						+ " to");
+			}
 			try {
 				buyingAgents = DFService.search(myAgent,
 						agentDescription);
@@ -56,12 +57,16 @@ final class SellTickerBehaviour extends TickerBehaviour {
 		}
 
 		if (!this.marketAgent.buyerAgentsList.isEmpty()) {
+			if (AgentsUtilities.PRINT_FINDING_STAGE) {
 			System.out.println(this.myAgent.getName()
 					+ " found the following " + this.marketAgent.buyerAgentsList.size()
 					+ " buyer agents:");
+			}
 			for (int i = 0; i < this.marketAgent.buyerAgentsList.size(); i++) {
+				if (AgentsUtilities.PRINT_FINDING_STAGE) {
 				System.out.println("* "
 						+ this.marketAgent.buyerAgentsList.get(i).getName());
+				}
 			}
 			myAgent.addBehaviour(new SellRequestPerformer(
 					this.marketAgent));
