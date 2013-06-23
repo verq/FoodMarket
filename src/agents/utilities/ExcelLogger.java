@@ -38,10 +38,11 @@ import agents.MarketAgent;
 
 public class ExcelLogger {
 
-	private static FileWriter tempFile;
-	private static String tempFileName;
-	private static int numberOfLastWroteRow;
-	private static String delimiter = "||";
+	private FileWriter tempFile;
+	private String tempFileName;
+	private int numberOfLastWroteRow;
+	private final String DELIMITER = "||";
+	private final String EXCEL_EXTENSION = "xlsx";
 
 	public ExcelLogger() {
 		if (tempFile == null) {
@@ -49,17 +50,15 @@ public class ExcelLogger {
 		}
 	}
 
-	public void writeAgent(MarketAgent agent) {
+	public synchronized void writeAgent(MarketAgent agent) {
 		try {
-			if (tempFile == null) {
-				generateNewLogFile();
-			}
 			tempFile.write(createAgentString(agent));
 
-			numberOfLastWroteRow++;
-			if (numberOfLastWroteRow >= 10000) {
+			if (numberOfLastWroteRow > 5000) {
 				writeToFile();
 			}
+
+			numberOfLastWroteRow++;
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -67,7 +66,7 @@ public class ExcelLogger {
 	}
 
 	private void generateNewLogFile() {
-			tempFileName = generateTempFileName("txt");
+		tempFileName = generateTempFileName();
 			numberOfLastWroteRow = 0;
 		try {
 			tempFile = new FileWriter(tempFileName);
@@ -76,9 +75,8 @@ public class ExcelLogger {
 		}
 	}
 
-	private String generateTempFileName(String extenstion) {
-		return "logs\\agentlog_" + (new Date()).getTime() + "_"
-				+ AgentsUtilities.randomInt(0, 1000) + "." + extenstion;
+	private String generateTempFileName() {
+		return "logs\\agentlog_" + (new Date()).getTime() + "_" + AgentsUtilities.randomInt(0, 1000);
 	}
 
 	private void writeToFile() {
@@ -99,9 +97,10 @@ public class ExcelLogger {
 			}
 			reader.close();
 			fileReader.close();
-			FileOutputStream fileOut = new FileOutputStream(tempFileName + ".xlsx");
+			FileOutputStream fileOut = new FileOutputStream(tempFileName + "." + EXCEL_EXTENSION);
 			workbook.write(fileOut);
 			fileOut.close();
+			generateNewLogFile();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -118,7 +117,7 @@ public class ExcelLogger {
 	}
 
 	private void writeLineToRow(XSSFSheet sheet, String line, int numberOfRow) {
-		Pattern p = Pattern.compile(delimiter, Pattern.LITERAL);
+		Pattern p = Pattern.compile(DELIMITER, Pattern.LITERAL);
 		String[] tokens = p.split(line);
 		XSSFRow row = sheet.createRow(numberOfRow);
 		for (int i = 0; i < tokens.length; i++) {
@@ -144,19 +143,23 @@ public class ExcelLogger {
 	private String addDelimitersToAgentString(String... strings) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < strings.length; i++) {
-			sb.append(strings[i] + delimiter);
+			sb.append(strings[i] + DELIMITER);
 		}
 		return sb.toString();
 	}
 
 	private String writeMap(EnumMap<Products, Double> map) {
+		if (map != null) {
 		StringBuffer sb = new StringBuffer();
 		for (Products product : Products.values()) {
 			if (map.containsKey(product)) {
 				sb.append(map.get(product));
 			}
-			sb.append(delimiter);
+			sb.append(DELIMITER);
 		}
 		return sb.toString();
+		} else {
+			return "";
+		}
 	}
 }
