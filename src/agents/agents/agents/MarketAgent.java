@@ -26,6 +26,11 @@ import constants.Products;
 public abstract class MarketAgent extends Agent {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * invoked to maintain buying part of the agent
 	 */
 	private void buyAction() {
@@ -298,6 +303,11 @@ public abstract class MarketAgent extends Agent {
 	 */
 	private void timeAction() {
 		addBehaviour(new TickerBehaviour(this, MarketConstants.WEEK) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onTick() {
 				produceAndUse();

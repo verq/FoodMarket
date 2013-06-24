@@ -27,7 +27,7 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 
 	@Override
 	protected void onTick() {
-		Main.getExcelLogger().writeAgent(marketAgent);
+		if(AgentsUtilities.CREATE_LOGS) Main.getExcelLogger().writeAgent(marketAgent);
 		Iterator<Products> buyProductsIterator = this.marketAgent.buyFrom.values()
 				.iterator();
 		this.marketAgent.sellerAgentsList.clear();

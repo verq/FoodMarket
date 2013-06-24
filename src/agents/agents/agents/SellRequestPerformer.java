@@ -148,7 +148,7 @@ class SellRequestPerformer extends Behaviour {
 				return STEP_GOT_CONFIRMATION_FROM_BUYERS;
 			}
 		} else {
-			return STEP_BLOCK;
+			block(); //return STEP_BLOCK;
 		}
 		return STEP_MADE_DECISION_ABOUT_SELLING;
 	}

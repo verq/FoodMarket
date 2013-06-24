@@ -28,6 +28,7 @@ public class SimpleStrategy extends Strategy {
 	@Override
 	public ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
+		informAboutNeeds();
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		// needed to choose best offers:
 		EnumMap<Products, Double> lowestPrices = new EnumMap<Products, Double>(

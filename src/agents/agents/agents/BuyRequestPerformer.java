@@ -23,7 +23,7 @@ class BuyRequestPerformer extends Behaviour {
 	private final MarketAgent marketAgent;
 	private final int STEP_START_ACTION = 0;
 	private final int STEP_RECIVED_CURRENT_PRICES = 1;
-	private final int STEP_SENDED_CFP_TO_SELLERS = 2;
+	private final int STEP_SENT_CFP_TO_SELLERS = 2;
 	private final int STEP_RECIVED_SELLERS_DECISIONS = 3;
 	private final int STEP_SENDED_CONFIRMATION = 4;
 	private final int STEP_RECIVED_CONFIRMATION = 5;
@@ -76,6 +76,7 @@ class BuyRequestPerformer extends Behaviour {
 			System.out.println(myAgent.getName() + " 3) buy: received all offers, sending cfp with decision");
 		}
 		Iterator<String> sellersIterator = responsesToSend.keySet().iterator();
+		System.out.println(responsesToSend);
 		// send offer specific response to every agent
 		while (sellersIterator.hasNext()) {
 			ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
@@ -86,13 +87,13 @@ class BuyRequestPerformer extends Behaviour {
 			myAgent.send(cfp);
 
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
-				System.out.println(myAgent.getName() + "3a) buy: sending to " + name + "my response: "
+				System.out.println(myAgent.getName() + "3a) buy: sending to " + name + " my response: "
 						+ responsesToSend.get(name));
 			}
 		}
 		sellTraders.clear();
 		sellOffers.clear();
-		return STEP_SENDED_CFP_TO_SELLERS;
+		return STEP_SENT_CFP_TO_SELLERS;
 	}
 
 	private int reciveSellersDecision() {
@@ -114,11 +115,12 @@ class BuyRequestPerformer extends Behaviour {
 				offersCnt = 0;
 				return STEP_RECIVED_SELLERS_DECISIONS;
 			} else {
-				return STEP_SENDED_CFP_TO_SELLERS;
+				return STEP_SENT_CFP_TO_SELLERS;
 			}
 		} else {
-			return STEP_BLOCK;
+			block(); //return STEP_BLOCK;
 		}
+		return STEP_SENT_CFP_TO_SELLERS;
 	}
 
 	private int sendConfirmation() {
@@ -189,12 +191,12 @@ class BuyRequestPerformer extends Behaviour {
 			case STEP_RECIVED_CURRENT_PRICES:
 				step = sendCFPToSellers();
 				break;
-			case STEP_SENDED_CFP_TO_SELLERS:
+			case STEP_SENT_CFP_TO_SELLERS:
 				step = reciveSellersDecision();
 				break;
 			case STEP_RECIVED_SELLERS_DECISIONS:
 				step = sendConfirmation();
-				break; // TODO: specjalnie nie by³o tu wczeœniej break?
+				break; // TODO: specjalnie nie byï¿½o tu wczeï¿½niej break?
 			case STEP_SENDED_CONFIRMATION:
 				step = reciveConfirmationOfTransaction();
 				break;

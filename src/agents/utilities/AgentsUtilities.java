@@ -11,9 +11,12 @@ import constants.OfferFormatUtilities;
 
 public class AgentsUtilities {
 	public static final boolean DEBUG_ST_1 = false;
-	public static final boolean PRINT_COMMUNICATION_STAGE = false;
-	public static final boolean PRINT_FINDING_STAGE = false;
-	public static final boolean PRINT_PRODUCTS_DETAILS = false;
+	public static final boolean PRINT_COMMUNICATION_STAGE = true;
+	public static final boolean PRINT_FINDING_STAGE = true;
+	public static final boolean PRINT_PRODUCTS_DETAILS = true;
+	public static final boolean CREATE_LOGS = false;
+	public static final boolean INFORM_ABOUT_AGENT_NEEDS = true;
+	
 	protected static Random rand = new Random();
 
 	public static int randomInt(int min, int max) {
@@ -66,9 +69,15 @@ public class AgentsUtilities {
 					agentOffer.getItemPrice(),
 					agentOffer.getAgentType(),
 					agentOffer.getOfferType());
+			System.out.println(agentOffer.getItemAmount() + " " +
+					agentOffer.getItemPrice() + " " +
+					agentOffer.getAgentType() + " " +
+					agentOffer.getOfferType());
+			System.out.println("||||" + content + "||||");
 			map.put(agentOffer.getAgentName(), content
 					);
 		}
+		System.out.println("===>>" + map);
 		return map;
 	}
 }

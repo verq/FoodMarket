@@ -143,6 +143,9 @@ public abstract class Strategy {
 		myType = Participants.MILKMAN;
 	}
 
+	protected void informAboutNeeds() {
+		if(AgentsUtilities.INFORM_ABOUT_AGENT_NEEDS) System.out.println(myType + " has " + myMoney + " money; needs to buy: " + buy + " sell:" + sell + " has: " + have);
+	}
 	public EnumMap<Products, Double> getBuy() {
 		return buy;
 	}

@@ -28,7 +28,7 @@ public class Client extends MarketAgent {
 	@Override
 	protected void fillInitialHave() {
 		myType = Participants.CLIENT;
-		AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
+		income = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 		money = income;
 	}
 
