@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.11.4)  9 JUN 2013 02:47
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.11.4)  24 JUN 2013 21:15
 entering extended mode
  %&-line parsing enabled.
 **raport.tex --shell-escape
@@ -746,11 +746,11 @@ LaTeX Info: Redefining \pageref on input line 67.
 
 \AtBeginShipoutBox=\box35
 LaTeX Info: Redefining \Ref on input line 67.
-LaTeX Font Info:    Try loading font information for U+msa on input line 82.
+LaTeX Font Info:    Try loading font information for U+msa on input line 83.
  (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 82.
+LaTeX Font Info:    Try loading font information for U+msb on input line 83.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
@@ -764,74 +764,51 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.100 \newpage
+l.101 \newpage
                [1]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 110.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 111.
 
  (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 110.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
+
+<obrazki/diagram_kolorowy.pdf, id=60, 785.93625pt x 408.52625pt>
+File: obrazki/diagram_kolorowy.pdf Graphic file (type pdf)
+
+<use obrazki/diagram_kolorowy.pdf> [2 <./obrazki/diagram_kolorowy.pdf>]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 145.
 
 
-! LaTeX Error: File `diagram_kolorowy' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.127 ...cs[width=0.8\textwidth]{diagram_kolorowy}
-                                                  
-I could not locate the file with any of these extensions:
-.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[2]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 144.
-
- (/usr/share/texmf-texlive/tex/latex/base/t1cmtt.fd
+(/usr/share/texmf-texlive/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
+) [3]
+<obrazki/komunikacja_2_agentow-accept.png, id=83, 214.8025pt x 165.61874pt>
+File: obrazki/komunikacja_2_agentow-accept.png Graphic file (type png)
 
-! LaTeX Error: File `schemat_komunikacji_v1' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.157 ...th=0.8\textwidth]{schemat_komunikacji_v1}
-                                                  
-I could not locate the file with any of these extensions:
-.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[3] [4] (./raport.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+<use obrazki/komunikacja_2_agentow-accept.png> [4 <./obrazki/komunikacja_2_agen
+tow-accept.png (PNG copy)>] [5] (./raport.aux) ) 
 Here is how much of TeX's memory you used:
  9780 strings out of 495061
- 138893 string characters out of 1182621
- 237958 words of memory out of 3000000
- 12721 multiletter control sequences out of 15000+50000
+ 139196 string characters out of 1182621
+ 236958 words of memory out of 3000000
+ 12729 multiletter control sequences out of 15000+50000
  15164 words of font info for 42 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 44i,6n,42p,370b,460s stack positions out of 5000i,500n,10000p,200000b,50000s
- </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/
-beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/beatka/.te
-xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/beatka/.texmf-var/fo
-nts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/beatka/.texmf-var/fonts/pk/ljf
-our/jknappen/ec/ecrm1440.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknapp
-en/ec/ecti1440.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc
-1728.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc2074.600pk
-></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on raport.pdf (5 pages, 120035 bytes).
+ 44i,7n,42p,370b,397s stack positions out of 5000i,500n,10000p,200000b,50000s
+ </home/beatka/.texmf-var/fonts
+/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour
+/jknappen/ec/ecrm1200.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/
+ec/ecbx1200.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx172
+8.600pk> </home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> <
+/home/beatka/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1440.600pk> </home/beat
+ka/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc1728.600pk> </home/beatka/.texmf-
+var/fonts/pk/ljfour/jknappen/ec/eccc2074.600pk></usr/share/texmf-texlive/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on raport.pdf (6 pages, 148688 bytes).
 PDF statistics:
- 373 PDF objects out of 1000 (max. 8388607)
- 31 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 380 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 500000)
+ 75 words of extra memory for PDF output out of 10000 (max. 10000000)
 
