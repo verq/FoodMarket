@@ -1,0 +1,443 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\usepackage{alltt}
+\usepackage{varioref}
+\usepackage{enumerate}
+\usepackage{amsfonts}
+\usepackage{amsmath} 
+\usepackage{indentfirst}
+\usepackage{graphicx} 
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{listings} 
+\usepackage{multirow}
+\usepackage[hdivide={2cm,*,2cm},vdivide={2cm,*,2.5cm}]{geometry}
+\frenchspacing
+
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+   \def\@currentlabel{#2}%
+   \label{#1}\endgroup
+}
+\makeatother
+
+
+\begin{document}
+
+\begin{titlepage}
+\vspace*{\fill}
+ \begin{center}
+
+  \textsc{\LARGE Analiza numeryczna}\\[2.0cm]
+  \textsc{\Large Projekt: Porównanie metod rozwiązywania układów równań liniowych}\\[1.5cm] 
+
+\vspace*{\fill}
+  \begin{minipage}{0.4\textwidth}
+    \begin{flushleft} \large
+    \emph{Autorzy:}\\
+    Mateusz Fedkowicz, 241620 \\ Beata Wójciak, 241772
+    \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+    \begin{flushright} \large
+    \emph{Prowadzący:} \\
+    Dr~Witold Karczewski
+    \end{flushright}
+  \end{minipage}
+\vspace*{\fill}
+
+{\large Wrocław, \today}
+ \end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Wstęp}
+Głównym celem naszej pracy jest rozważenie aspektów numerycznych rozwiązywania układów równań liniowych postaci\\
+\[
+ a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n\;=\;b_1
+ \]
+\[
+ a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n\;=\;b_2
+\]
+\[
+ .....................................................
+\]
+\[
+ a_{n1}x_1 + a_{n2}x_2 + ... + a_{nn}x_n\;=\;b_n
+\]\\
+Jest to układ $n$ równań z $n$ niewiadomymi $x_1, x_2, ... , x_n$. Wielkości $a_{ij}$ oraz $b_i$ są danymi liczbami rzeczywistymi. Liczby $x_1, x_2, ... , x_n$ będące rozwiązaniem układu także są rzeczywiste.\\
+Wygodnym narzędziem upraszczającym opis układów równań są macierze. Powyższy układ można wyrazić w postaci
+\begin{center}
+$\begin{bmatrix}  a_{11} &a_{12}  &...  &a_{1n} \\   a_{21} &a_{22}  &...  &a_{2n} \\    \ldots& \ldots & \ldots &\ldots \\   a_{m1} &a_{m2}  &...  &a_{mn}  \end{bmatrix}
+\begin{bmatrix}  x_1 \\ x_2 \\ ... \\ x_n  \end{bmatrix}=
+\begin{bmatrix}  b_1 \\ b_2 \\ ... \\ b_n  \end{bmatrix}$
+,\\
+\end{center}
+a po oznaczeniu odpowiednich macierzy symbolami $A$, $x$ i $b$ - w postaci
+\begin{center}
+$Ax=b$
+\end{center}
+
+Powszechnie stosowaną metodą rozwiązywania układów równań liniowych powyższego typu jest metoda eliminacji Gaussa, która poprzez operacje elementarne na wierszach sprowadza układ do postaci równoważnej, gdzie macierz $A$
+staje się macierzą trójkątną górną. Upraszcza to w sposób istotny dalsze poszukiwanie rozwiązań.
+
+W naszej pracy porównamy pod względem dokładności cztery różne odmiany metody eliminacji. Będą to:
+\begin{enumerate}[(a)]
+ \item eliminacja bez wyboru elementów głównych \namedlabel{eliminacjaBezTekst}{eliminacja bez wyboru elementów głównych}
+ \item eliminacja z~pełnym wyborem elementów głównych \namedlabel{eliminacjaWszystkoTekst}{eliminacja z~pełnym wyborem elementów głównych}
+ \item eliminacja z~wyborem elementów głównych w~wierszach \namedlabel{eliminacjaWierszTekst}{eliminacja z~wyborem elementów głównych w~wierszach}
+ \item eliminacja z~wyborem elementów głównych w~kolumnach \namedlabel{eliminacjaKolumnaTekst}{eliminacja z~wyborem elementów głównych w~kolumnach}
+\end{enumerate}
+Porównamy też czas działania każdej z metod. Do pomiaru czasu użyjemy komputera o następujących parametrach sprzętowych:
+\begin{itemize}
+ \item System operacyjny: Ubuntu 11.04 z jądrem w wersji 2.6.38-11
+ \item Pojemność pamięci RAM: 16GB
+ \item Procesor: Intel Core i7-2600, 3.40GHz
+\end{itemize}
+
+\section{Szczegółowy opis metod}
+\begin{enumerate}[(1)]
+ \item\label{eliminacjaBez} \ref{eliminacjaBezTekst}: \\
+Dla danego układu
+\[
+ a_{i1}^{(1)}x_1 + a_{i2}^{(1)}x_2 + a_{in}^{(1)}x_n\;=\;b_i^{(1)} 
+\]
+budujemy równoważny mu układ o~macierzy trójkątnej:
+\[
+ \sum_{j=r}^na_{rj}^{(r)}x_j\;=\;b_r^{(r)} 
+\]
+gdzie
+\[
+   \begin{cases}
+   a_{rj}^{(r)}\;=\;a_{rj}^{(r-1)} + m_{i,r-1}a_{r-1,j}^{(r-1)} \\
+   b_r^{(r)}\;=\;b_i^{(r-1)} + m_{i,r-1}b_{r-1}^{(r-1)}\\
+   m_{i,r-1} = \frac {-a_{i,r-1}^{(r-1)}} {a_{r-1,r-1}^{(r-1)}}
+  \end{cases}
+\]
+Z~powyższego równania można łatwo uzyskać rozwiązanie:
+\[
+ x_r = \frac {\left( b_r^{(r)} - \sum_{j=r}^na_{rj}^{(r)}x_j\right)} {a_{rr}^{(r)}}
+\]
+ \item\label{eliminacjaWszystko} \ref{eliminacjaWszystkoTekst}:\\
+przeprowadza się ją tak jak poprzednio z~tym, że w~$r$~-~tym kroku eliminacji przestawiamy równania $r$~-~te i~$p$~-~te, a~także
+zmieniamy numerację niewiadomych: $x_r := x_q$, gdzie $p, q \in \{r, r+1, \dots, n\}$ są takie, że 
+\begin{displaymath}
+ |a_{pq}^{(r)}| = max_{r\leq i,j \leq n} |a_{ij}^{(r)}|
+\end{displaymath}
+ \item\label{eliminacjaWiersz} \ref{eliminacjaWierszTekst}: \\
+przeprowadza się ją podobnie jak poprzednio z~tym, że w~$r$~-~tym kroku eliminacji przestawiamy równania $r$~-~te i~$p$~-~te, gdzie $p \in \{r, r+1, \dots, n\}$ jest takie, że
+\begin{displaymath}
+ |a_{pr}^{(r)}| = max_{r\leq i \leq n} |a_{ir}^{(r)}|
+\end{displaymath}
+ \item\label{eliminacjaKolumna} \ref{eliminacjaKolumnaTekst}: \\
+w~tym wypadku szukamy takiego $p$, $p \in \{r, r+1, \dots, n\}$, że
+\begin{displaymath}
+ |a_{rp}^{(r)}| = max_{r\leq i \leq n} |a_{ri}^{(r)}|
+\end{displaymath}
+\end{enumerate}
+Każda z~metod daje trochę inne wyniki: \ref{eliminacjaBezTekst} powinna być najmniej dokładna, lecz działać najszybciej. Ponadto niemożliwe jest jej stosowanie, gdy któryś z~elementów głównych jest równy $0$.
+\\ \indent Z~kolei \ref{eliminacjaWszystkoTekst} powinna być najdokładniejsza (posiada najlepsze własności numeryczne), lecz będzie zapewne działać najdłużej ze względu na złożony sposób wyboru elementów do zamiany. Pozostałe dwie metody będą prawdopodobnie dawać 
+zbliżone wyniki, lecz \ref{eliminacjaKolumnaTekst} może działać wolniej niż \ref{eliminacjaWierszTekst} ze względu na odwoływanie się do macierzy poprzez kolumny co jest metodą wolniejszą programowo.
+\\ \indent Mając na uwadze ograniczenia w~metodzie (\ref{eliminacjaBez}) badania przeprowadzimy na macierzach z~klas:
+\begin{itemize}
+ \item symetrycznych, dodatnio określonych, tj. takich, że $A=A^T$ i $x^TAx > 0, \forall x \neq 0$
+ \item silnie diagonalnie dominujących, tj. takich, że macierz $A$ spełnia $|a_{ii}| > \sum_{j\neq i}|a_{ij}|, \forall i$
+\end{itemize}
+Porównamy wyniki również dla kilku typów macierzy źle uwarunkowanych:
+\begin{itemize}
+ \item Macierzy Hilberta:
+  \begin{equation}
+  A =
+    \begin{bmatrix}
+    \dfrac 1 {i + j - 1}
+    \end{bmatrix}_{i,j=1,\dots,n}
+  \end{equation}
+Jest to również macierz dodatnio określona.
+  \item Macierzy Vandermonde'a:
+\begin{equation}
+  B =
+    \begin{bmatrix}
+    1		& x_1	& x_1^2 & \dots & x_1^{n-1}	\\
+    1		& x_2	& x_2^2 & \dots & x_2^{n-1}	\\
+    1		& x_3	& x_3^2 & \dots & x_3^{n-1}	\\
+    \vdots	& \vdots& \vdots& \ddots& \vdots	\\
+    1		& x_n	& x_n^2 & \dots & x_n^{n-1}	\\
+    \end{bmatrix}
+  \end{equation}
+\item Macierzy Pei:
+\begin{equation}
+  C =
+    \begin{bmatrix}
+    d		& 1	&	1 & \dots & 1		\\
+    1		& d	&	1 & \dots & 1		\\
+    1		& 1	&	d & \dots & 1		\\
+    \vdots	& \vdots& \vdots  & \ddots& \vdots	\\
+    1		& 1	&	1 & \dots &   d		\\
+    \end{bmatrix}
+  \end{equation} 
+Jest ona źle uwarunkowana, gdy $d$ jest bliskie 1.
+\end{itemize}
+
+Wyniki dla macierzy szczególnych porównamy również z wynikami uzyskanymi dla gęstych, nieosobliwych macierzy losowych, co powinno dać ogólne spojrzenie na 
+błędy generowane przez każdą z~testowanych metod.
+
+Błędy będziemy liczyć korzystając ze wzoru 
+\[
+ \|b-A\tilde{x}\|_{\infty}
+\]
+gdzie $\tilde{x}$ jest obliczonym (przybliżonym) rozwiązaniem układu.
+
+
+\subsection{Rozwiązania algorytmiczne}
+Program służący do testowania zachowań poszczególnych algorytmów
+został napisany w języku \verb C++  i podzielony logicznie na pliki. Głównym elementem programu jest klasa usługowa \emph{Matrix} zdefiniowana w~plikach \emph{Matrix.h} oraz \emph{Matrix.cpp}. Dostarcza ona metod do podstawowych operacji na macierzach takich jak: dodawanie, odejmowanie, mnożenie itd. Programowo macierz reprezentowana jest jako tablica dwuwymiarowa. Ma to znaczenie dla szybkości działania poszczególnych algorytmów.
+
+Definicje funkcji odpowiadających za rozwiązywanie układów równań
+zawarte są w pliku \emph{Gauss.h}. Metoda bez wyboru elemntów głównych jest zaimplementowana w standardowy sposób. Pewne usprawnienia wprowadzone są do pozostałych metod.
+Zamiast fizycznie zamieniać wiersze lub kolumny w macierzach, kiedy jest to potrzebne, odwołania do macierzy dokonywane są przez tworzone w trakcie trwania algorytmów tablice
+permutacji. Zamiast więc przepisywać elementy macierzy modyfikuje się jedynie wspomniane tablice permutacji. Dla dużych macierzy znacznie zmniejsza to liczbę wykonywanych operacji,
+co ma niemały wpływ na czas rozwiązywania układów.
+
+
+\subsection{Sposoby przeprowadzania badań}
+Testy przeprowadziliśmy generując macierz $A$ o~rozmiarze $n \times n$ w~zależności od typu macierzy w~następujący sposób:
+\begin{itemize}
+ \item Macierz Hilberta~---~generowaliśmy ją korzystając wprost z~definicji
+ \item Macierz Vandermonde'a~---~tworzyliśmy ją używając wcześniej wygenerowanego wektora o~rozmiarze $n$ wypełnionego liczbami losowymi nieujemnymi
+ \item Macierz Pei~---~na przekątnej znajdowała się liczba niewiele mniejsza od 1
+ \item Macierz dominująca przekątniowo~---~była wypełniona losowymi wartościami, a~na przekątnej znajdowała się suma elementów wiersza zwiększona o~losową wartość
+ \item Macierz $b$ była całkowicie losowo generowaną macierzą.
+\end{itemize}
+ 
+
+\subsection{Otrzymane rezultaty}
+W~zależności od typu badanej macierzy uzyskaliśmy różne wielkości generowanych błędów. By ułatwić porównanie
+wyników uzyskanych przy użyciu poszczególnych metod wygładziliśmy wykresy przy pomocy krzywej Beziera. Na kolejnych stronach zaprezentowane są 
+otrzymane dla różnych typów macierzy rezultaty. Zaprezentujemy również porównanie czasu działania każdej z~metod.
+
+\section{Porównanie czasu działania algorytmów}
+Czasy działania wszystkich metod są funkcją klasy $O(n^3)$, co nie jest żadnym zaskoczeniem. Właśnie taką złożonością cechują się algorytmy eliminacji Gaussa. 
+
+Zgodnie z~przewidywaniami najkrócej działa metoda bez wyboru elementów głównych, a najdłuższy czas działania zaobserwowaliśmy dla eliminacji z~pełnym ich wyborem. Jest to
+wynikiem wykonywania dużej liczby dodatkowych operacji porównania w~każdym kroku tego algorytmu. Operacje te są potrzebne by znaleźć element o~największym module.
+
+Pozostałe metody plasują się pod względem szybkości działania między dwiema wspomnianymi powyżej, działając wolniej niż metoda bez wyboru elementów głównych, lecz szybciej niż eliminacja
+z~pełnym wyborem. Metoda z~wyborem elementów w~wierszach działa jednak szybciej niż ta, w~której elementy główne poszukiwane są w~kolumnach. Jest to spowodowane specyfiką architektury
+dzisiejszych komputerów. Odwołania wierszowe w~tablicach dwuwymiarowych są przeprowadzane szybciej niż kolumnowe.
+
+Jest to wynik ciekawy z~tego względu, że rzadko w~literaturze wspomina 
+się o~wariancie eliminacji Gaussa z wyborem wierszowym, która~---~jak widać~---~jest szybsza niż eliminacja kolumnowa (nazywana najczęściej eliminacją Gaussa z częściowym wyborem elementów głównych).
+
+Wyniki testów szybkościowych zawarte są na poniższym wykresie.
+
+\begin{figure}[H]
+\centering
+ \includegraphics[width=0.7\textwidth]{wykresy/BEZWZGLEDNE/wykresy/czasy/czasy}
+\caption{Czas działania metod eliminacji}
+\label{fig:czas}
+\end{figure}
+
+\section{Porównanie dokładności obliczeń}
+
+\subsection{Macierz losowa}\label{sec:random}
+W~przypadku gęstej nieosobliwej macierzy losowej, która nie była źle uwarunkowana ani nie miała żadnych specyficznych własności, najgorzej wypadła metoda \ref{eliminacjaBez} (\ref{eliminacjaBezTekst}). Błąd jest aż o~4~rzędy wielkości
+większy niż w~przypadku pozostałych metod i~jest rzędu $10^{-9}$. Najskuteczniejsza okazuje się metoda z~pełnym wyborem elementów, jednak działa ona dłużej niż eliminacje z częściowym wyborem, a~różnica w~błędzie
+jest niewielka, dlatego też nie zawsze warto ją stosować. Eliminacja wierszowa i kolumnowa dają bowiem niewiele gorsze rezultaty.
+
+Uzyskane w~tym wypadku wyniki są zgodne z~intuicją i~własnościami numerycznymi każdej z~testowanych metod. Jak jednak zobaczymy w~następnych rozdziałach, są od tego wyjątki.
+
+\begin{figure}[H]
+\centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/RandomNorma}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/RandomNormaTrend}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy o losowych wartościach}
+\label{fig:random}
+\end{figure}
+
+\subsection{Macierz Hilberta}\label{sec:hilbert}
+Macierz Hilberta jest macierzą symetryczną i dodatnio określoną, więc można do rozwiązania układów równań ją zawierających wykorzystać każdą ze wspomnianych metod.
+Co więcej, macierz ta jest bardzo źle uwarunkowana, co powinno pokazać istotne różnice w wynikach obliczeń różnymi metodami.
+
+Jednak, jak widać na Rysunku \ref{pic:hilbA} trudno wywnioskować coś o~skuteczności którejkolwiek z metod. Lepiej widocznych rezultatów dostarcza Rysunek \ref{pic:hilbB},
+będący aproksymacją oryginalnych wyników, na którym widoczne są niewielkie różnice w wynikach.
+
+\begin{figure}[H] 
+\centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/HilbertNorma}\label{pic:hilbA}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/HilbertNormaTrend}\label{pic:hilbB}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy Hilberta}
+\label{fig:hilbert}
+\end{figure}
+
+Jak łatwo zauważyć metoda \ref{eliminacjaBez} (\ref{eliminacjaBezTekst}) okazuje się być minimalnie lepsza od pozostałych. Może to wynikać z tego, że elementy macierzy maleją
+wraz ze wzrostem sumy indeksów, przy czym największy element ma wartość 1. Podczas rozwiązywania układu są one dodatkowo poddawane przekształceniom, które zmniejszają dokładność
+przechowywanych elementów. Wybór elementu, przez który dzielone są pozostałe elementy wiersza ma wpływ na dokładność późniejszych obliczeń.
+
+\subsection{Macierz Vandermonde'a}\label{sec:vandermond}
+W~przypadku tej macierzy różnice między użytymi metodami były najbardziej widoczne. Najdokładniejszą metodą okazała się metoda \ref{eliminacjaKolumna} (\ref{eliminacjaKolumnaTekst}). Niewiele gorsza
+od niej była eliminacja bez wyboru elementów głównych. Największe błędy powodowała eliminacja metodą \ref{eliminacjaWiersz} (\ref{eliminacjaWierszTekst}).
+
+Jest to prawdopodobnie spowodowane specyfiką 
+macierzy Vandermonde'a~---~kolejne elementy wiersza są coraz to wyższymi potęgami ustalonej liczby, jeśli więc jest ona większa od 1 (co zdarzało się w~większości przypadków) 
+w~eliminacji metodą \ref{eliminacjaWiersz} zawsze jest wybierany element w~ostatniej kolumnie. Jest on większy od wszystkich poprzednich elementów wiersza, więc dzielenie przez niego (zwłaszcza liczb w początkowych 
+kolumnach) powoduje znaczne ich zmniejszenie. W~efekcie tego, jeśli $x_1,\dots,x_n$ byłyby wystarczająco duże, może wystąpić niedomiar zmiennoprzecinkowy, co wprowadza błędy w obliczeniach. 
+
+\begin{figure}[H]
+ \centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondNorma}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondNormaTrend}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy Vandermonde'a}
+\label{fig:vandermond}
+\end{figure}
+
+Podobną sytuację mamy w~przypadku eliminacji z~pełnym wyborem. Również w~tym wypadku zdarzają się sytuacje, w~których wybierany element znajduje się w~ostatniej kolumnie, co generuje błędy.
+Jednak elementy główne są wybierane również z wierszy, a~w~każdym wierszu elementy na tej samej pozycji są podobnego rzędu, więc dzielenie przez nie nie powoduje istotnej zmiany dokładności obliczeń.
+Dlatego też metoda z~pełnym wyborem okazała się dokładniejsza.
+
+Widać już dlaczego to właśnie \ref{eliminacjaKolumnaTekst} okazała się najdokładniejsza: wybierane elementy główne, przez które jest wykonywane dzielenie nie są istotnie większe od liczb dzielonych.
+
+W~powyższym przypadku większość elementów $x_1, \dots, x_n$ była większa od 1~i~ich kolejne potęgi były coraz większe. Dokładność wyników różni się jednak, gdy mamy do czynienia z macierzą, w~której
+wszystkie $x_i,\;i=1,\dots,n$ są nie większe od 1~---~wtedy każda kolejna potęga jest mniejsza od poprzedniej. Wyniki badań w~tym przypadku obrazuje Rysunek \ref{fig:vandermond maly}. Jak widać, nie
+ma tu już tak wielkiej rozbieżności pomiędzy wynikami poszczególnych metod.
+Są one bardziej zbliżone do rezultatów osiągniętych przez metody \ref{eliminacjaBez} (\ref{eliminacjaBezTekst}) i~\ref{eliminacjaKolumna} (\ref{eliminacjaKolumnaTekst}) w~poprzednim przypadku. 
+
+\begin{figure}[H]
+ \centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondMalyNorma}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondMalyNormaTrend}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy Vandermonde'a dla małych $x$}
+\label{fig:vandermond maly}
+\end{figure}
+
+Może to być spowodowane tym, że dla takich danych różnice między kolejnymi potęgami nie są tak wielkie. Ponadto wybór elementu głównego zarówno pełny jak i~w~wierszach sprowadza się tak naprawdę do wyboru elementu
+w~pierwszej kolumnie, czyli 1. Jednak dokładność obu tych metod bardzo się różni. Ponownie najgorszej wypadła \ref{eliminacjaWierszTekst}. Podobnie jak poprzednio może być to związane z dzieleniem elementów małych przez
+większe i~powstawaniem przez to niedomiaru.
+
+Pierwsza metoda, \ref{eliminacjaBezTekst}, daje wyniki kilka rzędów gorsze od poprzednich (porównanie wyników w obu przypadkach znajduje się na Rysunku \ref{fig:porownanie eliminacjaBez vandermond})~---~norma błędu nie 
+przekracza jednak nigdy wartości rzędu $10^{10}$, podczas gdy poprzednio oscylowała wokół $10^5$. Jest to prawdopodobnie ponownie związane z~dokładnością wykonywania obliczeń na niewielkich liczbach.
+
+\begin{figure}[H]
+\centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondMalyIDuzy}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/VandermondMalyIDuzyTrend}}
+\caption{Różnica błędów obliczeń dla macierzy Vandermonde'a o~małych i~dużych wartościach dla metody \ref{eliminacjaBez}}
+\label{fig:porownanie eliminacjaBez vandermond}
+\end{figure}
+
+\subsection{Macierz dominująca przekątniowo}\label{sec:dominate}
+
+W~badaniach wykorzystaliśmy macierze dominujące przekątniowo generowane w~sposób losowy. W~tym przypadku nie zaobserwowaliśmy znacznych różnic w~wynikach dla poszczególnych metod.
+Widać ponadto, że błąd obliczeń jest bardzo mały~---~rzędu $10^{-13}$. Na błąd nie miał wpływu zakres liczb użytych w~macierzach, na których były przeprowadzane badania.
+
+\begin{figure}[H]
+ \centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/DominateNorma}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/DominateTrend}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy dominującej przekątniowo}
+\label{fig:dominate}
+\end{figure}
+
+\subsection{Macierz Pei}\label{sec:pea}
+Macierz Pei jest również macierzą dominującą przekątniowo. W zależności od $d$ dokładność obliczeń jest różna. Rysunek \ref{fig:pea} przedstawia wyniki uzyskane dla $d \in [0.990, 0.999]$.
+Błędy obliczeń dla tej macierzy są zbliżone do błędów uzyskanych w~przypadku macierzy losowej.
+
+\begin{figure}[H]
+\centering
+ \subfloat[Oryginalne dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/PeaNorma}}
+ \subfloat[Wygładzone dane]{\includegraphics[width=0.5\textwidth]{wykresy/BEZWZGLEDNE/wykresy/PeaNormaTrend}}
+\caption{Wyniki uzyskane przy obliczeniach z~wykorzystaniem macierzy Pei}
+\label{fig:pea}
+\end{figure}
+
+Z~kolei w~tabelach \ref{fig:pea tabelka mniejsze od 1} i~\ref{fig:pea tabelka wieksze od 1} znajduje się porównanie wyników w~zależności od wartości $d$. Jak widać,
+błąd znacznie się zwiększa w~miarę zbliżania się $d$ do liczby~1. Nie ma tu znacznych różnic pomiędzy poszczególnymi metodami. Zwiększenie o~$10^2$ dokładności przybliżenia $d$ do 1 powoduje wzrost błędu obliczeń przeciętnie o~$10^2$. 
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{l||l|l|l|l|l}
+ d	&	n	&	\ref{eliminacjaBez}	&	\ref{eliminacjaWszystko}	&	\ref{eliminacjaWiersz}	&	\ref{eliminacjaKolumna}	\\ \hline \hline
+\multirow{5}{*}{0.999999}&	5	&		5.11188e-10	&		5.06031e-10	&		1.34959e-09	&		5.06031e-10\\ \cline{2-6}  
+	&	10	&		1.54824e-09	&		4.95511e-10	&		5.36094e-10	&		4.95511e-10\\ \cline{2-6}  
+	&	100	&		9.68164e-09	&		1.00748e-08	&		1.89661e-09	&		1.00748e-08\\ \cline{2-6}  
+	&	500	&		6.01156e-09	&		3.674e-08	&		2.08605e-08	&		3.674e-08\\ \cline{2-6}  
+	&	1000	&		4.13307e-08	&		3.61219e-08	&		3.87604e-08	&		3.61219e-08\\ \hline \hline
+
+\multirow{5}{*}{0.9999}&	5	&		5.31131e-12	&		1.40012e-11	&		4.49774e-12	&		1.40012e-11\\ \cline{2-6}  
+	&	10	&		9.44134e-12	&		2.35101e-12	&		4.40004e-12	&		2.35101e-12\\ \cline{2-6}  
+	&	100	&		7.32747e-11	&		1.03854e-10	&		2.83187e-11	&		1.03854e-10\\ \cline{2-6}  
+	&	500	&		4.75745e-10	&		1.88102e-10	&		3.54766e-10	&		1.88102e-10\\ \cline{2-6}  
+	&	1000	&		3.88424e-10	&		2.85595e-10	&		4.65441e-10	&		2.85595e-10\\ \hline \hline  
+
+\multirow{5}{*}{0.99}	&	5	&		1.59872e-14	&		1.1191e-13	&		8.88178e-15	&		1.1191e-13\\ \cline{2-6}  
+	&	10	&		6.39488e-14	&		1.42331e-13	&		1.07581e-13	&		1.42331e-13\\ \cline{2-6}  
+	&	100	&		3.10862e-13	&		2.44027e-13	&		4.4853e-13	&		2.44027e-13\\ \cline{2-6}  
+	&	500	&		4.72333e-12	&		5.10436e-12	&		3.37064e-13	&		5.10436e-12\\ \cline{2-6}  
+	&	1000	&		6.44373e-12	&		2.28795e-12	&		8.18456e-13	&		2.28795e-12\\ \hline
+\end{tabular}
+\caption{Wielkości błędów w~zależności od wielkości $d<1$}
+\label{fig:pea tabelka mniejsze od 1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{l||l|l|l|l|l}
+ d	&	n	&	\ref{eliminacjaBez}	&	\ref{eliminacjaWszystko}	&	\ref{eliminacjaWiersz}	&	\ref{eliminacjaKolumna}	\\ \hline \hline
+\multirow{5}{*}{1.00001}	&	5	&		2.31482e-11	&		2.31482e-11	&		2.31482e-11	&		2.31482e-11\\ \cline{2-6}  
+	&	10	&		7.2518e-11	&		7.2518e-11	&		7.2518e-11	&		7.2518e-11\\ \cline{2-6}  
+	&	100	&		8.68162e-10	&		8.68162e-10	&		8.68162e-10	&		8.68162e-10\\ \cline{2-6}  
+	&	500	&		2.12462e-09	&		2.12462e-09	&		2.12462e-09	&		2.12462e-09\\ \cline{2-6}  
+	&	1000	&		2.38722e-08	&		2.38722e-08	&		2.38722e-08	&		2.38722e-08\\ \hline \hline  
+
+\multirow{5}{*}{1.001}	&	5	&		8.9706e-14	&		8.9706e-14	&		8.9706e-14	&		8.9706e-14\\ \cline{2-6}  
+	&	10	&		3.59712e-13	&		3.59712e-13	&		3.59712e-13	&		3.59712e-13\\ \cline{2-6}  
+	&	100	&		1.68043e-12	&		1.68043e-12	&		1.68043e-12	&		1.68043e-12\\ \cline{2-6}  
+	&	500	&		9.47686e-13	&		9.47686e-13	&		9.47686e-13	&		9.47686e-13\\ \cline{2-6}  
+	&	1000	&		1.64371e-10	&		1.64371e-10	&		1.64371e-10	&		1.64371e-10\\ \hline \hline  
+
+\multirow{5}{*}{1.1}	&	5	&		8.88178e-16	&		8.88178e-16	&		8.88178e-16	&		8.88178e-16\\ \cline{2-6}  
+	&	10	&		3.55271e-15	&		3.55271e-15	&		3.55271e-15	&		3.55271e-15\\ \cline{2-6}  
+	&	100	&		1.66089e-13	&		1.66089e-13	&		1.66089e-13	&		1.66089e-13\\ \cline{2-6}  
+	&	500	&		3.19744e-14	&		3.19744e-14	&		3.19744e-14	&		3.19744e-14\\ \cline{2-6}  
+	&	1000	&		2.02505e-13	&		2.02505e-13	&		2.02505e-13	&		2.02505e-13\\ \hline
+\end{tabular}
+\caption{Wielkości błędów w~zależności od wielkości $d>1$}
+\label{fig:pea tabelka wieksze od 1}
+\end{figure}
+
+
+\section{Wnioski i podsumowanie}
+Wyniki, które uzyskaliśmy nie okazały się zgodne z~przewidywaniami. Co prawda czas działania każdej z~metod był taki, jak przewidywaliśmy, lecz wyniki porównania dokładności obliczeń w~większości przypadków
+odbiegały od intuicji. Zgadzały się one tylko dla macierzy losowych (por. Rozdział \ref{sec:random}).
+
+Metoda \ref{eliminacjaKolumna} (\ref{eliminacjaKolumnaTekst})~---~która ma najlepsze własności numeryczne spośród wszystkich użytych metod~---~w~większości badanych macierzy nie okazała się metodą najlepszą. W~niektórych przypadkach (np. dla macierzy Hilberta,
+por. Rozdział \ref{sec:hilbert}) wyniki były wręcz przeciwne od oczekiwanych: metody o~gorszych w~ogólnym przypadku własnościach numerycznych okazały się lepsze. Jest to w~dużej mierze związane z~uwarunkowaniem macierzy Hilberta.
+
+Również metody z~częściowym wyborem elementów głównych dawały nieoczekiwane wyniki. Najwyraźniej widać to na przykładzie macierzy Vandermonde'a (por. Rozdział \ref{sec:vandermond}), gdzie \ref{eliminacjaWierszTekst}
+ i~\ref{eliminacjaKolumnaTekst}
+uzyskały zupełnie różne rezultaty. Co więcej, były one znacznie gorsze od rezultatów uzyskanych przez metody o~gorszych w~ogólności własnościach numerycznych (\ref{eliminacjaBezTekst}). Jest to jednak związane ze specyfiką macierzy Vandermonde'a, co
+zostało omówione już wcześniej.
+
+W~literaturze rzadko kiedy wspomina się o~tym, że \ref{eliminacjaWszystkoTekst} nie w~każdym przypadku daje mniejsze błędy od pozostałych metod eliminacji. Zazwyczaj mówi się tylko o~tym, że ma ona lepsze własności numeryczne,
+jednak~---~co pokazaliśmy w~niniejszej pracy~---~są od tego wyjątki.
+
+
+\section{Literatura}
+\renewcommand*{\refname}{}
+\begin{thebibliography}{9}
+  \bibitem{Kincaid}  
+    David Kincaid, Ward Cheney: \emph{Analiza numeryczna.} Warszawa: Wydawnictwo Naukowo-Techniczne, 2006. \emph{Rozwiązywanie układów równań liniowych}, s. 131~-~178.
+  \bibitem{Jankowscy}  
+    Janina Jankowska, Michał Jankowski: \emph{Przegląd metod i algorytmów numerycznych.} Warszawa: Wydawnictwo Naukowo-Techniczne, 1981. \emph{Układy równań liniowych}, s. 37~-~56.
+  \bibitem{sle}
+    \emph{http://www.ii.uni.wroc.pl/$\sim$sle/teaching/anum/an-urlin2.pdf}
+  \bibitem{wazniak}
+    \emph{http://wazniak.mimuw.edu.pl/index.php?title=MN05}
+\end{thebibliography}
+
+\end{document}
