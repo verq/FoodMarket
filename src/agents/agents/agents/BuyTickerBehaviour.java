@@ -19,7 +19,7 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 	 * 
 	 */
 	private final MarketAgent marketAgent;
-
+	private BuyRequestPerformer buyRequestPerformer;
 	BuyTickerBehaviour(MarketAgent marketAgent, Agent a, long period) {
 		super(a, period);
 		this.marketAgent = marketAgent;
@@ -28,6 +28,7 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 	@Override
 	protected void onTick() {
 		if(AgentsUtilities.CREATE_LOGS) Main.getExcelLogger().writeAgent(marketAgent);
+		if(buyRequestPerformer != null && !buyRequestPerformer.done()) return;
 		Iterator<Products> buyProductsIterator = this.marketAgent.buyFrom.values()
 				.iterator();
 		this.marketAgent.sellerAgentsList.clear();
@@ -50,10 +51,11 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 						myAgent, agentDescription);
 
 				for (int i = 0; i < sellingAgents.length; ++i) {
+					if(this.marketAgent.sellerAgentsList.contains(sellingAgents[i].getName())) continue;
 					this.marketAgent.sellerAgentsList.add(sellingAgents[i].getName());
 				}
 			} catch (FIPAException fe) {
-				fe.printStackTrace();
+				System.out.println(fe.getMessage());
 			}
 		}
 
@@ -69,8 +71,9 @@ final class BuyTickerBehaviour extends TickerBehaviour {
 						+ this.marketAgent.sellerAgentsList.get(i).getName());
 				}
 			}
-			myAgent.addBehaviour(new BuyRequestPerformer(
-					this.marketAgent));
+			buyRequestPerformer = new BuyRequestPerformer(
+					this.marketAgent);
+			myAgent.addBehaviour(buyRequestPerformer);
 
 		}
 	}
