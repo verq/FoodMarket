@@ -21,7 +21,9 @@ public class Client extends MarketAgent {
 				if (productNeed != 0) {
 					buy.put(p, productNeed);
 				}
+				weeklyProductNeeds.put(p, productNeed);
 			}
+			else weeklyProductNeeds.put(p, 0.0);
 		}
 	}
 
@@ -60,7 +62,9 @@ public class Client extends MarketAgent {
 	protected void use() {
 		for (Map.Entry<Products, Double> haveEntry : have.entrySet()) {
 			Double value = haveEntry.getValue();
-			have.put(haveEntry.getKey(), haveEntry.setValue(AgentsUtilities.randomDouble(0.5, 1) * value));
+			Double moreToBuy = weeklyProductNeeds.get(haveEntry.getKey()) - value;
+			have.put(haveEntry.getKey(), Math.max(moreToBuy, 0));
+			if(moreToBuy > 0) buy.put(haveEntry.getKey(), buy.get(haveEntry.getKey()) + moreToBuy);
 		}
 	}
 }
