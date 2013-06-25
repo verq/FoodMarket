@@ -25,7 +25,7 @@ class BuyRequestPerformer extends Behaviour {
 	private final int STEP_RECIVED_CURRENT_PRICES = 1;
 	private final int STEP_SENT_CFP_TO_SELLERS = 2;
 	private final int STEP_RECIVED_SELLERS_DECISIONS = 3;
-	private final int STEP_SENDED_CONFIRMATION = 4;
+	private final int STEP_SENT_CONFIRMATION = 4;
 	private final int STEP_RECIVED_CONFIRMATION = 5;
 	private final int STEP_BLOCK = 6;
 	/**
@@ -76,7 +76,6 @@ class BuyRequestPerformer extends Behaviour {
 			System.out.println(myAgent.getName() + " 3) buy: received all offers, sending cfp with decision");
 		}
 		Iterator<String> sellersIterator = responsesToSend.keySet().iterator();
-		System.out.println(responsesToSend);
 		// send offer specific response to every agent
 		while (sellersIterator.hasNext()) {
 			ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
@@ -148,7 +147,7 @@ class BuyRequestPerformer extends Behaviour {
 			myAgent.send(dec);
 		}
 		offersCnt = 0;
-		return STEP_SENDED_CONFIRMATION;
+		return STEP_SENT_CONFIRMATION;
 	}
 
 	private int reciveConfirmationOfTransaction() {
@@ -165,12 +164,16 @@ class BuyRequestPerformer extends Behaviour {
 				this.marketAgent.updateBuyerStore(msg.getSender().getName());
 
 			}
+			else if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
+				System.out.println(myAgent.getName() + " 8) buy: received refusal from "
+						+ msg.getSender().getName());
+			}
 			offersCnt++;
 			if (offersCnt >= this.marketAgent.sellerAgentsList.size()) {
 				return STEP_RECIVED_CONFIRMATION;
 			}
 		}
-		return STEP_SENDED_CONFIRMATION;
+		return STEP_SENT_CONFIRMATION;
 	}
 
 	private void endOfTransaction() {
@@ -196,8 +199,8 @@ class BuyRequestPerformer extends Behaviour {
 				break;
 			case STEP_RECIVED_SELLERS_DECISIONS:
 				step = sendConfirmation();
-				break; // TODO: specjalnie nie by�o tu wcze�niej break?
-			case STEP_SENDED_CONFIRMATION:
+				break;
+			case STEP_SENT_CONFIRMATION:
 				step = reciveConfirmationOfTransaction();
 				break;
 			case STEP_RECIVED_CONFIRMATION:

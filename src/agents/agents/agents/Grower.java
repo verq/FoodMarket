@@ -25,6 +25,7 @@ public class Grower extends MarketFieldAgent {
 		have.put(Products.FRUIT, (double) AgentsUtilities.randomInt(
 				MarketConstants.GROWER_MIN_FRUIT,
 				MarketConstants.GROWER_MAX_FRUIT));
+		money = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 	}
 
 	@Override

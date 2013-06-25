@@ -69,15 +69,9 @@ public class AgentsUtilities {
 					agentOffer.getItemPrice(),
 					agentOffer.getAgentType(),
 					agentOffer.getOfferType());
-			System.out.println(agentOffer.getItemAmount() + " " +
-					agentOffer.getItemPrice() + " " +
-					agentOffer.getAgentType() + " " +
-					agentOffer.getOfferType());
-			System.out.println("||||" + content + "||||");
 			map.put(agentOffer.getAgentName(), content
 					);
 		}
-		System.out.println("===>>" + map);
 		return map;
 	}
 }

@@ -30,7 +30,7 @@ public class Keeper extends MarketFieldAgent {
 		have.put(Products.MILK, (double) AgentsUtilities.randomInt(
 				MarketConstants.KEEPER_MIN_MILK,
 				MarketConstants.KEEPER_MAX_MILK));
-
+		money = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 	}
 
 	@Override

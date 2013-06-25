@@ -17,6 +17,7 @@ import java.util.Set;
 
 import strategies.strategies.SimpleStrategy;
 import strategies.strategies.Strategy;
+import strategies.strategies.TakeAsMuchAsYouCanFromTheCheapestOfferStrategy;
 import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
@@ -194,7 +195,7 @@ public abstract class MarketAgent extends Agent {
 		buyAction();
 		sellAction();
 		timeAction();
-		myStrategy = new SimpleStrategy();
+		myStrategy = new TakeAsMuchAsYouCanFromTheCheapestOfferStrategy();//SimpleStrategy();
 		myStrategy.setBuy(buy);
 		myStrategy.setHave(have);
 		myStrategy.setSell(sell);
@@ -282,6 +283,7 @@ public abstract class MarketAgent extends Agent {
 		pricePerItem = new EnumMap<Products, Double>(Products.class);
 		buyFrom = new EnumMap<Participants, Products>(Participants.class);
 		sellTo = new EnumMap<Participants, Products>(Participants.class);
+		weeklyProductNeeds = new EnumMap<Products, Double>(Products.class);
 		buyerAgentsList = new ArrayList<AID>();
 		sellerAgentsList = new ArrayList<AID>();
 	}
@@ -311,12 +313,12 @@ public abstract class MarketAgent extends Agent {
 			@Override
 			protected void onTick() {
 				produceAndUse();
-				prepareForSelling();
+				//prepareForSelling();
 				}
 		});
 	}
 
-	protected void prepareForSelling() {
+	protected void prepareForSelling() { // WTF?!
 		if (!(this instanceof Client)) {
 		for (Products product : sellTo.values()) {
 				sell.put(product, have.get(product));
@@ -331,6 +333,7 @@ public abstract class MarketAgent extends Agent {
 		}
 	}
 
+	protected EnumMap<Products, Double> weeklyProductNeeds;
 	/**
 	 * how much money do I have
 	 */

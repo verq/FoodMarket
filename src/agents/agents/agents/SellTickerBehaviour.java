@@ -19,7 +19,7 @@ final class SellTickerBehaviour extends TickerBehaviour {
 	 * 
 	 */
 	private final MarketAgent marketAgent;
-
+	private SellRequestPerformer sellRequestPerformer;
 	SellTickerBehaviour(MarketAgent marketAgent, Agent a, long period) {
 		super(a, period);
 		this.marketAgent = marketAgent;
@@ -28,6 +28,8 @@ final class SellTickerBehaviour extends TickerBehaviour {
 	@Override
 	protected void onTick() {
 		if(AgentsUtilities.CREATE_LOGS) Main.getExcelLogger().writeAgent(marketAgent);
+		if(sellRequestPerformer != null && !sellRequestPerformer.done()) return;
+
 		Iterator<Products> sellProductsIterator = this.marketAgent.sellTo.values()
 				.iterator();
 		DFAgentDescription[] buyingAgents;
@@ -49,6 +51,7 @@ final class SellTickerBehaviour extends TickerBehaviour {
 				buyingAgents = DFService.search(myAgent,
 						agentDescription);
 				for (int i = 0; i < buyingAgents.length; i++) {
+					if(this.marketAgent.buyerAgentsList.contains(buyingAgents[i].getName())) continue;
 					this.marketAgent.buyerAgentsList.add(buyingAgents[i].getName());
 				}
 			} catch (FIPAException fe) {
@@ -68,8 +71,9 @@ final class SellTickerBehaviour extends TickerBehaviour {
 						+ this.marketAgent.buyerAgentsList.get(i).getName());
 				}
 			}
-			myAgent.addBehaviour(new SellRequestPerformer(
-					this.marketAgent));
+			sellRequestPerformer = new SellRequestPerformer(
+					this.marketAgent);
+			myAgent.addBehaviour(sellRequestPerformer);
 		}
 	}
 }

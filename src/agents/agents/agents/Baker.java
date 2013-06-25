@@ -24,6 +24,7 @@ public class Baker extends MarketEmployeeAgent {
 		have.put(Products.BREAD, (double) AgentsUtilities.randomInt(
 				MarketConstants.BAKER_MIN_BREAD_PRODUCT,
 				MarketConstants.BAKER_MAX_BREAD_PRODUCT));
+		money = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 
 	}
 

@@ -22,6 +22,10 @@ public class Farmer extends MarketFieldAgent {
 		have.put(Products.GRAIN, AgentsUtilities.randomDouble(0.5, 1)
 				* numberOfFields
 				* MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD);
+		have.put(Products.VEGETABLE, AgentsUtilities.randomDouble(0.5, 1)
+				* numberOfFields
+				* MarketConstants.FARMER_MAX_GRAIN_NEEDED_PER_FIELD);
+		money = AgentsUtilities.randomDouble(MarketConstants.CLIENT_MIN_INCOME, MarketConstants.CLIENT_MAX_INCOME);
 	}
 
 	@Override
@@ -29,6 +33,7 @@ public class Farmer extends MarketFieldAgent {
 		sell.put(Products.GRAIN, numberOfFields
 				* MarketConstants.FARMER_TRESHOLD_SOLD_GRAIN); // he can't sell all
 		pricePerItem.put(Products.GRAIN, MarketConstants.FARMER_GRAIN_COST);
+		
 		sell.put(Products.VEGETABLE, numberOfFields
 				* MarketConstants.FARMER_TRESHOLD_SOLD_VEGETABLES);
 		pricePerItem.put(Products.VEGETABLE,

@@ -27,6 +27,9 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 	@Override
 	public ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
+		informAboutNeeds();
+		currentWeekBuyOffersHistory.clear();
+		currentWeekSellOffersHistory.clear();
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		// needed to choose best offers:
 		EnumMap<Products, Double> lowestPrices = new EnumMap<Products, Double>(
@@ -61,6 +64,8 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 		for (AgentOffer agentOffer : offers) {
 			AgentOffer currentAnswer = new AgentOffer(
 					agentOffer.getAgentName(), "");
+			currentAnswer.setOfferType(OfferFormatUtilities.BUY_OFFER_TAG);
+			currentAnswer.setAgentType(myType);
 			if(cheapestAgents.containsValue(agentOffer.getAgentName())){ // checking if this agent offered cheapest price somewhere
 				Iterator<Products> iter = cheapestAgents.keySet().iterator();
 				while(iter.hasNext()) {
@@ -146,14 +151,13 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 			if (currentWeekBuyOffersHistory.containsKey(agentOffer
 					.getAgentName())) {
 				ArrayList<AgentOffer> myAnswers = currentWeekBuyOffersHistory
-						.get(agentOffer.getAgentName()); //  list of offers
+						.get(agentOffer.getAgentName()); // list of offers
 															// completed this
 															// week with this
 															// agent
 				if (agentOffer.getItemAmount().size() == 0
 						&& myAnswers.size() != 0) {
 					agreeForThisOffer = false;
-
 					for (AgentOffer ans : myAnswers) {
 						for (Products product : ans.getItemAmount().keySet()) {
 							ans.getItemAmount().put(product, 0.0);
@@ -161,39 +165,61 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 						}
 					}
 				}
-				for (Products product : agentOffer.getItemAmount().keySet()) { // check every position in this offer
+				for (Products product : agentOffer.getItemAmount().keySet()) { // check
+																				// every
+																				// position
+																				// in
+																				// this
+																				// offer
 					for (AgentOffer ans : myAnswers) {
-						/*System.out.println(ans.getItemAmount().get(product).doubleValue() + " " +agentOffer
-										.getItemAmount().get(product).doubleValue()
-								+ " " + ans.getItemPrice().get(product).doubleValue() + " " + agentOffer
-										.getItemPrice().get(product).doubleValue());
-						*/
-						double additionalProfit = agentOffer.getItemAmount().get(product).doubleValue() - ans.getItemAmount().get(product).doubleValue();
-						if (additionalProfit <= 1.0 && additionalProfit >= 0 
-								&& ans.getItemPrice().get(product).doubleValue() >= agentOffer
-										.getItemPrice().get(product).doubleValue()) {
-							
-							ans.getItemAmount().put(product, agentOffer
-										.getItemAmount().get(product).doubleValue());
-							ans.getItemPrice().put(product, agentOffer
-										.getItemPrice().get(product).doubleValue());
-							//System.out.println("after update: " + ans.getItemAmount().get(product).doubleValue() + " " +agentOffer
-							//		.getItemAmount().get(product).doubleValue()
-							//+ " " + ans.getItemPrice().get(product).doubleValue() + " " + agentOffer
-							//		.getItemPrice().get(product).doubleValue());
-						} 
-					 else { // if it's worse from the previous one - resign
-						agreeForThisOffer = false;
-						ans.getItemAmount().put(product, 0.0);
-						ans.getItemPrice().put(product, 0.0);
-						break;
-					}
+						/*
+						 * System.out.println(ans.getItemAmount().get(product).
+						 * doubleValue() + " " +agentOffer
+						 * .getItemAmount().get(product).doubleValue() + " " +
+						 * ans.getItemPrice().get(product).doubleValue() + " " +
+						 * agentOffer
+						 * .getItemPrice().get(product).doubleValue());
+						 */
+						double additionalProfit = -1;
+						if(agentOffer.getItemAmount().containsKey(product))
+							additionalProfit = agentOffer.getItemAmount()
+								.get(product).doubleValue()
+								- ans.getItemAmount().get(product)
+										.doubleValue();
+						if (additionalProfit <= 1.0
+								&& additionalProfit >= 0
+								&& ans.getItemPrice().get(product)
+										.doubleValue() >= agentOffer
+										.getItemPrice().get(product)
+										.doubleValue()) {
+							ans.getItemAmount().put(
+									product,
+									agentOffer.getItemAmount().get(product)
+											.doubleValue());
+							ans.getItemPrice().put(
+									product,
+									agentOffer.getItemPrice().get(product)
+											.doubleValue());
+							// System.out.println("after update: " +
+							// ans.getItemAmount().get(product).doubleValue() +
+							// " " +agentOffer
+							// .getItemAmount().get(product).doubleValue()
+							// + " " +
+							// ans.getItemPrice().get(product).doubleValue() +
+							// " " + agentOffer
+							// .getItemPrice().get(product).doubleValue());
+						} else { // if it's worse from the previous one - resign
+							agreeForThisOffer = false;
+							ans.getItemAmount().put(product, 0.0);
+							ans.getItemPrice().put(product, 0.0);
+							break;
+						}
 					}
 				}
 				decisions.put(agentOffer.getAgentName(), agreeForThisOffer);
 
-			}
-			else decisions.put(agentOffer.getAgentName(), false);
+			} else
+				decisions.put(agentOffer.getAgentName(), false);
 		}
 		return decisions;
 	}
@@ -223,7 +249,9 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 	@Override
 	protected boolean getSellingCondition(double buyerItemPrice,
 			double sellerItemPrice) {
-		return AgentsUtilities.randomDouble(0, 1) < 0.4;
+		if(buyerItemPrice >= sellerItemPrice)
+		return AgentsUtilities.randomDouble(0, 1) < 0.99;
+		return false;
 	}
 	
 }

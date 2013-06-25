@@ -66,6 +66,7 @@ public abstract class Strategy {
 	 */
 	public ArrayList<AgentOffer> decideAboutBuyOffer(
 			ArrayList<AgentOffer> offers) {
+		informAboutNeeds();
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		Iterator<Products> sellIterator = sell.keySet().iterator();
 		Iterator<AgentOffer> offersIterator = offers.iterator();
@@ -80,10 +81,6 @@ public abstract class Strategy {
 						&& offer.getItemPrice().containsKey(product)
 						&& getSellingCondition(offer.getItemPrice()
 								.get(product), pricePerItem.get(product))) {
-					if (AgentsUtilities.PRINT_PRODUCTS_DETAILS) {
-					System.out.println(myType + " product details: " + product
-							+ " " + offer.getItemAmount().get(product));
-					}
 					currentAnswer.addItemAmount(product, offer.getItemAmount()
 							.get(product)); // tu nie powinno być tyle, ile
 											// sprzedający chce sprzedać w
@@ -125,6 +122,7 @@ public abstract class Strategy {
 		for (Products product : buyerOffer.getItemAmount().keySet()) {
 			sell.put(product, sell.get(product)
 					- buyerOffer.getItemAmount().get(product));
+			// TODO: nie działa dla bakerów i milkmanów
 			have.put(product, have.get(product)
 					- buyerOffer.getItemAmount().get(product));
 			myMoney -= buyerOffer.getItemPrice().get(product);
@@ -144,7 +142,8 @@ public abstract class Strategy {
 	}
 
 	protected void informAboutNeeds() {
-		if(AgentsUtilities.INFORM_ABOUT_AGENT_NEEDS) System.out.println(myType + " has " + myMoney + " money; needs to buy: " + buy + " sell:" + sell + " has: " + have);
+		if(AgentsUtilities.INFORM_ABOUT_AGENT_NEEDS) 
+			System.out.println(myType + " has " + myMoney + " money;\nneeds to buy: " + buy + "\nsell:" + sell + "\nhas: " + have);
 	}
 	public EnumMap<Products, Double> getBuy() {
 		return buy;

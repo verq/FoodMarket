@@ -23,6 +23,7 @@ import constants.Products;
  * @author beatka
  * 
  */
+@Deprecated
 public class SimpleStrategy extends Strategy {
 
 	@Override

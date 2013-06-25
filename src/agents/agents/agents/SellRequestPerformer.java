@@ -133,12 +133,14 @@ class SellRequestPerformer extends Behaviour {
 			if (confirmed) {
 				confirm.setPerformative(ACLMessage.CONFIRM);
 				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
-					System.out.println(myAgent.getName() + " 7a) I can complete this transaction");
+					System.out.println(myAgent.getName() + " 7a) I can complete transaction with " + msg.getSender()
+							.getName());
 				}
 			} else {
 				confirm.setPerformative(ACLMessage.REFUSE);
 				if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
-					System.out.println(myAgent.getName() + " 7a) I cannot complete this transaction");
+					System.out.println(myAgent.getName() + " 7a) I cannot complete transaction with " + msg.getSender()
+							.getName());
 				}
 			}
 			confirm.setReplyWith("cfp" + System.currentTimeMillis());
