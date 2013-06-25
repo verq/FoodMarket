@@ -98,5 +98,8 @@ public class MarketConstants {
 
 	public static final double FARMER_GRAIN_COST = 2;
 	public static final double FARMER_VEGETABLE_COST = 2;
+	
+	// strategy
+	public static final double SIMPLE_STRATEGY_ACCEPTANCE_PROBABILITY = 0.6;
 
 }

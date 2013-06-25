@@ -1,5 +1,6 @@
 package agents;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.Products;
 
@@ -10,10 +11,10 @@ public abstract class MarketFieldAgent extends MarketAgent {
 	protected void produceAndUse() {
 		for (Products product : sellTo.values()) {
 			double numberOfProduct = have.get(product);
-			//System.out.println("farmer had " + numberOfProduct + " " + product);
+			//if(AgentsUtilities.PRINT_AGENT_WEEKLY_UPDATES)  System.out.println("farmer had " + numberOfProduct + " " + product);
 			numberOfProduct = numberOfProduct + numberOfFields
 					* getNumberOfProductsPerField(product);
-			//System.out.println("farmer now has " + numberOfProduct + " " + product);
+			//if(AgentsUtilities.PRINT_AGENT_WEEKLY_UPDATES) System.out.println("farmer now has " + numberOfProduct + " " + product);
 			have.put(product, numberOfProduct);
 			
 			// TODO: przerobić na funkcję zwracającą odpowiedni treshold w zależności od produktu

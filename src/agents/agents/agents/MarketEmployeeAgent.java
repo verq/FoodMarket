@@ -1,5 +1,6 @@
 package agents;
 
+import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.Products;
 
@@ -8,7 +9,7 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 	protected double productCost;
 
 	protected void produceAndUse() {
-		System.out.println(" baker have BEFORE update: " + have);
+		if(AgentsUtilities.PRINT_AGENT_WEEKLY_UPDATES) System.out.println(" baker have BEFORE update: " + have);
 		for (Products product : sellTo.values()) {
 			double numberOfProduct = have.get(product);
 			double numberOfUsedProduct = numberOfEmployees * getNumberOfProductPerEmployee();
@@ -20,7 +21,12 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 				have.put(getProductUsedToProduce(product), 0D);
 			}
 		}
-		System.out.println(" baker have AFTER update: " + have);
+		
+		for (Products product : buyFrom.values()) {
+			buy.put(product, numberOfEmployees * neededAmountOf(product));
+			
+		}
+		if(AgentsUtilities.PRINT_AGENT_WEEKLY_UPDATES) System.out.println(" baker have AFTER update: " + have);
 
 		for (Products product : sellTo.values()) {
 			double totalAmountOfProduct = have.get(product);
@@ -28,6 +34,7 @@ public abstract class MarketEmployeeAgent extends MarketAgent {
 			sell.put(product, sell.get(product) + totalAmountOfProduct);
 		}
 	}
+	protected abstract double neededAmountOf(Products product);
 
 	protected abstract double getUsedProductUsage();
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import utilities.AgentsUtilities;
 import agents.AgentOffer;
+import constants.MarketConstants;
 import constants.OfferFormatUtilities;
 import constants.Products;
 
@@ -250,7 +251,7 @@ public class TakeAsMuchAsYouCanFromTheCheapestOfferStrategy extends Strategy {
 	protected boolean getSellingCondition(double buyerItemPrice,
 			double sellerItemPrice) {
 		if(buyerItemPrice >= sellerItemPrice)
-		return AgentsUtilities.randomDouble(0, 1) < 0.99;
+		return AgentsUtilities.randomDouble(0, 1) < MarketConstants.SIMPLE_STRATEGY_ACCEPTANCE_PROBABILITY;
 		return false;
 	}
 	

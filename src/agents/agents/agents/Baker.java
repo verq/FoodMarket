@@ -63,4 +63,11 @@ public class Baker extends MarketEmployeeAgent {
 		return MarketConstants.BAKER_PRODUCTIVITY_CONSTANT;
 	}
 
+	@Override
+	protected double neededAmountOf(Products product) {
+		if(product.equals(Products.GRAIN))
+			return (sell.get(Products.BREAD) + have.get(Products.BREAD)) * MarketConstants.BAKER_GRAIN_PER_BREAD;
+		return 0;
+	}
+
 }

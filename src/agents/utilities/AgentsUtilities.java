@@ -16,6 +16,7 @@ public class AgentsUtilities {
 	public static final boolean PRINT_PRODUCTS_DETAILS = true;
 	public static final boolean CREATE_LOGS = false;
 	public static final boolean INFORM_ABOUT_AGENT_NEEDS = true;
+	public static final boolean PRINT_AGENT_WEEKLY_UPDATES = true;
 	
 	protected static Random rand = new Random();
 
