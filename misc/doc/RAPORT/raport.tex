@@ -213,19 +213,40 @@ Informacje o~poszczególnych oferowanych produktach oddzielone są przy pomocy `
 \section{Strategie}
 Sposób, w~jaki zaimplementowana jest komunikacja między agentami pozwala na prostą implementację strategii: w~strategiach kupujących konieczne jest napisanie
 trzech, a~w~sprzedających~---~dwóch metod.
+
+W~obu typach strategii pierwsza metoda służy do analizy rynku i~stworzenia odpowiednich odpowiedzi dla otrzymanych ofert. Druga metoda jest ostatecznym potwierdzeniem
+tego, czy agent używający danej strategii chce i~może dokonać transakcji.
+
+Trzecią metodą w~strategii kupującej jest aktualizacja posiadanych zasobów, w~przypadku, gdy transakcja doszła do skutku.
+
+Strategie są przypisywane agentom podczas startu i~nie ulegają późniejszym zmianom.
+
 \subsection{Zaimplementowane strategie kupujące agentów}
+W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwsza z~koniecznych do implementacji metod dla tego typu strategii:
 \begin{enumerate}
- \item \textbf{Strategia naiwna}: Agent wybiera zawsze najtańszą ofertę.
-  \begin{itemize}
-  \item \textbf{Prosta}: Agent kupuje od sprzedającego z~najtańszą ofertą tyle ile potrzebuje, a~jeśli to jest mniej niż potrzebuje to nic nie robi więcej.
-  \item \textbf{Złożona}: Jeśli agent oferujący najtańszą ofertę nie ma wystarczająco dużo towaru, to pozostały potrzebny towar bierze od agenta z~drugą w kolejności ceną itd.
-  \end{itemize}
- \item \textbf{Strategia mniej naiwna}: Agent kupuje od najtańszego tyle ile może, a~kolejnym w~kolejności oferuje cenę najniższej oferty.
- \item Oferuje cenę najniższej oferty temu, który ma tyle, ile on potrzebuje.
- \item Jeśli ceny są niższe niż w poprzednich tygodniach to kupuje więcej (proporcjonalnie do różnicy cen), a jeśli są wyższe - to mniej
+ \item \textbf{Wybór prosty}: Agent wybiera zawsze najtańszą ofertę dla danego produktu i~stara się kupić od oferenta tyle produktu, ile tylko może i~potrzebuje.
+Musi przy tym wziąć pod uwagę, że ma ograniczone zasoby finansowe i~musi je podzielić pomiędzy możliwie wiele typów produktów tak, by zaspokoić swoje potrzeby w~zakresie każdego z~nich.
+
+Kwestia ta została rozwiązana w~ten sposób, że agent zmniejsza ilość kupowanego produktu proporcjonalnie do początkowej ilości jaką zamierzał kupić.
+Powtarza się to dla wszystkich towarów, które muszą zostać kupione, tak, by sumaryczny koszt wszystkich zakupów nie przekroczył budżetu agenta.
+ \item \textbf{Wybór zachłanny}: W~tej strategii agent dla każdego produktu stara się zachłannie wybierać oferty począwszy od najtańszych. 
+Jeśli agent oferujący najtańszą ofertę nie ma wystarczająco dużo towaru, to pozostały potrzebny towar bierze od agenta z~drugą w kolejności ceną itd.
+
+By nie przekroczyć dostępnego budżetu, a~jednocześnie kupić każdy rodzaj potrzebnego produktu agent rozważa oferty w~kolejności od najtańszej kolejno dla każdego produktu. Gdy kwota potrzebna na zakupy
+przekroczy budżet agenta dalsze oferty nie są rozpatrywane, zaś~w~ ofertach już wybranych ilość kupowanego towaru jest zmniejszana tak, by zmieścić się w~budżecie.
+ \label{item:strategia kupujaca zachlanna} 
+ \item \textbf{Wybór ryzykowny}: W~tej strategii agent stara się zaoferować sprzedającym niższą cenę niż w~ofercie. Dokładniej, zgadza się na najtańszą ofertę, zaś~pozostałym agentom
+oferuje zakup towaru po cenie najtańszej oferty. Jego nowa cena jest dodatkowo zmieniana o~losową wartość z~przedziału $[-10, 10]$ procent ceny najniższej oferty.
+
+Kwestię zmieszczenia zakupów w~budżecie rozwiązuje w~podobny sposób jak w~strategii \ref{item:strategia kupujaca zachlanna}.
 \end{enumerate}
 
+W~drugiej metodzie dla strategii kupujących agenci akceptują (bądź nie) otrzymane od kupców nowe oferty. W~tym celu porównują je z~ofertami, które przesłali do oferentów. Jeśli sprzedający oferuje tyle samo
+lub więcej produktu po nie wyższej cenie lub gdy cena nie jest wyższa o~więcej niż $10\%$~---~oferta jest akceptowana. W~przeciwnym razie agent nie zgadza się na ofertę.
+
 \subsection{Zaimplementowane strategie sprzedające agentów}
+W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwsza z~koniecznych do implementacji metod dla tego typu strategii:
+
 \begin{enumerate}
  \item Akceptuje tylko oferty nie wyższe niż jego własne.
  \item Akceptuje oferty niższe o nie więcej niż 10\% jego.
