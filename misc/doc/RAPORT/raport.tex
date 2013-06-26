@@ -259,7 +259,7 @@ wciąż by rosła.
 
 W~tej strategii nowe ceny ustalane są podobnie do cen w~strategii \emph{\ref{item: sprzedajacy twardy wybor}}.
 
- \item \textbf{Wybór losowy}: Agent akceptuje losowo ze zmiennym prawdopodobieństwem, które jest jednym z~parametrów symulacji.
+ \item \namedlabel{item: sprzedajacy losowo}{Wybór losowy} \textbf{Wybór losowy}: Agent akceptuje losowo ze zmiennym prawdopodobieństwem, które jest jednym z~parametrów symulacji.
 
 Również nowe ceny towarów zmieniane są o~wartość losową z~pewnego ustalonego przedziału (też parametru symulacji).
 \end{enumerate}
@@ -269,11 +269,46 @@ zgodnie z~czasem ich otrzymania.
 
 \section{Otrzymane rezultaty}\label{chapter: rezultaty}
 Przeprowadziłyśmy kilka symulacji dla różnych parametrów oraz warunków początkowych. Najciekawsze wyniki zaprezentowane są poniżej. Wariant symulacji uważałyśmy za skuteczny, jeśli agenci z~czasem byli w~stanie zgromadzić
-większy kapitał.
+większy kapitał lub ich sprzedaż wzrastała.
 \subsection{Symulacje z~użyciem pojedynczej strategii}
 Przeprowadziłyśmy symulacje ustalając dla każdego agenta tę samą strategię sprzedającą i~tę samą kupującą (łącznie było 9~różnych wariantów). 
+
+\subsubsection{Porównanie sprzedaży w~różnych konfiguracjach strategii}
+Rysunek \ref{fig:growing farmer} przedstawia jak wygląda ilość sprzedanego zboża przez rolników w~zależności od czasu dla strategii \emph{\ref{item: sprzedajacy miekki wybor}} i~\emph{\ref{item:strategia kupujaca zachlanna}}. 
+Jak widać w~każdym kolejnym tygodniu rolnik może sprzedawać więcej, co przekłada się na jego zarobki.
+
+\begin{figure} [H]
+ \centering
+    \includegraphics[width=0.8\textwidth]{obrazki/fast_growing_farmer}
+ \caption{Ilość sprzedanego zboża w~kolejnych tygodniach}
+ \label{fig:growing farmer}
+\end{figure}
+
+Z~zupełnie odwrotną sytuacją mamy do czynienia w~przypadku użycia strategii \emph{\ref{item: sprzedajacy losowo}} dla niskiego prawdopodobieństwa akceptacji oferty, nawet przy zastosowaniu tej samej strategii kupującej.
+Rysunek \ref{fig:dying milkman} pokazuje, że mleczarze szybko przy tej strategii stracili możliwość sprzedawania produktów mlecznych, co jest spowodowane tym, że trudno było im kupić mleko od hodowców.
+
+\begin{figure} [H]
+ \centering
+    \includegraphics[width=0.8\textwidth]{obrazki/fast_decreasing_milkman}
+ \caption{Ilość sprzedanych produktów mlecznych w~kolejnych tygodniach}
+ \label{fig:dying milkman}
+\end{figure}
+
+W~symulacji z~użyciem strategii \emph{\ref{item: sprzedajacy twardy wybor}} oraz \emph{\ref{item:strategia kupujaca ryzykowna}} ilość sprzedawanych produktów utrzymywała się na stałym poziomie, co było konsekwencją
+tego, że klienci oferowali wszystkim sprzedającym takie same ceny.
+
+Spowodowało to stopniowe zrównanie cen wszystkich agentów, a~co za tym idzie brak drastycznych zmian cen i~stałą sprzedaż. Zjawisko to można zaobserwować
+na Rysunku \ref{fig:constant client}.
+
+\begin{figure} [H]
+ \centering
+    \includegraphics[width=0.8\textwidth]{obrazki/random_client_bread}
+ \caption{Ilość kupionego chleba w~kolejnych tygodniach}
+ \label{fig:constant client}
+\end{figure}
+
 \subsubsection{Analiza strategii sprzedających}
-Okazało się, że niezależnie od wyboru liczby agentów oraz strategii kupujących najgorzej wypadała strategia losowa. 
+Okazało się, że niezależnie od wyboru liczby agentów oraz strategii kupujących najgorzej wypadała strategia \emph{\ref{item: sprzedajacy losowo}}. 
 
 Jeśli szansa akceptacji była wysoka agenci sprzedający szybko tracili fundusze, przez co nie mieli potem
 środków na dalsze zakupy. 
@@ -282,14 +317,14 @@ Jeśli zaś była niska, to oferty agentów kupujących były często odrzucane,
 
 Pozostałe strategie sprzedające pozwalały na uzyskanie przychodów. Strategia \emph{\ref{item: sprzedajacy miekki wybor}} ze względu na większą elastyczność warunków sprzedaży pozwalała na większe przychody.
 
-Poniższy wykres pokazuje jak wyglądały zarobki dla przykładowego agenta (rolnika) w~zależności od strategii sprzedającej. Strategią kupujących jest strategia \emph{\ref{item:strategia kupujaca ryzykowna}}.
-\begin{verbatim}
-WYKRES: 3 różne linie/słupki, 
-jeden szybko spada i jest oznaczony jako strategia losowa
-pozostałe rosną: 
-  jedno szybciej (miękki wybór), 
-  drugie wolniej (twardy wybór)
-\end{verbatim}
+% Poniższy wykres pokazuje jak wyglądały zarobki dla przykładowego agenta (rolnika) w~zależności od strategii sprzedającej. Strategią kupujących jest strategia \emph{\ref{item:strategia kupujaca ryzykowna}}.
+% \begin{verbatim}
+% WYKRES: 3 różne linie/słupki, 
+% jeden szybko spada i jest oznaczony jako strategia losowa
+% pozostałe rosną: 
+%   jedno szybciej (miękki wybór), 
+%   drugie wolniej (twardy wybór)
+% \end{verbatim}
 
 \subsubsection{Analiza strategii kupujących}
 Wyniki porównania strategii kupujących są zgodne z~intuicją: strategia \emph{\ref{item:strategia kupujaca prosta}} wydaje się być bezpieczna, lecz nie zawsze pozwala na zakup wystarczającej ilości towarów, by móc produkować,
@@ -303,14 +338,16 @@ o~znacznie niższych cenach nie były akceptowane przez agentów sprzedających.
 Ostatecznie przy uwzględnieniu zaimplementowanych strategii sprzedających najlepsza okazała się strategia \emph{\ref{item:strategia kupujaca zachlanna}}, przy której możliwość produkowania większej ilości produktów
 niwelowała ewentualne straty spowodowane kupowaniem droższych towarów.
 
-Wykres jak poprzednio przedstawia zarobki dla przykładowego agenta (rolnika) w~zależności od strategii kupującej. Użytą strategią jest \emph{\ref{item: sprzedajacy miekki wybor}}, która dawała najlepsze rezultaty.
+% Wykres jak poprzednio przedstawia zarobki dla przykładowego agenta (rolnika) w~zależności od strategii kupującej. Użytą strategią jest \emph{\ref{item: sprzedajacy miekki wybor}}, która dawała najlepsze rezultaty.
 
-\begin{verbatim}
-WYKRES: 3 różne linie/słupki, 
-jeden wolno rośnie: Wybór prosty
-drugi czasem rośnie, a czasem spada: Wybór ryzykowny
-trzeci rośnie szybciej niż pierwszy: Wybór zachłanny 
-\end{verbatim}
+% \begin{verbatim}
+% WYKRES: 3 różne linie/słupki, 
+% jeden wolno rośnie: Wybór prosty
+% drugi czasem rośnie, a czasem spada: Wybór ryzykowny
+% trzeci rośnie szybciej niż pierwszy: Wybór zachłanny 
+% \end{verbatim}
+
+
 
 \subsection{Symulacje z procentowym wykorzystaniem każdej strategii}
 
