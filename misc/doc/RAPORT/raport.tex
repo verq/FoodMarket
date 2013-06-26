@@ -107,19 +107,19 @@ W~projekcie uwzględniłyśmy kilka różnych typów agentów różniących się
 
 \section{Opis projektu}
 Na naszym rynku działało 6~różnych typów agentów na 3~różnych poziomach:
-\begin{itemize}
+\begin{itemize}\label{items:typy agentów}
  \item Poziom~1: agenci, którzy produkują najbardziej podstawowe towary, należą tu:
   \begin{itemize}
-  \item Rolnik (produkuje zboże)
-  \item Hodowca (produkuje mięso, mleko i~nawóz)
-  \item Sadownik (produkuje owoce)
+  \item Rolnik (produkuje zboże, \verb GRAIN )~---~\verb FARMER .
+  \item Hodowca (produkuje mięso~---~\verb MEAT , mleko~---~\verb MILK  i~nawóz~---~\verb MANURE )~---~\verb KEEPER .
+  \item Sadownik (produkuje owoce, \verb FRUIT )~---~\verb GROWER .
   \end{itemize}
  \item Poziom~2: agenci, którzy kupują towary od agentów 1~poziomu, przetwarzają je, a~następnie sprzedają dalej. Należą tu:
   \begin{itemize}
-   \item Piekarz (kupuje zboże, a~sprzedaje pieczywo)
-   \item Mleczarz (kupuje mleko, a~sprzedaje produkty mleczne)
+   \item Piekarz (kupuje zboże, a~sprzedaje pieczywo~---~\verb BREAD )~---~\verb BAKER .
+   \item Mleczarz (kupuje mleko, a~sprzedaje produkty mleczne~---~\verb MILK_PRODUCT )~---~\verb MILKMAN .
   \end{itemize}
- \item Poziom~3: należą tu tylko agenci pełniący rolę klientów, którzy nie produkują żadnych dóbr, a~jedynie kupują je od innych
+ \item Poziom~3: należą tu tylko agenci pełniący rolę klientów, którzy nie produkują żadnych dóbr, a~jedynie kupują je od innych~---~\verb CLIENT .
 \end{itemize}
 
 Zależności między agentami przedstawia Rysunek \ref{fig:schemat zależności}.
@@ -134,31 +134,82 @@ Na początku każdy agent dostaje pewną ilość dóbr, które może zużyć na 
 na rynku~---~szczegółowe wyniki z tym związane przedstawione zostały w Rozdziale~\ref{chapter: rezultaty}.
 
 \section{Architektura systemu}
-Program został napisany w~Javie z~wykorzystaniem JADE. Ułatwiło to znacznie implementację komunikacji między agentami zgodnie ze standardami FIPA.
+Program został napisany w~Javie z~wykorzystaniem platformy JADE. Ułatwiło to znacznie implementację komunikacji między agentami zgodnie ze standardami FIPA.
+
+W~celu utworzenia statystyk działania agentów wszelkie informacje zapisywane są do plików przy pomocy Apache POI, na podstawie których tworzone są następnie wykresy obrazujące zasoby poszczególnych agentów w~zależności od czasu.
 
 \section{Komunikacja między agentami}
+\subsection{Etapy komunikacji}
 Komunikacja między agentami odbywa się w~kilku etapach. W~każdym etapie muszą być przeprowadzone pewne akcje, które następnie są komunikowane drugiej stronie.
 
 Podczas dokonywania transakcji
-można wyróżnić następujące etapy (schemat komunikacji przedstawia Rysunek~\ref{fig:schemat komunikacji}):
+można wyróżnić następujące etapy (schemat komunikacji przedstawia Rysunek~\ref{fig:schemat komunikacji}, stworzony przy pomocy narzędzia \emph{Sniffer} będącego częścią platformy JADE):
 \begin{enumerate}
- \item Na początku każdego tygodnia każdy agent, który sprzedaje jakiś produkt informuje potencjalnych kupców co sprzedaje, w~jakiej cenie i~w~jakiej ilości. Wysyła to za pomocą komunikatu typu \verb INFORM .
+ \item Na początku każdego tygodnia każdy agent, który sprzedaje jakiś produkt informuje potencjalnych kupców co sprzedaje, w~jakiej cenie i~w~jakiej ilości. Wysyła to za pomocą komunikatu typu \verb INFORM  (czarna strzałka
+na Rysunku \ref{fig:schemat komunikacji}).
  \item Po otrzymaniu ofert od wszystkich sprzedających oferujących dobro poszukiwane przez kupca, podejmuje on decyzję, na które oferty się może przystać i~na jakich warunkach (może zaoferować inną cenę i~ilość niż sprzedający).
- \item Kupujący odsyła sprzedającemu swoje propozycje (lub pustą wiadomość, by dać znać, że nie jest zainteresowany daną ofertą) używając komunikatu typu \verb CFP .
+ \item Kupujący odsyła sprzedającemu swoje propozycje (lub pustą wiadomość, by dać znać, że nie jest zainteresowany daną ofertą) używając komunikatu typu \verb CFP  (górna szara strzałka
+na Rysunku \ref{fig:schemat komunikacji}).
  \item Po otrzymaniu propozycji od wszystkich kupujących, do których sprzedający wysłał wiadomość sprzedający analizuje oferty i~podejmuje ostateczną decyzję co do tego, na jakie transakcje przystaje. 
-Wysyła klientom swoje decyzje korzystając z~komunikatu typu \verb PROPOSE .
- \item Klient po otrzymaniu i~analizie decyzji od sprzedającego akceptuje ją lub odrzuca, o~czym informuje sprzedającego komunikatem typu \verb ACCEPT_PROPOSAL \newline albo \verb REJECT_PROPOSAL .
+Wysyła klientom swoje decyzje korzystając z~komunikatu typu \verb PROPOSE  (górna błękitna strzałka
+na Rysunku \ref{fig:schemat komunikacji}).
+ \item Klient po otrzymaniu i~analizie decyzji od sprzedającego akceptuje ją lub odrzuca, o~czym informuje sprzedającego komunikatem typu \verb ACCEPT_PROPOSAL \newline albo \verb REJECT_PROPOSAL  (dolna szara strzałka
+na Rysunku \ref{fig:schemat komunikacji}).
  \item Jeśli sprzedawca otrzymał zgodę kupującego na transakcję, to sprawdza, czy może ona wciąż być zrealizowana (czy w~międzyczasie towary nie zostały sprzedane komuś innemu).
-Jeśli wszystko jest w~porządku potwierdza klientowi wykonanie transakcji komunikatem typu \verb CONFIRM  i~aktualizuje stan posiadanych produktów. W~przeciwnym razie wysyła komunikat typu \verb REFUSE .
+Jeśli wszystko jest w~porządku potwierdza klientowi wykonanie transakcji komunikatem typu \verb CONFIRM  i~aktualizuje stan posiadanych produktów. W~przeciwnym razie wysyła komunikat typu \verb REFUSE  (dolna błękitna strzałka
+na Rysunku \ref{fig:schemat komunikacji}).
  \item Po otrzymaniu potwierdzenia wykonania transakcji kupujący również uaktualnia zawartość swoich magazynów.
 \end{enumerate}
 
 \begin{figure} [H]
  \centering
- \includegraphics[width=0.8\textwidth]{obrazki/komunikacja_2_agentow-accept}
- \caption{Schemat komunikacji między agentami}
+ \includegraphics[width=0.7\textwidth]{obrazki/komunikacja_2_agentow-accept}
+ \caption{Schemat komunikacji między przykładowymi agentami}
  \label{fig:schemat komunikacji}
 \end{figure}
+
+Przykładowa transakcja z~wykorzystaniem większej liczby agentów przedstawiona jest na Rysunku \ref{fig:sytuacje w komunikacji}. 
+
+\begin{figure} [H]
+ \centering
+    \subfloat{\includegraphics[width=0.45\textwidth]{obrazki/komunikacja_3_agentow-refuse} \label{fig: odrzuć oba}}\hspace{20pt}
+    \subfloat{\includegraphics[width=0.45\textwidth]{obrazki/komunikacja_3_agentow-refuse_and_accept}\label{fig: zaakceptuj jedno}}\hspace{20pt}
+ \caption{Różne możliwe sytuacje podczas transakcji}
+ \label{fig:sytuacje w komunikacji}
+\end{figure}
+
+Rysunek \ref{fig: odrzuć oba} obrazuje sytuację, w~której agent \emph{client1} nie jest zainteresowany ofertą żadnego z~agentów. 
+
+W~tym wypadku po otrzymaniu ofert od sprzedających i~analizie sytuacji odrzuca obie propozycje sprzedaży,
+co oświadcza komunikatem \verb REJECT_PROPOSAL . Otrzymanie informacji potwierdza zarówno \emph{farmer1} jak i~\emph{farmer2} wysyłając wiadomość \verb REFUSE .
+
+
+Rysunek \ref{fig: zaakceptuj jedno} przedstawia podobną sytuację, jednak w~tym wypadku \emph{client1} zgadza się na ofertę agenta \emph{farmer1}. 
+
+Wysyła mu zatem komunikat \verb ACCEPT_PROPOSAL , na co \emph{farmer1} odpowiada
+wiadomością \verb CONFIRM . Gdyby \emph{farmer1} nie był w~stanie dokonać tej transakcji wysłałby komunikat \verb REFUSE .
+
+\subsection{Format oferty}
+Komunikaty zawierające ofertę wysyłane przez agentów mają poniższy format:
+\begin{itemize}
+ \item \verb!FARMER;sell;VEGETABLE 2014.9341514088535 2.0:GRAIN 5171.979684030067 2.0:!
+ \item \verb!BAKER;buy;GRAIN 140.30443250879 2.0:!
+\end{itemize}
+
+Komunikat podzielony jest na 3~główne części oddzielone znakiem~``\verb ; '':
+\begin{itemize}
+ \item Typ agenta składającego ofertę (jeden z~typów wyjaśnionych w~\ref{items:typy agentów})
+ \item Typ oferty (\verb buy  lub \verb sell ~---~odpowiednio dla ofert kupna i~sprzedaży)
+ \item Lista oferowanych produktów
+\end{itemize}
+
+Informacje o~poszczególnych oferowanych produktach oddzielone są przy pomocy ``\verb : ''. Wewnątrz każdej pozycji znajdują się kolejno:
+\begin{itemize}
+ \item Nazwa produktu (zgodnie z~opisem w~~\ref{items:typy agentów})
+ \item Liczba oferowanych lub poszukiwanych (w~zależności od typu oferty) jednostek
+ \item Cena jednostkowa produktu
+\end{itemize}
+
 
 \section{Zaimplementowane strategie kupujące agentów}
 \begin{enumerate}
@@ -172,7 +223,7 @@ Jeśli wszystko jest w~porządku potwierdza klientowi wykonanie transakcji komun
  \item Jeśli ceny są niższe niż w poprzednich tygodniach to kupuje więcej (proporcjonalnie do różnicy cen), a jeśli są wyższe - to mniej
 \end{enumerate}
 
-\section{Zaimplementowane strategie kupujące agentów}
+\section{Zaimplementowane strategie sprzedające agentów}
 \begin{enumerate}
  \item Akceptuje tylko oferty nie wyższe niż jego własne.
  \item Akceptuje oferty niższe o nie więcej niż 10\% jego.
