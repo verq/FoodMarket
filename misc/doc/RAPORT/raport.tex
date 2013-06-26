@@ -346,10 +346,33 @@ niwelowała ewentualne straty spowodowane kupowaniem droższych towarów.
 % drugi czasem rośnie, a czasem spada: Wybór ryzykowny
 % trzeci rośnie szybciej niż pierwszy: Wybór zachłanny 
 % \end{verbatim}
+\emph{\ref{item:strategia kupujaca prosta}}
+\emph{\ref{item:strategia kupujaca zachlanna}}
+\emph{\ref{item:strategia kupujaca ryzykowna}}
 
-
+\emph{\ref{item: sprzedajacy losowo}}
+\emph{\ref{item: sprzedajacy miekki wybor}}
+\emph{\ref{item: sprzedajacy twardy wybor}}
 
 \subsection{Symulacje z procentowym wykorzystaniem każdej strategii}
+W~tych symulacjach zaobserwować można było tendencje ukazane już w~symulacjach wykorzystujących pojedyncze strategie. W~zależności od liczby agentów używających danej strategi rynek prosperował lepiej lub gorzej.
+
+Duże pogorszenie sytuacji można było zaobserwować przy większym udziale agentów wykorzystujących strategię \emph{\ref{item: sprzedajacy losowo}}~---~wtedy agentom trudniej było osiągać zyski.
+
+Sytuacja wyglądała najlepiej przy dużym udziale agentów ze strategią \emph{\ref{item: sprzedajacy miekki wybor}} i~stosunkowo dużym udziale agentów ze strategią \emph{\ref{item: sprzedajacy twardy wybor}}, która
+balansowała ewentualne straty spowodowane zbyt liberalnym podejściem agentów z~pierwszą strategią.
+
+Strategie \emph{\ref{item:strategia kupujaca zachlanna}} i~\emph{\ref{item:strategia kupujaca ryzykowna}} wydają się być skorelowane ze strategią 
+odpowiednio \emph{\ref{item: sprzedajacy twardy wybor}} i~\emph{\ref{item: sprzedajacy miekki wybor}}~---~im bardziej zbliżone do siebie były liczby agentów implementujących odpowiednie strategie tym lepsza była sytuacja
+na rynku.
+
+Jest to zapewne wynikiem tego, że agent ze strategią \emph{\ref{item: sprzedajacy twardy wybor}} akceptuje tylko takie oferty, które nie są wyższe od jego własnej, a~strategia \emph{\ref{item:strategia kupujaca zachlanna}}
+właśnie tego mu dostarcza.
+
+Z~drugiej strony \emph{\ref{item: sprzedajacy miekki wybor}} pozwala na niewielką zmianę ceny w~ofercie, zaś w~strategii \emph{\ref{item:strategia kupujaca ryzykowna}} możliwe jest zaproponowanie agentowi, który
+oferował wyższą cenę, ceny niższej, która będzie spełniała warunek akceptacji agenta sprzedającego.
+
+
 
 \section{Wnioski i~podsumowanie}
 Nasz projekt ma zaimplementowane stosunkowo proste strategie. Można by go dalej rozwijać implementując coraz to bardziej skomplikowane strategie i~porównując ich rezultaty z~już otrzymanymi.
@@ -362,6 +385,12 @@ warunkach w~przeszłości mogłoby być pomocą przy ustalaniu aktualnych cen.
 
 Tego typu strategie ze względu na swoją złożoność są bardziej skomplikowane w~implementacji, przez co wymagają więcej czasu. Tego czynnika nie starczyło nam jednak na tyle, by je stworzyć.
 
-Spośród zaimplementowanych strategii najlepiej okazały się działać ... bla bla bla
+Spośród zaimplementowanych strategii najlepiej okazały się działać strategie \emph{\ref{item: sprzedajacy miekki wybor}} i~\emph{\ref{item:strategia kupujaca zachlanna}}. Im więcej było agentów używających tych strategii 
+tym lepiej prosperował rynek. 
+
+Możliwe, że w~przypadku posiadania bardziej skomplikowanych strategii sprzedających strategia \emph{\ref{item:strategia kupujaca zachlanna}} nie byłaby już tak skuteczna.
+
+W~obecnej sytuacji jednak strategia ta bardzo dobrze dopasowuje się do modelu sprzedaży \emph{\ref{item: sprzedajacy miekki wybor}}.
+
 
 \end{document}
