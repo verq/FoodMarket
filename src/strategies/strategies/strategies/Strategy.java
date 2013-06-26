@@ -82,17 +82,12 @@ public abstract class Strategy {
 						&& getSellingCondition(offer.getItemPrice()
 								.get(product), pricePerItem.get(product))) {
 					currentAnswer.addItemAmount(product, offer.getItemAmount()
-							.get(product)); // tu nie powinno być tyle, ile
-											// sprzedający chce sprzedać w
-											// ogóle,
-											// tylko odpowiedź na to, ile dany
-											// klient chce kupić
+							.get(product));
 					currentAnswer.addItemPrice(product, offer.getItemPrice()
 							.get(product));
 				}
 			}
 		answer.add(currentAnswer);
-		// jedna odpowiedź przypada na jedną ofertę od kupującego, a nie na pojedynczy produkt
 		}
 		return answer;
 	}

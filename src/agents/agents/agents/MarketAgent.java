@@ -123,6 +123,19 @@ public abstract class MarketAgent extends Agent {
 	 */
 	protected abstract void produceAndUse();
 
+	protected void alterPrices() {
+		for(Products product : pricePerItem.keySet()) {
+			double newPrice = Math
+					.max(1.0,
+							pricePerItem.get(product)
+									+ pricePerItem.get(product)
+									* (AgentsUtilities
+											.randomDouble(
+													0,
+													MarketConstants.PRICE_ALTER_FACTOR * 3) - MarketConstants.PRICE_ALTER_FACTOR));
+			pricePerItem.put(product, newPrice);
+		}
+	}
 	/*************** end of strategy related methods ***************/
 
 	/************ beginning of offers formatters ************/

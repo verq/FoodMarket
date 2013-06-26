@@ -101,5 +101,6 @@ public class MarketConstants {
 	
 	// strategy
 	public static final double SIMPLE_STRATEGY_ACCEPTANCE_PROBABILITY = 0.6;
+	public static final double PRICE_ALTER_FACTOR = 0.13;
 
 }

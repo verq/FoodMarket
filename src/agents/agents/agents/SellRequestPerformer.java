@@ -44,6 +44,7 @@ class SellRequestPerformer extends Behaviour {
 											// reply
 
 	private int sendPriceToInterestedBuyers(String conversationID) {
+		this.marketAgent.alterPrices();
 		ACLMessage offer_inform = new ACLMessage(ACLMessage.INFORM);
 		for (int i = 0; i < this.marketAgent.buyerAgentsList.size(); ++i) {
 			if (AgentsUtilities.PRINT_COMMUNICATION_STAGE) {
