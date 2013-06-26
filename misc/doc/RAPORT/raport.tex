@@ -224,7 +224,7 @@ Strategie są przypisywane agentom podczas startu i~nie ulegają późniejszym z
 \subsection{Zaimplementowane strategie kupujące agentów}
 W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwszą z~koniecznych do implementacji metod dla tego typu strategii:
 \begin{enumerate}
- \item \textbf{Wybór prosty}: Agent wybiera zawsze najtańszą ofertę dla danego produktu i~stara się kupić od oferenta tyle produktu, ile tylko może i~potrzebuje.
+ \item \namedlabel{item:strategia kupujaca prosta}{Wybór prosty} \textbf{Wybór prosty}: Agent wybiera zawsze najtańszą ofertę dla danego produktu i~stara się kupić od oferenta tyle produktu, ile tylko może i~potrzebuje.
 Musi przy tym wziąć pod uwagę, że ma ograniczone zasoby finansowe i~musi je podzielić pomiędzy możliwie wiele typów produktów tak, by zaspokoić swoje potrzeby w~zakresie każdego z~nich.
 
 Kwestia ta została rozwiązana w~ten sposób, że agent zmniejsza ilość kupowanego produktu proporcjonalnie do początkowej ilości jaką zamierzał kupić.
@@ -257,7 +257,7 @@ Nową cenę ustala jako średnią wszystkich otrzymanych w~bieżącym tygodniu o
 wciąż by rosła.
  \item \namedlabel{item: sprzedajacy miekki wybor}{Wybór miękki} \textbf{Wybór miękki}: Agent akceptuje oferty o~cenach niższych o nie więcej niż 10\% jego.
 
-W~tej strategii nowe ceny ustalane są podobnie do cen w~strategii \ref{item: sprzedajacy twardy wybor}.
+W~tej strategii nowe ceny ustalane są podobnie do cen w~strategii \emph{\ref{item: sprzedajacy twardy wybor}}.
 
  \item \textbf{Wybór losowy}: Agent akceptuje losowo ze zmiennym prawdopodobieństwem, które jest jednym z~parametrów symulacji.
 
@@ -272,7 +272,7 @@ Przeprowadziłyśmy kilka symulacji dla różnych parametrów oraz warunków poc
 większy kapitał.
 \subsection{Symulacje z~użyciem pojedynczej strategii}
 Przeprowadziłyśmy symulacje ustalając dla każdego agenta tę samą strategię sprzedającą i~tę samą kupującą (łącznie było 9~różnych wariantów). 
-
+\subsubsection{Analiza strategii sprzedających}
 Okazało się, że niezależnie od wyboru liczby agentów oraz strategii kupujących najgorzej wypadała strategia losowa. 
 
 Jeśli szansa akceptacji była wysoka agenci sprzedający szybko tracili fundusze, przez co nie mieli potem
@@ -289,6 +289,27 @@ jeden szybko spada i jest oznaczony jako strategia losowa
 pozostałe rosną: 
   jedno szybciej (miękki wybór), 
   drugie wolniej (twardy wybór)
+\end{verbatim}
+
+\subsubsection{Analiza strategii kupujących}
+Wyniki porównania strategii kupujących są zgodne z~intuicją: strategia \emph{\ref{item:strategia kupujaca prosta}} wydaje się być bezpieczna, lecz nie zawsze pozwala na zakup wystarczającej ilości towarów, by móc produkować,
+a~następnie sprzedawać wiele towarów. Przekłada się to na niższy wzrost posiadanego kapitału.
+
+Strategia \emph{\ref{item:strategia kupujaca zachlanna}} daje w~kwestii ilości zakupionego towaru większą pewność otrzymania potrzebnej ilości towaru, jednak ze względu na akceptowanie droższych ofert może być ryzykowna.
+
+Z~kolei \emph{\ref{item:strategia kupujaca ryzykowna}} ze względu na to, jak wyglądają strategie sprzedające nie odniosła większego sukcesu niż \emph{\ref{item:strategia kupujaca prosta}}, bowiem oferty kupujących
+o~znacznie niższych cenach nie były akceptowane przez agentów sprzedających.
+
+Ostatecznie przy uwzględnieniu zaimplementowanych strategii sprzedających najlepsza okazała się strategia \emph{\ref{item:strategia kupujaca zachlanna}}, przy której możliwość produkowania większej ilości produktów
+niwelowała ewentualne straty spowodowane kupowaniem droższych towarów.
+
+Wykres jak poprzednio przedstawia zarobki dla przykładowego agenta (rolnika) w~zależności od strategii kupującej. Użytą strategią jest \emph{\ref{item: sprzedajacy miekki wybor}}, która dawała najlepsze rezultaty.
+
+\begin{verbatim}
+WYKRES: 3 różne linie/słupki, 
+jeden wolno rośnie: Wybór prosty
+drugi czasem rośnie, a czasem spada: Wybór ryzykowny
+trzeci rośnie szybciej niż pierwszy: Wybór zachłanny 
 \end{verbatim}
 
 \subsection{Symulacje z procentowym wykorzystaniem każdej strategii}
