@@ -210,8 +210,10 @@ Informacje o~poszczególnych oferowanych produktach oddzielone są przy pomocy `
  \item Cena jednostkowa produktu
 \end{itemize}
 
-
-\section{Zaimplementowane strategie kupujące agentów}
+\section{Strategie}
+Sposób, w~jaki zaimplementowana jest komunikacja między agentami pozwala na prostą implementację strategii: w~strategiach kupujących konieczne jest napisanie
+trzech, a~w~sprzedających~---~dwóch metod.
+\subsection{Zaimplementowane strategie kupujące agentów}
 \begin{enumerate}
  \item \textbf{Strategia naiwna}: Agent wybiera zawsze najtańszą ofertę.
   \begin{itemize}
@@ -223,7 +225,7 @@ Informacje o~poszczególnych oferowanych produktach oddzielone są przy pomocy `
  \item Jeśli ceny są niższe niż w poprzednich tygodniach to kupuje więcej (proporcjonalnie do różnicy cen), a jeśli są wyższe - to mniej
 \end{enumerate}
 
-\section{Zaimplementowane strategie sprzedające agentów}
+\subsection{Zaimplementowane strategie sprzedające agentów}
 \begin{enumerate}
  \item Akceptuje tylko oferty nie wyższe niż jego własne.
  \item Akceptuje oferty niższe o nie więcej niż 10\% jego.

@@ -11,10 +11,10 @@ import constants.OfferFormatUtilities;
 
 public class AgentsUtilities {
 	public static final boolean DEBUG_ST_1 = false;
-	public static final boolean PRINT_COMMUNICATION_STAGE = true;
+	public static final boolean PRINT_COMMUNICATION_STAGE = false;
 	public static final boolean PRINT_FINDING_STAGE = false;
-	public static final boolean PRINT_PRODUCTS_DETAILS = true;
-	public static final boolean CREATE_LOGS = false;
+	public static final boolean PRINT_PRODUCTS_DETAILS = false;
+	public static final boolean CREATE_LOGS = true;
 	public static final boolean INFORM_ABOUT_AGENT_NEEDS = false;
 	public static final boolean PRINT_AGENT_WEEKLY_UPDATES = false;
 	

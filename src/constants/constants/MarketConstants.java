@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MarketConstants {
-	public static final int WEEK = 5000;
+	public static final int WEEK = 100;
 	// client
 	public static final double CLIENT_MIN_INCOME = 1300;
 	public static final double CLIENT_MAX_INCOME = 4000;
