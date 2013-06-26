@@ -222,7 +222,7 @@ Trzecią metodą w~strategii kupującej jest aktualizacja posiadanych zasobów, 
 Strategie są przypisywane agentom podczas startu i~nie ulegają późniejszym zmianom.
 
 \subsection{Zaimplementowane strategie kupujące agentów}
-W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwsza z~koniecznych do implementacji metod dla tego typu strategii:
+W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwszą z~koniecznych do implementacji metod dla tego typu strategii:
 \begin{enumerate}
  \item \textbf{Wybór prosty}: Agent wybiera zawsze najtańszą ofertę dla danego produktu i~stara się kupić od oferenta tyle produktu, ile tylko może i~potrzebuje.
 Musi przy tym wziąć pod uwagę, że ma ograniczone zasoby finansowe i~musi je podzielić pomiędzy możliwie wiele typów produktów tak, by zaspokoić swoje potrzeby w~zakresie każdego z~nich.
@@ -238,24 +238,48 @@ przekroczy budżet agenta dalsze oferty nie są rozpatrywane, zaś~w~ ofertach j
  \item \textbf{Wybór ryzykowny}: W~tej strategii agent stara się zaoferować sprzedającym niższą cenę niż w~ofercie. Dokładniej, zgadza się na najtańszą ofertę, zaś~pozostałym agentom
 oferuje zakup towaru po cenie najtańszej oferty. Jego nowa cena jest dodatkowo zmieniana o~losową wartość z~przedziału $[-10, 10]$ procent ceny najniższej oferty.
 
-Kwestię zmieszczenia zakupów w~budżecie rozwiązuje w~podobny sposób jak w~strategii \ref{item:strategia kupujaca zachlanna}.
+Kwestię zmieszczenia zakupów w~budżecie agent rozwiązuje w~podobny sposób jak w~strategii \ref{item:strategia kupujaca zachlanna}.
 \end{enumerate}
 
-W~drugiej metodzie dla strategii kupujących agenci akceptują (bądź nie) otrzymane od kupców nowe oferty. W~tym celu porównują je z~ofertami, które przesłali do oferentów. Jeśli sprzedający oferuje tyle samo
+W~drugiej metodzie dla strategii kupujących agenci akceptują (bądź nie) otrzymane od kupców nowe oferty. W~tym celu porównują je z~ofertami, które przesłali do oferentów. 
+
+Jeśli sprzedający oferuje tyle samo
 lub więcej produktu po nie wyższej cenie lub gdy cena nie jest wyższa o~więcej niż $10\%$~---~oferta jest akceptowana. W~przeciwnym razie agent nie zgadza się na ofertę.
 
 \subsection{Zaimplementowane strategie sprzedające agentów}
-W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwsza z~koniecznych do implementacji metod dla tego typu strategii:
+Po każdym tygodniu sprzedaży agenci ustalają nowe ceny towarów w~oparciu o~oferty otrzymane w~bieżącym tygodniu. Sposób zmiany ceny towaru zależy od wyboru strategii.
 
+W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwszą z~koniecznych do implementacji metod dla tego typu strategii:
 \begin{enumerate}
- \item Akceptuje tylko oferty nie wyższe niż jego własne.
- \item Akceptuje oferty niższe o nie więcej niż 10\% jego.
- \item Akceptuje losowo (np. z prawdopodobieństwem 40\%).
- \item Jeśli ceny są wyższe niż w poprzednich tygodniach to sprzedaje więcej.
+ \item \label{item: sprzedajacy twardy wybor} \textbf{Wybór twardy}: Agent akceptuje tylko oferty nie wyższe niż jego własne.
+
+Nową cenę ustala jako średnią wszystkich otrzymanych w~bieżącym tygodniu ofert z~pominięciem najniższej oraz dwóch najwyższych ofert~---~w~ten sposób zmniejszamy szanse na wystąpienie sytuacji. w~której cena 
+wciąż by rosła.
+ \item \textbf{Wybór miękki}: Agent akceptuje oferty o~cenach niższych o nie więcej niż 10\% jego.
+
+W~tej strategii nowe ceny ustalane są podobnie do cen w~strategii \ref{item: sprzedajacy twardy wybor}.
+
+ \item \textbf{Wybór losowy}: Agent akceptuje losowo ze zmiennym prawdopodobieństwem, które jest jednym z~parametrów symulacji.
+
+Również nowe ceny towarów zmieniane są o~wartość losową z~pewnego ustalonego przedziału (też parametru symulacji).
 \end{enumerate}
 
+Dla agenta sprzedającego liczba zaakceptowanych ofert nie ma znaczenia~---~ważne tylko, by sumaryczna ilość sprzedanych produktów nie przekroczyła aktualnej ich dostępności. Agenci akceptują oferty kupna
+zgodnie z~czasem ich otrzymania.
 
 \section{Otrzymane rezultaty}\label{chapter: rezultaty}
 tu będą wykresy
 \section{Wnioski i~podsumowanie}
+Nasz projekt ma zaimplementowane stosunkowo proste strategie. Można by go dalej rozwijać implementując coraz to bardziej skomplikowane strategie i~porównując ich rezultaty z~już otrzymanymi.
+
+Jednym z~pomysłów na strategie mogłoby być wprowadzenie historii transakcji. Na jej bazie łatwo byłoby zbudować całą grupę strategii, jak np. preferowanie ofert kupna od kupców, z~którymi częściej się handluje, czy
+oferowanie im niższych cen.
+
+Historia transakcji pozwoliłaby też na ustalanie ceny w~oparciu o~dane historyczne: łatwiej byłoby ustalić kiedy podnieść, a~kiedy opuścić cenę. Również informacja o~tym jak sprawdziło się dane podejście w~podobnych
+warunkach w~przeszłości mogłoby być pomocą przy ustalaniu aktualnych cen.
+
+Tego typu strategie ze względu na swoją złożoność są bardziej skomplikowane w~implementacji, przez co wymagają więcej czasu. Tego czynnika nie starczyło nam jednak na tyle, by je stworzyć.
+
+Spośród zaimplementowanych strategii najlepiej okazały się działać ... bla bla bla
+
 \end{document}
