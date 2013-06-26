@@ -76,7 +76,7 @@ public class ExcelLogger {
 	}
 
 	private String generateTempFileName() {
-		return "logs\\agentlog_" + (new Date()).getTime() + "_" + AgentsUtilities.randomInt(0, 1000);
+		return "logs" + System.getProperty("file.separator") + "agentlog_" + (new Date()).getTime() + "_" + AgentsUtilities.randomInt(0, 1000);
 	}
 
 	private void writeToFile() {
