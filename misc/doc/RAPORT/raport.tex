@@ -229,13 +229,13 @@ Musi przy tym wziąć pod uwagę, że ma ograniczone zasoby finansowe i~musi je 
 
 Kwestia ta została rozwiązana w~ten sposób, że agent zmniejsza ilość kupowanego produktu proporcjonalnie do początkowej ilości jaką zamierzał kupić.
 Powtarza się to dla wszystkich towarów, które muszą zostać kupione, tak, by sumaryczny koszt wszystkich zakupów nie przekroczył budżetu agenta.
- \item \textbf{Wybór zachłanny}: W~tej strategii agent dla każdego produktu stara się zachłannie wybierać oferty począwszy od najtańszych. 
+ \item \namedlabel{item:strategia kupujaca zachlanna}{Wybór zachłanny} \textbf{Wybór zachłanny}: W~tej strategii agent dla każdego produktu stara się zachłannie wybierać oferty począwszy od najtańszych. 
 Jeśli agent oferujący najtańszą ofertę nie ma wystarczająco dużo towaru, to pozostały potrzebny towar bierze od agenta z~drugą w kolejności ceną itd.
 
 By nie przekroczyć dostępnego budżetu, a~jednocześnie kupić każdy rodzaj potrzebnego produktu agent rozważa oferty w~kolejności od najtańszej kolejno dla każdego produktu. Gdy kwota potrzebna na zakupy
 przekroczy budżet agenta dalsze oferty nie są rozpatrywane, zaś~w~ ofertach już wybranych ilość kupowanego towaru jest zmniejszana tak, by zmieścić się w~budżecie.
- \label{item:strategia kupujaca zachlanna} 
- \item \textbf{Wybór ryzykowny}: W~tej strategii agent stara się zaoferować sprzedającym niższą cenę niż w~ofercie. Dokładniej, zgadza się na najtańszą ofertę, zaś~pozostałym agentom
+ 
+ \item \namedlabel{item:strategia kupujaca ryzykowna}{Wybór ryzykowny} \textbf{Wybór ryzykowny}: W~tej strategii agent stara się zaoferować sprzedającym niższą cenę niż w~ofercie. Dokładniej, zgadza się na najtańszą ofertę, zaś~pozostałym agentom
 oferuje zakup towaru po cenie najtańszej oferty. Jego nowa cena jest dodatkowo zmieniana o~losową wartość z~przedziału $[-10, 10]$ procent ceny najniższej oferty.
 
 Kwestię zmieszczenia zakupów w~budżecie agent rozwiązuje w~podobny sposób jak w~strategii \ref{item:strategia kupujaca zachlanna}.
@@ -251,11 +251,11 @@ Po każdym tygodniu sprzedaży agenci ustalają nowe ceny towarów w~oparciu o~o
 
 W~projekcie zaimplementowane zostały 3~strategie kupujące implementujące pierwszą z~koniecznych do implementacji metod dla tego typu strategii:
 \begin{enumerate}
- \item \label{item: sprzedajacy twardy wybor} \textbf{Wybór twardy}: Agent akceptuje tylko oferty nie wyższe niż jego własne.
+ \item \namedlabel{item: sprzedajacy twardy wybor}{Wybór twardy} \textbf{Wybór twardy}: Agent akceptuje tylko oferty nie wyższe niż jego własne.
 
 Nową cenę ustala jako średnią wszystkich otrzymanych w~bieżącym tygodniu ofert z~pominięciem najniższej oraz dwóch najwyższych ofert~---~w~ten sposób zmniejszamy szanse na wystąpienie sytuacji. w~której cena 
 wciąż by rosła.
- \item \textbf{Wybór miękki}: Agent akceptuje oferty o~cenach niższych o nie więcej niż 10\% jego.
+ \item \namedlabel{item: sprzedajacy miekki wybor}{Wybór miękki} \textbf{Wybór miękki}: Agent akceptuje oferty o~cenach niższych o nie więcej niż 10\% jego.
 
 W~tej strategii nowe ceny ustalane są podobnie do cen w~strategii \ref{item: sprzedajacy twardy wybor}.
 
@@ -268,7 +268,31 @@ Dla agenta sprzedającego liczba zaakceptowanych ofert nie ma znaczenia~---~waż
 zgodnie z~czasem ich otrzymania.
 
 \section{Otrzymane rezultaty}\label{chapter: rezultaty}
-tu będą wykresy
+Przeprowadziłyśmy kilka symulacji dla różnych parametrów oraz warunków początkowych. Najciekawsze wyniki zaprezentowane są poniżej. Wariant symulacji uważałyśmy za skuteczny, jeśli agenci z~czasem byli w~stanie zgromadzić
+większy kapitał.
+\subsection{Symulacje z~użyciem pojedynczej strategii}
+Przeprowadziłyśmy symulacje ustalając dla każdego agenta tę samą strategię sprzedającą i~tę samą kupującą (łącznie było 9~różnych wariantów). 
+
+Okazało się, że niezależnie od wyboru liczby agentów oraz strategii kupujących najgorzej wypadała strategia losowa. 
+
+Jeśli szansa akceptacji była wysoka agenci sprzedający szybko tracili fundusze, przez co nie mieli potem
+środków na dalsze zakupy. 
+
+Jeśli zaś była niska, to oferty agentów kupujących były często odrzucane, przez co kupujący nie mogli dostać potrzebnych towarów, w~konsekwencji czego nie mogli produkować towarów na sprzedaż i~tracili środki.
+
+Pozostałe strategie sprzedające pozwalały na uzyskanie przychodów. Strategia \emph{\ref{item: sprzedajacy miekki wybor}} ze względu na większą elastyczność warunków sprzedaży pozwalała na większe przychody.
+
+Poniższy wykres pokazuje jak wyglądały zarobki dla przykładowego agenta (rolnika) w~zależności od strategii sprzedającej. Strategią kupujących jest strategia \emph{\ref{item:strategia kupujaca ryzykowna}}.
+\begin{verbatim}
+WYKRES: 3 różne linie/słupki, 
+jeden szybko spada i jest oznaczony jako strategia losowa
+pozostałe rosną: 
+  jedno szybciej (miękki wybór), 
+  drugie wolniej (twardy wybór)
+\end{verbatim}
+
+\subsection{Symulacje z procentowym wykorzystaniem każdej strategii}
+
 \section{Wnioski i~podsumowanie}
 Nasz projekt ma zaimplementowane stosunkowo proste strategie. Można by go dalej rozwijać implementując coraz to bardziej skomplikowane strategie i~porównując ich rezultaty z~już otrzymanymi.
 
