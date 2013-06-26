@@ -7,6 +7,7 @@ import java.util.Map;
 import agents.AgentOffer;
 import constants.Products;
 
+@Deprecated
 public class TakeCheapestThenOfferLowestOffer extends Strategy {
 
 	@Override

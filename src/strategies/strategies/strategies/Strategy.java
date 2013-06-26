@@ -122,7 +122,7 @@ public abstract class Strategy {
 		for (Products product : buyerOffer.getItemAmount().keySet()) {
 			sell.put(product, sell.get(product)
 					- buyerOffer.getItemAmount().get(product));
-			// TODO: nie działa dla bakerów i milkmanów
+			// TODO: nie działa dla bakerów i milkmanów - whatever
 			have.put(product, have.get(product)
 					- buyerOffer.getItemAmount().get(product));
 			myMoney -= buyerOffer.getItemPrice().get(product);

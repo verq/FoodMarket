@@ -15,9 +15,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import strategies.strategies.OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy;
 import strategies.strategies.SimpleStrategy;
 import strategies.strategies.Strategy;
 import strategies.strategies.TakeAsMuchAsYouCanFromTheCheapestOfferStrategy;
+import strategies.strategies.TakeCheapestThenTakeNextCheapestStrategy;
 import utilities.AgentsUtilities;
 import constants.MarketConstants;
 import constants.OfferFormatUtilities;
@@ -195,7 +197,7 @@ public abstract class MarketAgent extends Agent {
 		buyAction();
 		sellAction();
 		timeAction();
-		myStrategy = new TakeAsMuchAsYouCanFromTheCheapestOfferStrategy();//SimpleStrategy();
+		myStrategy = new OfferLowestPriceToEveryoneAndSeeWhatHappensStrategy();//TakeCheapestThenTakeNextCheapestStrategy(); //TakeAsMuchAsYouCanFromTheCheapestOfferStrategy();//SimpleStrategy();
 		myStrategy.setBuy(buy);
 		myStrategy.setHave(have);
 		myStrategy.setSell(sell);

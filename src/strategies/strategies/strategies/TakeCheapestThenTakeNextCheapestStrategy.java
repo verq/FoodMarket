@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import agents.AgentOffer;
+import constants.OfferFormatUtilities;
 import constants.Products;
 
 public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
@@ -16,6 +17,8 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 	@Override
 	public ArrayList<AgentOffer> decideAboutSellOffer(
 			ArrayList<AgentOffer> offers) {
+		currentWeekBuyOffersHistory.clear();
+		currentWeekSellOffersHistory.clear();
 		ArrayList<AgentOffer> answer = new ArrayList<AgentOffer>();
 		Map<String, AgentOffer> offersMap = new HashMap<String, AgentOffer>();
 		Map<String, AgentOffer> myAnswers = new HashMap<String, AgentOffer>();
@@ -42,6 +45,8 @@ public class TakeCheapestThenTakeNextCheapestStrategy extends Strategy {
 				double cheapestNowPrice = entry.getValue();
 				AgentOffer cheapestNow = offersMap.get(cheapestNowName);
 				AgentOffer currentAnswer = myAnswers.get(cheapestNowName);
+				currentAnswer.setOfferType(OfferFormatUtilities.BUY_OFFER_TAG);
+				currentAnswer.setAgentType(myType);
 				/*
 				 * System.out.println(currentBuyProduct.name() + "  " +
 				 * cheapestNowPrice + " " +
